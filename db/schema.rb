@@ -10,7 +10,25 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20201116082624) do
+ActiveRecord::Schema.define(version: 20201126064557) do
+
+  create_table "landings", force: :cascade do |t|
+    t.string "fishing_ground"
+    t.string "weather"
+    t.decimal "water_temperature"
+    t.string "fish_species"
+    t.decimal "landing_amount"
+    t.datetime "landing_datetime"
+    t.string "wind"
+    t.string "wave"
+    t.string "remarks"
+    t.string "size_etc"
+    t.integer "unit_price"
+    t.string "purchase"
+    t.string "shipping_destination"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "users", force: :cascade do |t|
     t.string "name"
@@ -20,6 +38,7 @@ ActiveRecord::Schema.define(version: 20201116082624) do
     t.string "password_digest"
     t.string "remember_digest"
     t.boolean "admin", default: false
+    t.boolean "accounting", default: false
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 
