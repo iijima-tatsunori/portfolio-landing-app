@@ -10,7 +10,40 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20201126064557) do
+ActiveRecord::Schema.define(version: 20201126071359) do
+
+  create_table "accounts", force: :cascade do |t|
+    t.date "accounting_date"
+    t.string "account_title"
+    t.string "description"
+    t.integer "income"
+    t.integer "expense"
+    t.integer "deduction_balance"
+    t.integer "tax_rate"
+    t.integer "subsidiary_journal_species"
+    t.string "check_number"
+    t.integer "deposit"
+    t.integer "drawer"
+    t.integer "debit_credit"
+    t.integer "balance"
+    t.string "customer"
+    t.string "receiving_method"
+    t.string "product_name"
+    t.decimal "quantity"
+    t.integer "unit_price"
+    t.integer "breakdown"
+    t.integer "amount"
+    t.integer "general_edger_number"
+    t.integer "journal_books_number"
+    t.string "notation"
+    t.string "debit_account"
+    t.string "credit_account"
+    t.integer "debit_amount"
+    t.integer "credit_amount"
+    t.integer "journal_balance"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "landings", force: :cascade do |t|
     t.string "fishing_ground"
