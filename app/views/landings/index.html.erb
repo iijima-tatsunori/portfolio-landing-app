@@ -1,0 +1,68 @@
+<%= provide(:title, '水揚げ情報一覧') %>
+
+<h1>水揚げ情報一覧</h1>
+
+<div class="panel-group">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <%= link_to "水揚げ情報追加", new_landing_path, class: "btn btn-primary" %>
+    </div>
+  </div>
+</div>
+
+<div>
+  <table class="table table-bordered table-condensed table-hover" id="table-attendances">
+    
+    <thead>
+      <tr>
+        <th>水揚げ日時</th>
+        <th>漁場</th>
+        <th>天気</th>
+        <th>水温</th>
+        <th>魚の種類</th>
+        <th>水揚げ量</th>
+        <th>風</th>
+        <th>波</th>
+        <th>備考</th>
+        <th>サイズ等</th>
+        <th>単価</th>
+        <th>買受</th>
+        <th>出荷先</th>
+        <th></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @landings.each do |landing| %>
+      
+      <tr>
+        <td><%= l(landing.landing_datetime, format: :short) %></td>
+        <td><%= landing.fishing_ground %></td>
+        <td><%= landing.weather %></td>
+        <% if landing.water_temperature.present? %>
+          <td><%= landing.water_temperature %>℃</td>
+        <% else %>
+          <td><%= landing.water_temperature %></td>
+        <% end %>
+        <td><%= landing.fish_species %></td>
+        <td><%= landing.landing_amount %></td>
+        <td><%= landing.wind %></td>
+        <td><%= landing.wave %></td>
+        <td><%= landing.remarks %></td>
+        <td><%= landing.size_etc %></td>
+        <td><%= landing.unit_price %></td>
+        <td><%= landing.purchase %></td>
+        <td><%= landing.shipping_destination %></td>
+        <td class="col-md-2 center">
+          <%= link_to "修正", edit_landing_path(landing), class: "btn btn-primary" %>
+          <%= link_to "削除", landing, method: :delete,
+                              data: { confirm: "削除してよろしいですか？" },
+                              class: "btn btn-danger" %>
+        </td>
+      </tr>
+        
+      <% end %>
+    </tbody>
+    
+  </table>
+</div>

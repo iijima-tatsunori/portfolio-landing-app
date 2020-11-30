@@ -2,6 +2,9 @@ ja:
   activerecord:
     models:
       user: ユーザー
+      landing: 水揚げ
+      account: 帳簿
+
     attributes:
         user:
           id: ID
@@ -11,3 +14,49 @@ ja:
           password_confirmation: パスワード再入力
           created_at: 作成日
           updated_at: 更新日
+          
+        landing:
+          fishing_ground: 漁場
+          weather: 天気
+          water_temperature: 水温
+          fish_species: 魚の種類
+          landing_amount: 水揚げ量
+          landing_datetime: 水揚げ日時
+          wind: 風
+          wave: 波
+          remarks: 備考
+          size_etc: サイズ等
+          unit_price: 単価
+          purchase: 買受
+          shipping_destination: 出荷先
+          
+        account:
+          accounting_date: 年月日
+          account_title: 科目
+          description: 摘要
+          income: 収入金額
+          expense: 支出金額
+          deduction_balance: 差引残高
+          tax_rate: 税率
+          subsidiary_journal_species: 補助記入帳種類
+          check_number: 小切手番号
+          deposit: 預入
+          drawer: 引出
+          debit_credit: 借 / 貸
+          balance: 残高
+          customer: 得意先
+          receiving_method: 受取方法
+          product_name: 商品名
+          quantity: 数量
+          unit_price: 単価
+          breakdown: 内訳
+          amount: 金額
+          general_edger_number: 元丁（総勘定元帳口座番号）
+          journal_books_number: 仕丁（仕訳帳の番号）
+          notation: 小書き
+          debit_account: 借方勘定科目（摘要）
+          credit_account: 貸方勘定科目（摘要）
+          journal_description: 摘要
+          debit_amount: 借方金額
+          credit_amount: 貸方金額
+          journal_balance: 残高

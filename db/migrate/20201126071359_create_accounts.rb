@@ -26,7 +26,6 @@ class CreateAccounts < ActiveRecord::Migration[5.1]
       t.string :notation
       t.string :debit_account
       t.string :credit_account
-      t.string :description
       t.integer :debit_amount
       t.integer :credit_amount
       t.integer :journal_balance

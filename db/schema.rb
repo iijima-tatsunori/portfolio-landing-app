@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20201126071359) do
+ActiveRecord::Schema.define(version: 20201127050935) do
 
   create_table "accounts", force: :cascade do |t|
     t.date "accounting_date"
@@ -43,6 +43,7 @@ ActiveRecord::Schema.define(version: 20201126071359) do
     t.integer "journal_balance"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "journal_description"
   end
 
   create_table "landings", force: :cascade do |t|
