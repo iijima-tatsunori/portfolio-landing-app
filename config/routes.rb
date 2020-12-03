@@ -15,6 +15,9 @@ Rails.application.routes.draw do
   # ユーザー
   resources :users
   
+  # 漁場
+  resources :grounds
+  
   # 水揚げ
   resources :landings
   

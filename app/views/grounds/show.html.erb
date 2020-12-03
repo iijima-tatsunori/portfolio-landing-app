@@ -1,0 +1,16 @@
+<% provide(:title, @ground.fishing_ground_name) %>
+<div>
+  <table class="table table-bordered table-condensed">
+    <tr>
+      <td>漁場：<%= @ground.fishing_ground_name %></td>
+    </tr>
+  </table>
+</div>
+
+<div class="panel-group">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <%= link_to "漁場情報変更", edit_ground_path, class: "btn btn-primary" %>
+    </div>
+  </div>
+</div>

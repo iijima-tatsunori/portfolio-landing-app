@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20201127050935) do
+ActiveRecord::Schema.define(version: 20201201044154) do
 
   create_table "accounts", force: :cascade do |t|
     t.date "accounting_date"
@@ -46,13 +46,18 @@ ActiveRecord::Schema.define(version: 20201127050935) do
     t.string "journal_description"
   end
 
+  create_table "grounds", force: :cascade do |t|
+    t.string "fishing_ground_name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "landings", force: :cascade do |t|
-    t.string "fishing_ground"
     t.string "weather"
     t.decimal "water_temperature"
     t.string "fish_species"
     t.decimal "landing_amount"
-    t.datetime "landing_datetime"
+    t.date "landing_date"
     t.string "wind"
     t.string "wave"
     t.string "remarks"
@@ -62,6 +67,9 @@ ActiveRecord::Schema.define(version: 20201127050935) do
     t.string "shipping_destination"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "ground_id"
+    t.time "landing_time"
+    t.index ["ground_id"], name: "index_landings_on_ground_id"
   end
 
   create_table "users", force: :cascade do |t|

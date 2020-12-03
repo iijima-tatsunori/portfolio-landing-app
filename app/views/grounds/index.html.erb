@@ -1,0 +1,37 @@
+<% provide(:title, '漁場一覧') %>
+<h1>漁場一覧</h1>
+
+<div class="panel-group">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <%= link_to "漁場追加", new_ground_path, class: "btn btn-primary" %>
+    </div>
+  </div>
+</div>
+
+
+<div class="col-md-10 col-md-offset-1">
+  <%= will_paginate %>
+  <table class="table table-condensed table-hover">
+    <thead>
+      <tr>
+        <th><%= Ground.human_attribute_name :fishing_ground_name %></th>
+        <th></th>
+      </tr>
+    </thead>
+
+    <% @grounds.each do |ground| %>
+      <tr>
+        <td><%= link_to ground.fishing_ground_name, ground %></td>
+        <td>
+          <% if current_user.admin? %>
+            <%= link_to "削除", ground, method: :delete,
+                data: { confirm: "削除してよろしいですか？" },
+                class: "btn btn-danger" %>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </table>
+  <%= will_paginate %>
+</div>

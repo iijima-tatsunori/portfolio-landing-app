@@ -36,8 +36,8 @@
       <% @landings.each do |landing| %>
       
       <tr>
-        <td><%= l(landing.landing_datetime, format: :short) %></td>
-        <td><%= landing.fishing_ground %></td>
+        <td><%= l(landing.landing_date, format: :short) %></td>
+        <td><%= l(landing.landing_time, format: :short) %></td>
         <td><%= landing.weather %></td>
         <% if landing.water_temperature.present? %>
           <td><%= landing.water_temperature %>℃</td>

@@ -6,6 +6,7 @@
         <li><%= link_to "ホーム", root_path %></li>
         <% if logged_in? %>
           <li><%= link_to "全てのユーザー", users_path %></li>
+          <li><%= link_to "漁場一覧", grounds_path %></li>
           <li><%= link_to "水揚げ情報", landings_path %></li>
           <li><%= link_to "帳簿管理", new_account_path %></li>
           <li class="dropdown">

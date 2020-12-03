@@ -3,7 +3,7 @@ class LandingsController < ApplicationController
 
   def new
     @landing = Landing.new
-    @whathers = ["晴れ",
+    @weathers = ["晴れ",
                  "晴れ時々曇り",
                  "晴れ時々雨",
                  "曇り",
@@ -16,19 +16,6 @@ class LandingsController < ApplicationController
                  "大嵐",
                  "雪",
                  "大雪"]
-                 
-    @fishing_ground = ["四丁目",
-                       "三丁目",
-                       "三貫",
-                       "汐折",
-                       "ほっちょうか",
-                       "下り松",
-                       "白崎",
-                       "釜沖",
-                       "小松",
-                       "金島",
-                       "大建",
-                       "仲網"]
                        
     @fish_species = ["鯖",
                      "若子",
@@ -64,7 +51,7 @@ class LandingsController < ApplicationController
   end
 
   def update
-    if @base.update_attributes(landing_params)
+    if @landing.update_attributes(landing_params)
       flash[:success] = "水揚げ情報を更新しました。"
       redirect_to landings_url
     else
@@ -88,8 +75,8 @@ class LandingsController < ApplicationController
   private
 
     def landing_params
-      params.require(:landing).permit(:landing_datetime,
-                                      :fishing_ground,
+      params.require(:landing).permit(:landing_date,
+                                      :landing_time,
                                       :weather,
                                       :water_temperature,
                                       :fish_species,

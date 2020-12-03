@@ -2,6 +2,7 @@ ja:
   activerecord:
     models:
       user: ユーザー
+      ground: 漁場
       landing: 水揚げ
       account: 帳簿
 
@@ -15,13 +16,16 @@ ja:
           created_at: 作成日
           updated_at: 更新日
           
+        ground:
+          fishing_ground_name: 漁場
+          
         landing:
-          fishing_ground: 漁場
           weather: 天気
           water_temperature: 水温
           fish_species: 魚の種類
           landing_amount: 水揚げ量
-          landing_datetime: 水揚げ日時
+          landing_date: 水揚げ日
+          landing_time: 水揚げ時間
           wind: 風
           wave: 波
           remarks: 備考
