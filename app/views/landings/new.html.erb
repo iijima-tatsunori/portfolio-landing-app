@@ -5,15 +5,96 @@
   
   <div class="row">
     <div class="col-md-6 col-md-offset-3">
-      <h1>水揚げ情報作成</h1>
+      <h3 class="center">「<%= @ground.fishing_ground_name %>」の水揚げ情報作成</h3>
   
       <div>
-        <%= link_to "水揚げ情報一覧", landings_path, class: "btn btn-primary" %>
+        <%= link_to "水揚げ情報一覧", landing_index_path, class: "btn btn-primary" %>
       </div>
       
-      <%= render 'form' %>
-      
+      <%= form_with(model: @landing, url: ground_landings_path, local: true, mehtod: :post) do |f| %>
+      <%= render 'shared/error_messages', object: f.object %>
+        <div>
+          <%= f.label :landing_date, class: "label-#{yield(:class_text)}" %>
+        </div>
+        <div>
+          <%= f.date_select :landing_date, {}, { class: 'datetime-form-control' , required: true } %>
+        </div>
+        <div>
+          <%= f.label :landing_time, class: "label-#{yield(:class_text)}" %>
+        </div>
+        <div>
+          <%= f.time_select :landing_time, {}, { class: 'datetime-form-control' , required: true } %>
+        </div>
+        <div>
+          <%= f.label :weather, class: "label-#{yield(:class_text)}" %>
+        </div>
+        <div>
+          <%= f.select :weather, weathers, { include_blank: "---" }, { class: 'form-control' } %>
+        </div>
+        <div>
+          <%= f.label :water_temperature, class: "label-#{yield(:class_text)}" %>
+        </div>
+        <div>
+          <%= f.text_field :water_temperature, class: "form-control" %>
+        </div>
+        <div>
+          <%= f.label :fish_species, class: "label-#{yield(:class_text)}" %>
+        </div>
+        <div>
+          <%= f.select :fish_species, fish_species, { include_blank: "---" }, class: "form-control" %>
+        </div>
+        <div>
+          <%= f.label :landing_amount, class: "label-#{yield(:class_text)}" %>
+        </div>
+        <div>
+          <%= f.text_field :landing_amount, class: "form-control" %>
+        </div>
+        <div>
+          <%= f.label :wind, class: "label-#{yield(:class_text)}" %>
+        </div>
+        <div>
+          <%= f.select :wind, wind, { include_blank: "---" }, class: "form-control" %>
+        </div>
+        <div>
+          <%= f.label :wave, class: "label-#{yield(:class_text)}" %>
+        </div>
+        <div>
+          <%= f.select :wave, wave, { include_blank: "---" }, class: "form-control" %>
+        </div>
+        <div>
+          <%= f.label :remarks, class: "label-#{yield(:class_text)}" %>
+        </div>
+        <div>
+          <%= f.text_field :remarks, class: "form-control" %></div>
+        <div>
+          <%= f.label :size_etc, class: "label-#{yield(:class_text)}" %>
+        </div>
+        <div>
+          <%= f.text_field :size_etc, class: "form-control" %>
+        </div>
+        <div>
+          <%= f.label :unit_price, class: "label-#{yield(:class_text)}" %>
+        </div>
+        <div>
+          <%= f.text_field :unit_price, class: "form-control" %>
+        </div>
+        <div>
+          <%= f.label :purchase, class: "label-#{yield(:class_text)}" %>
+        </div>
+        <div>
+          <%= f.text_field :purchase, class: "form-control" %>
+        </div>
+        <div>
+          <%= f.label :shipping_destination, class: "label-#{yield(:class_text)}" %>
+        </div>
+        <div>
+          <%= f.text_field :shipping_destination, class: "form-control" %>
+        </div>
+        
+        <%= f.submit "作成", class: "btn btn-primary btn-block btn-#{yield(:class_text)}" %>
+        <%= link_to "キャンセル", landing_index_path, class: "btn btn-block btn-default" %>
+        
+      <% end %>
     </div>
   </div>
-
 </div>

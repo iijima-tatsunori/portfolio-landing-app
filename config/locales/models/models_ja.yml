@@ -17,7 +17,7 @@ ja:
           updated_at: 更新日
           
         ground:
-          fishing_ground_name: 漁場
+          fishing_ground_name: 漁場名
           
         landing:
           weather: 天気
@@ -33,6 +33,7 @@ ja:
           unit_price: 単価
           purchase: 買受
           shipping_destination: 出荷先
+          ground: 漁場ID
           
         account:
           accounting_date: 年月日

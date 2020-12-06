@@ -16,10 +16,21 @@ Rails.application.routes.draw do
   resources :users
   
   # 漁場
-  resources :grounds
+  resources :grounds do
   
-  # 水揚げ
-  resources :landings
+    member do
+      get 'landing_show', to: 'landings#show'
+      get 'landing_edit', to: 'landings#edit'
+      patch 'landing_update', to: 'landings#update'
+      delete 'landing_destroy', to: 'landings#destroy'
+    end
+    # 水揚げ
+    resources :landings, only: [:new, :create]
+  
+  end
+  
+  # get 'landing_new', to: 'landings#new'
+  get 'landing_index', to: 'landings#index'
   
   # 帳簿
   resources :accounts

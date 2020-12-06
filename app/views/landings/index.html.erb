@@ -5,7 +5,10 @@
 <div class="panel-group">
   <div class="panel panel-default">
     <div class="panel-heading">
-      <%= link_to "水揚げ情報追加", new_landing_path, class: "btn btn-primary" %>
+      新規水揚げ情報追加
+      <% @grounds.each do |ground| %>
+        <%= link_to ground.fishing_ground_name, new_ground_landing_path(ground), class: "btn btn-primary" %>
+      <% end %>
     </div>
   </div>
 </div>
@@ -15,7 +18,8 @@
     
     <thead>
       <tr>
-        <th>水揚げ日時</th>
+        <th>水揚げ日</th>
+        <th>水揚げ時間</th>
         <th>漁場</th>
         <th>天気</th>
         <th>水温</th>
@@ -38,6 +42,7 @@
       <tr>
         <td><%= l(landing.landing_date, format: :short) %></td>
         <td><%= l(landing.landing_time, format: :short) %></td>
+        <td><%= link_to landing.ground_id, "#" %></td>
         <td><%= landing.weather %></td>
         <% if landing.water_temperature.present? %>
           <td><%= landing.water_temperature %>℃</td>
@@ -54,8 +59,8 @@
         <td><%= landing.purchase %></td>
         <td><%= landing.shipping_destination %></td>
         <td class="col-md-2 center">
-          <%= link_to "修正", edit_landing_path(landing), class: "btn btn-primary" %>
-          <%= link_to "削除", landing, method: :delete,
+          <%= link_to "修正", landing_edit_ground_path(landing), class: "btn btn-primary" %>
+          <%= link_to "削除", landing_destroy_ground_path(landing),
                               data: { confirm: "削除してよろしいですか？" },
                               class: "btn btn-danger" %>
         </td>
@@ -63,6 +68,7 @@
         
       <% end %>
     </tbody>
-    
+    <!--edit_ground_landing_path(landing)-->
+    <!--landing, method: :delete-->
   </table>
 </div>

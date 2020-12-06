@@ -48,7 +48,7 @@ class GroundsController < ApplicationController
 
     # beforeフィルター
 
-    # paramsハッシュからユーザーを取得します。
+    # paramsハッシュから漁場idを取得します。
     def set_ground
       @ground = Ground.find(params[:id])
     end
