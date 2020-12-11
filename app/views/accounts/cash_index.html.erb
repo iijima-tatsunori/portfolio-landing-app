@@ -1,0 +1,86 @@
+<%= provide(:title, '現金出納帳一覧') %>
+<%= provide(:class_text, 'account--form') %>
+<%= provide(:button_text, '送信') %>
+
+<h2><%= l(@first_day, format: :year) %>の現金出納帳一覧</h2>
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <div class="container">
+      
+      <div class="badge badge-secondary">絞り込み検索</div>
+      
+      <div class="row">
+        <div class="col-sm-4">
+          <%= form_with(scope: :search, url: cash_index_accounts_path, method: :get, local: true) do |f| %>
+            <div>
+              <%= f.label :accounting_date, '日付', class: "label-#{yield(:class_text)}"  %>
+            </div>
+            <div>
+              <%= f.date_field :accounting_date, class: 'datetime-form-control' %>
+            </div>
+            <div>
+              <%= f.submit '検索', class: "btn btn-block btn-primary btn-#{yield(:class_text)}" %>
+            </div>
+          <% end %>
+        </div>
+        
+        <div class="col-sm-4">
+          <%= form_with(scope: :search, url: cash_index_accounts_path, method: :get, local: true) do |f| %>
+            <div>
+              <%= f.label :account_title, '科目', class: "label-#{yield(:class_text)}"  %>
+            </div>
+            <div>
+              <%= f.text_field :account_title, class: 'datetime-form-control' %>
+            </div>
+            <div>
+              <%= f.submit '検索', class: "btn btn-block btn-primary btn-#{yield(:class_text)}" %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+</div>
+
+<div>
+  <%= link_to "絞り込み解除", cash_index_accounts_path, class: "btn btn-success" %>
+</div>
+
+<div>
+  <table class="table table-bordered table-condensed table-hover" id="table-account">
+    
+    <thead>
+      <tr>
+        <th>日付</th>
+        <th>科目</th>
+        <th>摘要</th>
+        <th>収入金額</th>
+        <th>支出金額</th>
+        <th>差引残高</th>
+        <th></th>
+      </tr>
+    </thead>
+    
+    <tbody>
+      <% @cash_accounts.each do |account| %>
+        <tr>
+          <td><%= l(account.accounting_date, format: :short) %></td>
+          <td><%= account.account_title %></td>
+          <td><%= account.description %></td>
+          <td><%= account.income %></td>
+          <td><%= account.expense %></td>
+          <td><%= account.deduction_balance %></td>
+          <td class="center">
+            <%= link_to "修正", cash_edit_account_path(account), class: "btn btn-primary" %>
+            <%= link_to "削除", cash_destroy_account_path(account), method: :delete,
+                                data: { confirm: "#{l(account.accounting_date, format: :long)}の現金出納帳データを削除してよろしいですか？" },
+                                class: "btn btn-danger" %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+    
+  </table>
+</div>

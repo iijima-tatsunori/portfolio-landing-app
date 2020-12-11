@@ -1,0 +1,64 @@
+<%= provide(:title, '現金出納帳作成') %>
+<%= provide(:class_text, 'account--form') %>
+
+<h2><%= l(@first_day, format: :year) %>の現金出納帳作成</h2>
+
+<div>
+  
+  <table class="table table-bordered table-condensed table-hover" id="table-account">
+    
+    
+    <thead>
+      <tr>
+        <th>日付</th>
+        <th>摘要</th>
+      </tr>
+    </thead>
+    
+    <tbody>
+      
+      <% @one_month.each do |day| %>
+      
+      <tr>
+      
+        <td><%= l(day, format: :short2) %></td>
+        
+        <td>
+          <p>
+            <button type="button" class="btn btn-success account-button" data-toggle="collapse" data-target="#collapse<%= day %>" aria-expanded="false" aria-controls="collapseExample">
+              入力フォーム展開
+            </button>
+          </p>
+          <div class="collapse" id="collapse<%= day %>">
+            <div class="card card-body">
+            <%= form_with(model: @account, url: cash_create_accounts_path, local: true) do |f| %>
+              <%= f.hidden_field :accounting_date, value: day %>
+              <%= f.hidden_field :subsidiary_journal_species, value: 1 %>
+              <%= f.label :account_title, class: "label-#{yield(:class_text)}" %>
+              <%= f.text_field :account_title, class: "form-control" %>
+              <%= f.label :description, class: "label-#{yield(:class_text)}" %>
+              <%= f.text_field :description, class: "form-control" %>
+              <%= f.label :income, class: "label-#{yield(:class_text)}" %>
+              <%= f.text_field :income, class: "form-control" %>
+              <%= f.label :expense, class: "label-#{yield(:class_text)}" %>
+              <%= f.text_field :expense, class: "form-control" %>
+              <%= f.label :deduction_balance, class: "label-#{yield(:class_text)}" %>
+              <%= f.text_field :deduction_balance, class: "form-control" %>
+              
+              <%= f.submit "作成", class: "btn btn-block btn-primary btn-#{yield(:class_text)}" %>
+            <% end %>
+            </div>
+          </div>
+        </td>
+        
+        
+        
+      </tr>
+      
+      <% end %>
+    </tbody>
+    
+    
+    
+  </table>
+</div>

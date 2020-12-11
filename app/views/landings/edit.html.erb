@@ -1,94 +1,96 @@
-<%= provide(:title, '拠点修正') %>
-<%= provide(:button_text, '送信') %>
+<%= provide(:title, '水揚げ情報修正') %>
+<%= provide(:class_text, 'landing--form') %>
 
-<h1>拠点修正</h1>
+
 
 <div class="row">
   <div class="col-md-6 col-md-offset-3">
-    <%= form_with(model: @ground, url: landings_edit_ground, local: true, mehtod: :patch) do |f| %>
-      <%= render 'shared/error_messages', object: f.object %>
-        <%= f.fields_for "landings[]", do |landing| %>
+    <h3 class="center">「<%= @ground.fishing_ground_name %>」<%= l(@landing.landing_date, format: :short) %>の水揚げ情報修正</h3>
+    <%= form_with(model: @landing, url: ground_landing_path( id: @landing.id), local: true, mehtod: :patch) do |f| %>
+      
+        
+        <%= render 'shared/error_messages', object: f.object %>
           <div>
-            <%= landing.label :landing_date, class: "label-#{yield(:class_text)}" %>
+            <%= f.label :landing_date, class: "label-#{yield(:class_text)}" %>
           </div>
           <div>
-            <%= landing.date_select :landing_date, {}, { class: 'datetime-form-control' , required: true } %>
+            <%= f.date_select :landing_date, {}, { class: 'datetime-form-control' , required: true } %>
           </div>
           <div>
-            <%= landing.label :landing_time, class: "label-#{yield(:class_text)}" %>
+            <%= f.label :landing_time, class: "label-#{yield(:class_text)}" %>
           </div>
           <div>
-            <%= landing.time_select :landing_time, {}, { class: 'datetime-form-control' , required: true } %>
+            <%= f.time_select :landing_time, {}, { class: 'datetime-form-control' , required: true } %>
           </div>
           <div>
-            <%= landing.label :weather, class: "label-#{yield(:class_text)}" %>
+            <%= f.label :weather, class: "label-#{yield(:class_text)}" %>
           </div>
           <div>
-            <%= landing.select :weather, @weathers, { include_blank: "---", selected: "" }, { class: 'form-control' } %>
+            <%= f.select :weather, weathers, { prompt: "" }, { class: 'form-control' } %>
           </div>
           <div>
-            <%= landing.label :water_temperature, class: "label-#{yield(:class_text)}" %>
+            <%= f.label :water_temperature, class: "label-#{yield(:class_text)}" %>
           </div>
           <div>
-            <%= landing.text_field :water_temperature, class: "form-control" %>
+            <%= f.text_field :water_temperature, class: "form-control" %>
           </div>
           <div>
-            <%= landing.label :fish_species, class: "label-#{yield(:class_text)}" %>
+            <%= f.label :fish_species, class: "label-#{yield(:class_text)}" %>
           </div>
           <div>
-            <%= landing.select :fish_species, @fish_species, { prompt: "" }, class: "form-control" %>
+            <%= f.select :fish_species, fish_species, { prompt: "" }, class: "form-control" %>
           </div>
           <div>
-            <%= landing.label :landing_amount, class: "label-#{yield(:class_text)}" %>
+            <%= f.label :landing_amount, class: "label-#{yield(:class_text)}" %>
           </div>
           <div>
-            <%= landing.text_field :landing_amount, class: "form-control" %>
+            <%= f.text_field :landing_amount, class: "form-control" %>
           </div>
           <div>
-            <%= landing.label :wind, class: "label-#{yield(:class_text)}" %>
+            <%= f.label :wind, class: "label-#{yield(:class_text)}" %>
           </div>
           <div>
-            <%= landing.select :wind, @wind, { prompt: "" }, class: "form-control" %>
+            <%= f.select :wind, winds, { prompt: "" }, class: "form-control" %>
           </div>
           <div>
-            <%= landing.label :wave, class: "label-#{yield(:class_text)}" %>
+            <%= f.label :wave, class: "label-#{yield(:class_text)}" %>
           </div>
           <div>
-            <%= landing.select :wave, @wave, { prompt: "" }, class: "form-control" %>
+            <%= f.select :wave, waves, { prompt: "" }, class: "form-control" %>
           </div>
           <div>
-            <%= landing.label :remarks, class: "label-#{yield(:class_text)}" %>
+            <%= f.label :remarks, class: "label-#{yield(:class_text)}" %>
           </div>
           <div>
-            <%= landing.text_field :remarks, class: "form-control" %></div>
+            <%= f.text_field :remarks, class: "form-control" %></div>
           <div>
-            <%= landing.label :size_etc, class: "label-#{yield(:class_text)}" %>
+            <%= f.label :size_etc, class: "label-#{yield(:class_text)}" %>
           </div>
           <div>
-            <%= landing.text_field :size_etc, class: "form-control" %>
+            <%= f.text_field :size_etc, class: "form-control" %>
           </div>
           <div>
-            <%= landing.label :unit_price, class: "label-#{yield(:class_text)}" %>
+            <%= f.label :unit_price, class: "label-#{yield(:class_text)}" %>
           </div>
           <div>
-            <%= landing.text_field :unit_price, class: "form-control" %>
+            <%= f.text_field :unit_price, class: "form-control" %>
           </div>
           <div>
-            <%= landing.label :purchase, class: "label-#{yield(:class_text)}" %>
+            <%= f.label :purchase, class: "label-#{yield(:class_text)}" %>
           </div>
           <div>
-            <%= landing.text_field :purchase, class: "form-control" %>
+            <%= f.text_field :purchase, class: "form-control" %>
           </div>
           <div>
-            <%= landing.label :shipping_destination, class: "label-#{yield(:class_text)}" %>
+            <%= f.label :shipping_destination, class: "label-#{yield(:class_text)}" %>
           </div>
           <div>
-            <%= landing.text_field :shipping_destination, class: "form-control" %>
+            <%= f.text_field :shipping_destination, class: "form-control" %>
           </div>
         
-        <%= f.submit "作成", class: "btn btn-primary btn-block btn-#{yield(:class_text)}" %>
-        <%= link_to "キャンセル", landings_path, class: "btn btn-lg btn-default" %>
-      <% end %>
+        <%= f.submit "変更", class: "btn btn-primary btn-block btn-#{yield(:class_text)}" %>
+        <%= link_to "キャンセル", landing_index_path, class: "btn btn-block btn-default" %>
+      
     <% end %>
       
   </div>

@@ -12,18 +12,18 @@
       </div>
       
       <%= form_with(model: @landing, url: ground_landings_path, local: true, mehtod: :post) do |f| %>
-      <%= render 'shared/error_messages', object: f.object %>
+        <%= render 'shared/error_messages', object: f.object %>
         <div>
           <%= f.label :landing_date, class: "label-#{yield(:class_text)}" %>
         </div>
         <div>
-          <%= f.date_select :landing_date, {}, { class: 'datetime-form-control' , required: true } %>
+          <%= f.date_field :landing_date, { class: 'datetime-form-control' , required: true } %>
         </div>
         <div>
           <%= f.label :landing_time, class: "label-#{yield(:class_text)}" %>
         </div>
         <div>
-          <%= f.time_select :landing_time, {}, { class: 'datetime-form-control' , required: true } %>
+          <%= f.time_field :landing_time, { class: 'datetime-form-control' , required: true } %>
         </div>
         <div>
           <%= f.label :weather, class: "label-#{yield(:class_text)}" %>
@@ -53,13 +53,13 @@
           <%= f.label :wind, class: "label-#{yield(:class_text)}" %>
         </div>
         <div>
-          <%= f.select :wind, wind, { include_blank: "---" }, class: "form-control" %>
+          <%= f.select :wind, winds, { include_blank: "---" }, class: "form-control" %>
         </div>
         <div>
           <%= f.label :wave, class: "label-#{yield(:class_text)}" %>
         </div>
         <div>
-          <%= f.select :wave, wave, { include_blank: "---" }, class: "form-control" %>
+          <%= f.select :wave, waves, { include_blank: "---" }, class: "form-control" %>
         </div>
         <div>
           <%= f.label :remarks, class: "label-#{yield(:class_text)}" %>

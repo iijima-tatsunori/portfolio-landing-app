@@ -38,7 +38,6 @@ h1 {
 
 h2 {
   font-size: 1.2em;
-  letter-spacing: -1px;
   margin-bottom: 30px;
   text-align: center;
   font-weight: normal;
@@ -142,11 +141,11 @@ p {
 }
 
 .btn-landing--form {
-  margin-top: 20px;
+  margin: 20px 0 10px 0;
 }
 
 .datetime-form-control {
-  padding: 10px;
+  padding: 7px;
 }
 
 
@@ -154,6 +153,26 @@ p {
 
 .label-account--form {
   margin-top: 5px;
+}
+
+.account-button {
+  margin-top: 10px;
+}
+
+.btn-account--form {
+  margin: 20px 0 10px 0;
+}
+
+
+#table-account {
+  th {
+    vertical-align: middle;
+    text-align: center;
+  }
+  td {
+    vertical-align: middle;
+    text-align: center;
+  }
 }
 
 

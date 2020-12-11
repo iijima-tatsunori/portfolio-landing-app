@@ -36,7 +36,7 @@ ja:
           ground: 漁場ID
           
         account:
-          accounting_date: 年月日
+          accounting_date: 日付
           account_title: 科目
           description: 摘要
           income: 収入金額

@@ -1,0 +1,95 @@
+<%= provide(:title, '売上帳一覧') %>
+<%= provide(:class_text, 'account--form') %>
+<%= provide(:button_text, '送信') %>
+
+<h2><%= l(@first_day, format: :year) %>の売上帳一覧</h2>
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <div class="container">
+      
+      <div class="badge badge-secondary">絞り込み検索</div>
+      
+      <div class="row">
+        
+        <div class="col-sm-4">
+          <%= form_with(scope: :search, url: accounts_path, method: :get, local: true) do |f| %>
+            <div>
+              <%= f.label :accounting_date, '日付', class: "label-#{yield(:class_text)}"  %>
+            </div>
+            <div>
+              <%= f.date_field :accounting_date, class: 'datetime-form-control' %>
+            </div>
+            <div>
+              <%= f.submit '検索', class: "btn btn-block btn-primary btn-#{yield(:class_text)}" %>
+            </div>
+          <% end %>
+        </div>
+        
+        <div class="col-sm-4">
+          <%= form_with(scope: :search, url: accounts_path, method: :get, local: true) do |f| %>
+            <div>
+              <%= f.label :customer, '得意先', class: "label-#{yield(:class_text)}"  %>
+            </div>
+            <div>
+              <%= f.text_field :customer, class: 'datetime-form-control' %>
+            </div>
+            <div>
+              <%= f.submit '検索', class: "btn btn-block btn-primary btn-#{yield(:class_text)}" %>
+            </div>
+          <% end %>
+        </div>
+        
+      </div>
+      
+      
+      
+      
+          
+    </div>
+  </div>
+</div>
+<div>
+  <%= link_to "絞り込み解除", accounts_path, class: "btn btn-success" %>
+</div>
+
+<div>
+  <table class="table table-bordered table-condensed table-hover" id="table-account">
+    
+    <thead>
+      <tr>
+        <th>日付</th>
+        <th>得意先</th>
+        <th>受取方法</th>
+        <th>商品名</th>
+        <th>数量</th>
+        <th>単価</th>
+        <th>内訳</th>
+        <th>金額</th>
+        <th></th>
+      </tr>
+    </thead>
+    
+    <tbody>
+      <% @accounts.each do |account| %>
+        <tr>
+          <td><%= l(account.accounting_date, format: :short) %></td>
+          <td><%= account.customer %></td>
+          <td><%= account.receiving_method %></td>
+          <td><%= account.product_name %></td>
+          <td><%= account.quantity %></td>
+          <td><%= account.unit_price %></td>
+          <td><%= account.breakdown %></td>
+          <td><%= account.amount %></td>
+          <td class="center">
+            <%= link_to "修正", edit_account_path(account), class: "btn btn-primary" %>
+            <%= link_to "削除", account_path(account), method: :delete,
+                                data: { confirm: "#{l(account.accounting_date, format: :long)}の売上帳データを削除してよろしいですか？" },
+                                class: "btn btn-danger" %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+    
+  </table>
+</div>

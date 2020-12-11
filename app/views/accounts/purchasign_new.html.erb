@@ -1,7 +1,7 @@
-<%= provide(:title, '売上帳作成') %>
+<%= provide(:title, '仕入帳作成') %>
 <%= provide(:class_text, 'account--form') %>
 
-<h2><%= l(@first_day, format: :year) %>の売上帳作成</h2>
+<h2><%= l(@first_day, format: :year) %>の仕入帳作成</h2>
 
 <div>
   
@@ -31,9 +31,10 @@
           </p>
           <div class="collapse" id="collapse<%= day %>">
             <div class="card card-body">
-            <%= form_with(model: @account, local: true) do |f| %>
+            <%= form_with(model: @account, url: purchasign_create_accounts_path, local: true) do |f| %>
               <%= f.hidden_field :accounting_date, value: day %>
-              <%= f.hidden_field :subsidiary_journal_species, value: 4 %>
+              <%= f.hidden_field :subsidiary_journal_species, value: 3 %>
+              
               <%= f.label :customer, class: "label-#{yield(:class_text)}" %>
               <%= f.text_field :customer, class: "form-control" %>
               <%= f.label :receiving_method, class: "label-#{yield(:class_text)}" %>

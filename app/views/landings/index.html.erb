@@ -1,18 +1,53 @@
 <%= provide(:title, '水揚げ情報一覧') %>
+<%= provide(:class_text, 'landing--form') %>
 
-<h1>水揚げ情報一覧</h1>
 
-<div class="panel-group">
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      新規水揚げ情報追加
-      <% @grounds.each do |ground| %>
-        <%= link_to ground.fishing_ground_name, new_ground_landing_path(ground), class: "btn btn-primary" %>
-      <% end %>
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <div class="container">
+      
+      <div class="badge badge-secondary">絞り込み検索</div>
+      
+      <div class="row">
+        
+        <div class="col-sm-4">
+          <%= form_with(scope: :search, url: landing_index_path, method: :get, local: true) do |f| %>
+            <div>
+              <%= f.label :landing_date, '水揚げ日', class: "label-#{yield(:class_text)}"  %>
+            </div>
+            <div>
+              <%= f.date_field :landing_date, class: 'datetime-form-control' %>
+            </div>
+            <div>
+              <%= f.submit '検索', class: "btn btn-block btn-primary btn-#{yield(:class_text)}" %>
+            </div>
+          <% end %>
+        </div>
+        
+        <div class="col-sm-4">
+          <%= form_with(scope: :search, url: landing_index_path, method: :get, local: true) do |f| %>
+            <div>
+              <%= f.label :landing_fishing_ground_name, '漁場名', class: "label-#{yield(:class_text)}"  %>
+            </div>
+            <div>
+              <%= f.select :landing_fishing_ground_name, landing_fishing_ground_names, { include_blank: "---" }, class: 'form-control' %>
+            </div>
+            <div>
+              <%= f.submit '検索', class: "btn btn-block btn-primary btn-#{yield(:class_text)}" %>
+            </div>
+          <% end %>
+        </div>
+        
+      </div>
+      
+      
+          
     </div>
   </div>
 </div>
-
+<div>
+  <%= link_to "絞り込み解除", landing_index_path, class: "btn btn-success" %>
+</div>
 <div>
   <table class="table table-bordered table-condensed table-hover" id="table-attendances">
     
@@ -38,37 +73,35 @@
 
     <tbody>
       <% @landings.each do |landing| %>
-      
-      <tr>
-        <td><%= l(landing.landing_date, format: :short) %></td>
-        <td><%= l(landing.landing_time, format: :short) %></td>
-        <td><%= link_to landing.ground_id, "#" %></td>
-        <td><%= landing.weather %></td>
-        <% if landing.water_temperature.present? %>
-          <td><%= landing.water_temperature %>℃</td>
-        <% else %>
-          <td><%= landing.water_temperature %></td>
-        <% end %>
-        <td><%= landing.fish_species %></td>
-        <td><%= landing.landing_amount %></td>
-        <td><%= landing.wind %></td>
-        <td><%= landing.wave %></td>
-        <td><%= landing.remarks %></td>
-        <td><%= landing.size_etc %></td>
-        <td><%= landing.unit_price %></td>
-        <td><%= landing.purchase %></td>
-        <td><%= landing.shipping_destination %></td>
-        <td class="col-md-2 center">
-          <%= link_to "修正", landing_edit_ground_path(landing), class: "btn btn-primary" %>
-          <%= link_to "削除", landing_destroy_ground_path(landing),
-                              data: { confirm: "削除してよろしいですか？" },
-                              class: "btn btn-danger" %>
-        </td>
-      </tr>
+
+        <tr>
+          <td><%= l(landing.landing_date, format: :short) %></td>
+          <td><%= l(landing.landing_time, format: :time) %></td>
+          <td><%= link_to landing.landing_fishing_ground_name, landing_show_ground_path(ground_id: landing.ground_id, id: landing.id) %></td>
+          <td><%= landing.weather %></td>
+          <% if landing.water_temperature.present? %>
+            <td><%= landing.water_temperature %>℃</td>
+          <% else %>
+            <td><%= landing.water_temperature %></td>
+          <% end %>
+          <td><%= landing.fish_species %></td>
+          <td><%= landing.landing_amount %></td>
+          <td><%= landing.wind %></td>
+          <td><%= landing.wave %></td>
+          <td><%= landing.remarks %></td>
+          <td><%= landing.size_etc %></td>
+          <td><%= landing.unit_price %></td>
+          <td><%= landing.purchase %></td>
+          <td><%= landing.shipping_destination %></td>
+          <td class="col-md-2 center">
+            <%= link_to "修正", edit_ground_landing_path(ground_id: landing.ground_id, id: landing.id), class: "btn btn-primary" %>
+            <%= link_to "削除", landing_destroy_ground_path(landing), method: :delete,
+                                data: { confirm: "#{landing.landing_fishing_ground_name}の#{l(landing.landing_date, format: :short)}のデータを削除してよろしいですか？" },
+                                class: "btn btn-danger" %>
+          </td>
+        </tr>
         
       <% end %>
     </tbody>
-    <!--edit_ground_landing_path(landing)-->
-    <!--landing, method: :delete-->
   </table>
 </div>

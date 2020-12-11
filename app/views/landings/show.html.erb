@@ -1,0 +1,60 @@
+<%= provide(:title, '水揚げ情報') %>
+<%= provide(:class_text, 'landing--form') %>
+
+<h1>水揚げ情報</h1>
+
+<div>
+  <table class="table table-bordered table-condensed table-hover" id="table-attendances">
+    
+    <thead>
+      <tr>
+        <th>水揚げ日</th>
+        <th>水揚げ時間</th>
+        <th>漁場</th>
+        <th>天気</th>
+        <th>水温</th>
+        <th>魚の種類</th>
+        <th>水揚げ量</th>
+        <th>風</th>
+        <th>波</th>
+        <th>備考</th>
+        <th>サイズ等</th>
+        <th>単価</th>
+        <th>買受</th>
+        <th>出荷先</th>
+        <th></th>
+      </tr>
+    </thead>
+
+    <tbody>
+
+        <tr>
+          <td><%= l(@landing.landing_date, format: :short) %></td>
+          <td><%= l(@landing.landing_time, format: :time) %></td>
+          <td><%= @landing.landing_fishing_ground_name %></td>
+          <td><%= @landing.weather %></td>
+          <% if @landing.water_temperature.present? %>
+            <td><%= @landing.water_temperature %>℃</td>
+          <% else %>
+            <td><%= @landing.water_temperature %></td>
+          <% end %>
+          <td><%= @landing.fish_species %></td>
+          <td><%= @landing.landing_amount %></td>
+          <td><%= @landing.wind %></td>
+          <td><%= @landing.wave %></td>
+          <td><%= @landing.remarks %></td>
+          <td><%= @landing.size_etc %></td>
+          <td><%= @landing.unit_price %></td>
+          <td><%= @landing.purchase %></td>
+          <td><%= @landing.shipping_destination %></td>
+          <td class="col-md-2 center">
+            <%= link_to "修正", edit_ground_landing_path(ground_id: @landing.ground_id, id: @landing.id), class: "btn btn-primary" %>
+            <%= link_to "削除", landing_destroy_ground_path(@landing), method: :delete,
+                                data: { confirm: "#{@landing.landing_fishing_ground_name}の#{l(@landing.landing_date, format: :short)}のデータを削除してよろしいですか？" },
+                                class: "btn btn-danger" %>
+          </td>
+        </tr>
+        
+    </tbody>
+  </table>
+</div>

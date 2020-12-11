@@ -1,0 +1,47 @@
+<%= provide(:title, '現金出納帳編集') %>
+<%= provide(:class_text, 'account--form') %>
+
+<h2><%= l(@account.accounting_date, format: :year) %>の現金出納帳編集</h2>
+
+<div>
+  
+  <table class="table table-bordered table-condensed table-hover" id="table-account">
+    
+    
+    <thead>
+      <tr>
+        <th>日付</th>
+        <th>摘要</th>
+      </tr>
+    </thead>
+    
+    <tbody>
+      <tr>
+      
+        <td><%= l(@account.accounting_date, format: :year) %></td>
+        
+        <td>
+            <%= form_with(model: @account, url: cash_update_account_path(@account), local: true, method: :patch) do |f| %>
+              <%= f.label :account_title, class: "label-#{yield(:class_text)}" %>
+              <%= f.text_field :account_title, class: "form-control" %>
+              <%= f.label :description, class: "label-#{yield(:class_text)}" %>
+              <%= f.text_field :description, class: "form-control" %>
+              <%= f.label :income, class: "label-#{yield(:class_text)}" %>
+              <%= f.text_field :income, class: "form-control" %>
+              <%= f.label :expense, class: "label-#{yield(:class_text)}" %>
+              <%= f.text_field :expense, class: "form-control" %>
+              <%= f.label :deduction_balance, class: "label-#{yield(:class_text)}" %>
+              <%= f.text_field :deduction_balance, class: "form-control" %>
+              
+              <%= f.submit "変更", class: "btn btn-block btn-primary btn-#{yield(:class_text)}" %>
+            <% end %>
+            </div>
+          </div>
+        </td>
+        
+        
+        
+      </tr>
+    </tbody>
+  </table>
+</div>

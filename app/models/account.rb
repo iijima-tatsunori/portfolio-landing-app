@@ -1,4 +1,61 @@
 class Account < ApplicationRecord
+  
+  
+  scope :search, -> (search_params) do
+    return if search_params.blank?
+
+    accounting_date_is(search_params[:accounting_date])
+    .customer_like(search_params[:customer])
+      
+  end
+  scope :accounting_date_is, -> (accounting_date) { where(accounting_date: accounting_date) if accounting_date.present? }
+  scope :customer_like, -> (customer) { where('customer LIKE ?', "%#{customer}%") if customer.present? }
+  
+  
+  
+  
+  
+  scope :purchasign_search, -> (search_params) do
+    return if search_params.blank?
+
+    accounting_date_is(search_params[:accounting_date])
+    .customer_like(search_params[:customer])
+      
+  end
+  scope :accounting_date_is, -> (accounting_date) { where(accounting_date: accounting_date) if accounting_date.present? }
+  scope :customer_like, -> (customer) { where('customer LIKE ?', "%#{customer}%") if customer.present? }
+  
+  
+  
+  
+  scope :cash_search, -> (search_params) do
+    return if search_params.blank?
+
+    accounting_date_is(search_params[:accounting_date])
+    .account_title_like(search_params[:account_title])
+      
+  end
+  scope :accounting_date_is, -> (accounting_date) { where(accounting_date: accounting_date) if accounting_date.present? }
+  scope :account_title_like, -> (account_title) { where('account_title LIKE ?', "%#{account_title}%") if account_title.present? }
+  
+  
+  
+  
+  
+  scope :current_search, -> (search_params) do
+    return if search_params.blank?
+
+    accounting_date_is(search_params[:accounting_date])
+    .check_number_like(search_params[:check_number])
+      
+  end
+  scope :accounting_date_is, -> (accounting_date) { where(accounting_date: accounting_date) if accounting_date.present? }
+  scope :check_number_like, -> (check_number) { where('check_number LIKE ?', "%#{check_number}%") if check_number.present? }
+  
+  
+  
+  
+  
   validates :accounting_date,            presence: true,
                                          length: { maximum: 30 }
                     

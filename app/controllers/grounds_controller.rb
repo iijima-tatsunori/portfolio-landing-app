@@ -1,5 +1,8 @@
 class GroundsController < ApplicationController
   before_action :set_ground, only: [:show, :edit, :update, :destroy]
+  before_action :logged_in_user, only: [:new, :create, :show, :edit, :update, :index, :destroy]
+  before_action :admin_user, only: [:new, :create, :show, :edit, :update, :index, :destroy]
+  
 
   def index
     @grounds = Ground.paginate(page: params[:page])

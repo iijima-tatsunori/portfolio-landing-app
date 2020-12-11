@@ -20,19 +20,54 @@ Rails.application.routes.draw do
   
     member do
       get 'landing_show', to: 'landings#show'
-      get 'landing_edit', to: 'landings#edit'
-      patch 'landing_update', to: 'landings#update'
       delete 'landing_destroy', to: 'landings#destroy'
     end
     # 水揚げ
-    resources :landings, only: [:new, :create]
+    resources :landings, only: [:new, :create, :edit, :update]
   
   end
   
-  # get 'landing_new', to: 'landings#new'
   get 'landing_index', to: 'landings#index'
+  get 'landing_pre_new', to: 'landings#pre_new'
   
-  # 帳簿
-  resources :accounts
+  # 帳簿（売上帳）
+  resources :accounts, only: [:new, :create, :edit, :update, :index, :destroy] do
+    
+    member do
+      # 帳簿（仕入帳）
+      get 'purchasign_edit'
+      patch 'purchasign_update'
+      delete 'purchasign_destroy'
+      
+      # 帳簿（現金出納帳）
+      get 'cash_edit'
+      patch 'cash_update'
+      delete 'cash_destroy'
+      
+      # 帳簿（当座預金出納帳）
+      get 'current_edit'
+      patch 'current_update'
+      delete 'current_destroy'
+    end
+    
+    collection do
+      get 'purchasign_new'
+      post 'purchasign_create'
+      get 'purchasign_index'
+      
+      get 'cash_new'
+      post 'cash_create'
+      get 'cash_index'
+      
+      get 'current_new'
+      post 'current_create'
+      get 'current_index'
+    end
+    
+  end
+  
+  
+  
+  
   
 end

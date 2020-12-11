@@ -1,0 +1,18 @@
+<%= provide(:title, '作成漁場選択') %>
+
+<h1>水揚げ情報作成漁場選択</h1>
+
+<div class="container">
+  <div class="panel-group">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h2>水揚げ情報を新規作成する漁場を選択してください。</h2>
+        <div class="center">
+          <% @grounds.each do |ground| %>
+            <%= link_to ground.fishing_ground_name, new_ground_landing_path(ground), class: "btn btn-lg btn-primary" %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
