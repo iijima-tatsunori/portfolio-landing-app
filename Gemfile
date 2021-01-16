@@ -2,6 +2,7 @@ source 'https://rubygems.org'
 
 gem 'rails',        '~> 5.1.6'
 gem 'bootstrap-sass'
+gem 'bootstrap',    '~> 4.4.1'
 gem 'faker'
 gem 'roo'
 gem 'rounding'

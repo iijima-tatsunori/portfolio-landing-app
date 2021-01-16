@@ -1,0 +1,45 @@
+<%= provide(:class_text, 'account--form') %>
+
+<div class="modal-dialog modal-lg modal-dialog-center">
+  <div class="modal-content">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <h2 class="modal-title"><%= l(@account.accounting_date, format: :long) %>の売上帳編集</h2>
+    </div>
+    <div class="modal-body">
+      <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+          <div>
+            <%= form_with(model: @account, local: true, method: :patch) do |f| %>
+              <table class="table table-bordered table-condensed table-hover" id="table-account">
+                <thead>
+                  <tr>
+                    <th><%= f.label :accounting_date, class: "label-#{yield(:class_text)}" %></th>
+                    <th><%= f.label :customer, class: "label-#{yield(:class_text)}" %></th>
+                    <th><%= f.label :receiving_method, class: "label-#{yield(:class_text)}" %></th>
+                    <th><%= f.label :product_name, class: "label-#{yield(:class_text)}" %></th>
+                    <th><%= f.label :quantity, class: "label-#{yield(:class_text)}" %></th>
+                    <th><%= f.label :unit_price, class: "label-#{yield(:class_text)}" %></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><%= f.date_field :accounting_date, required: true, class: "form-control" %></td>
+                    <td><%= f.text_field :customer, required: true, placeholder: "入力必須", class: "form-control" %></td>
+                    <td><%= f.text_field :receiving_method, required: true, placeholder: "入力必須", class: "form-control" %></td>
+                    <td><%= f.text_field :product_name, class: "form-control" %></td>
+                    <td><%= f.text_field :quantity, class: "form-control" %></td>
+                    <td><%= f.text_field :unit_price, class: "form-control" %></td>
+                  </tr>
+                </tbody>
+              </table>
+              <div><%= f.submit "変更", class: "btn btn-block btn-primary btn-#{yield(:class_text)}" %></div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

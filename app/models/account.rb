@@ -46,13 +46,17 @@ class Account < ApplicationRecord
     return if search_params.blank?
 
     accounting_date_is(search_params[:accounting_date])
-    .check_number_like(search_params[:check_number])
       
   end
   scope :accounting_date_is, -> (accounting_date) { where(accounting_date: accounting_date) if accounting_date.present? }
-  scope :check_number_like, -> (check_number) { where('check_number LIKE ?', "%#{check_number}%") if check_number.present? }
   
   
+  
+  validate :future_day
+
+  def future_day
+    errors.add(:accounting_date," : 未来の日付は選択できません。") if Date.current < accounting_date
+  end
   
   
   
@@ -66,6 +70,8 @@ class Account < ApplicationRecord
   validates :income,                     length: { maximum: 30 }
                     
   validates :expense,                    length: { maximum: 30 }
+                    
+  validates :deduction_balance,          length: { maximum: 30 }
                     
   validates :tax_rate,                   length: { maximum: 30 }
                     
@@ -91,9 +97,9 @@ class Account < ApplicationRecord
   
   validates :unit_price,                 length: { maximum: 30 }
   
-  validates :breakdown,                  length: { maximum: 30 }
+  validates :breakdown,                  length: { maximum: 300 }
   
-  validates :amount,                     length: { maximum: 30 }
+  validates :amount,                     length: { maximum: 300 }
   
   validates :general_edger_number,       length: { maximum: 30 }
   

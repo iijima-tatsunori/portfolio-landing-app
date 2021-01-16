@@ -35,9 +35,9 @@ Rails.application.routes.draw do
     
     member do
       # 帳簿（仕入帳）
-      get 'purchasign_edit'
-      patch 'purchasign_update'
-      delete 'purchasign_destroy'
+      get 'purchasing_edit'
+      patch 'purchasing_update'
+      delete 'purchasing_destroy'
       
       # 帳簿（現金出納帳）
       get 'cash_edit'
@@ -51,9 +51,9 @@ Rails.application.routes.draw do
     end
     
     collection do
-      get 'purchasign_new'
-      post 'purchasign_create'
-      get 'purchasign_index'
+      get 'purchasing_new'
+      post 'purchasing_create'
+      get 'purchasing_index'
       
       get 'cash_new'
       post 'cash_create'
@@ -62,6 +62,12 @@ Rails.application.routes.draw do
       get 'current_new'
       post 'current_create'
       get 'current_index'
+      
+      # 仕訳帳
+      get 'journal_books'
+      # 総勘定元帳
+      get 'general_edger'
+      
     end
     
   end

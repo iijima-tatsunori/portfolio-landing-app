@@ -37,7 +37,7 @@ ja:
           
         account:
           accounting_date: 日付
-          account_title: 科目
+          account_title: 勘定科目
           description: 摘要
           income: 収入金額
           expense: 支出金額
@@ -45,8 +45,8 @@ ja:
           tax_rate: 税率
           subsidiary_journal_species: 補助記入帳種類
           check_number: 小切手番号
-          deposit: 預入
-          drawer: 引出
+          deposit: 入金
+          drawer: 出金
           debit_credit: 借 / 貸
           balance: 残高
           customer: 得意先
@@ -65,3 +65,4 @@ ja:
           debit_amount: 借方金額
           credit_amount: 貸方金額
           journal_balance: 残高
+          continue_check_box: 連続作成

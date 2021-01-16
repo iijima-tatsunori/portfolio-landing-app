@@ -56,10 +56,11 @@ class ApplicationController < ActionController::Base
     redirect_to(root_url) unless current_user.admin? || current_user?(@user)
   end
   
-  def set_one_month 
-    @first_day = Date.current.beginning_of_month
+  def set_one_month
+    @first_day = params[:accounting_date].nil? ? Date.current.beginning_of_month : params[:accounting_date].to_date
     @last_day = @first_day.end_of_month
     @one_month = [*@first_day..@last_day]
+    @this_month = @first_day.all_month
   end
   
   

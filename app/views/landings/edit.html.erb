@@ -7,8 +7,6 @@
   <div class="col-md-6 col-md-offset-3">
     <h3 class="center">「<%= @ground.fishing_ground_name %>」<%= l(@landing.landing_date, format: :short) %>の水揚げ情報修正</h3>
     <%= form_with(model: @landing, url: ground_landing_path( id: @landing.id), local: true, mehtod: :patch) do |f| %>
-      
-        
         <%= render 'shared/error_messages', object: f.object %>
           <div>
             <%= f.label :landing_date, class: "label-#{yield(:class_text)}" %>

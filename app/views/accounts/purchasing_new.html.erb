@@ -1,10 +1,10 @@
-<%= provide(:title, '売上帳作成') %>
+<%= provide(:title, '仕入帳作成') %>
 <%= provide(:class_text, 'account--form') %>
 
-<h2>売上帳作成</h2>
+<h2>仕入帳作成</h2>
 
 <div>
-  <%= form_with(model: @account, local: true, method: :post) do |f| %>
+  <%= form_with(model: @account, url: purchasing_create_accounts_path, local: true, method: :post) do |f| %>
   <%= render 'shared/error_messages', object: f.object %>
     <table class="table table-bordered table-condensed table-hover" id="table-account">
       <thead>
@@ -26,7 +26,7 @@
           <td><%= f.text_field :product_name, class: "form-control" %></td>
           <td><%= f.text_field :quantity, required: true, placeholder: "入力必須", class: "form-control" %></td>
           <td><%= f.text_field :unit_price, required: true, placeholder: "入力必須", class: "form-control" %></td>
-          <%= f.hidden_field :subsidiary_journal_species, value: 4 %>
+          <%= f.hidden_field :subsidiary_journal_species, value: 3 %>
         </tr>
       </tbody>
     </table>

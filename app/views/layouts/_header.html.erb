@@ -4,41 +4,69 @@
     <ul class="nav navbar-nav navbar-expand-lg navbar-right">
       <li><%= link_to "ホーム", root_path %></li>
       <% if logged_in? %>
-        <% if current_user.admin? %>
-          <li><%= link_to "全てのユーザー", users_path %></li>
-        <% end %>
         
         <% if current_user.admin? %>
           <li><%= link_to "漁場一覧", grounds_path %></li>
         <% end %>
         
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-            水揚げ情報<b class="caret"></b>
-          </a>
-          <ul class="dropdown-menu">
-            <li><%= link_to "水揚げ情報一覧", landing_index_path %></li>
-            <li><%= link_to "作成場所選択", landing_pre_new_path %></li>
-        </ul>
-        </li>
+        <% if current_user.admin? || current_user.accounting? %>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+              水揚げ情報<b class="caret"></b>
+            </a>
+            <ul class="dropdown-menu">
+              <li><%= link_to "水揚げ情報作成", landing_pre_new_path %></li>
+              <li><%= link_to "水揚げ情報一覧", landing_index_path %></li>
+            </ul>
+          </li>
+        <% else %>
+          <li><%= link_to "水揚げ情報作成", landing_pre_new_path %></li>
+          <li><%= link_to "水揚げ情報一覧", landing_index_path %></li>
+        <% end %>
         
         <% if current_user.admin? || current_user.accounting? %>
           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              帳簿管理<b class="caret"></b>
+              主要簿<b class="caret"></b>
             </a>
             <ul class="dropdown-menu">
-              <li><%= link_to "売上帳一覧", accounts_path %></li>
+              <li><%= link_to "仕訳帳", journal_books_accounts_path %></li>
+              <li class="divider"></li>
+              <li><%= link_to "総勘定元帳", general_edger_accounts_path %></li>
+            </ul>
+          </li>
+        <% end %>
+        
+        <% if current_user.admin? || current_user.accounting? %>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+              補助簿作成<b class="caret"></b>
+            </a>
+            <ul class="dropdown-menu">
               <li><%= link_to "売上帳作成", new_account_path %></li>
               <li class="divider"></li>
-              <li><%= link_to "仕入帳一覧", purchasign_index_accounts_path %></li>
-              <li><%= link_to "仕入帳作成", purchasign_new_accounts_path %></li>
+              <li><%= link_to "仕入帳作成", purchasing_new_accounts_path %></li>
               <li class="divider"></li>
-              <li><%= link_to "現金出納帳一覧", cash_index_accounts_path %></li>
               <li><%= link_to "現金出納帳作成", cash_new_accounts_path %></li>
               <li class="divider"></li>
-              <li><%= link_to "当座預金出納帳一覧", current_index_accounts_path %></li>
               <li><%= link_to "当座預金出納帳作成", current_new_accounts_path %></li>
+            </ul>
+          </li>
+        <% end %>
+        
+        <% if current_user.admin? || current_user.accounting? %>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+              補助簿一覧<b class="caret"></b>
+            </a>
+            <ul class="dropdown-menu">
+              <li><%= link_to "売上帳", accounts_path %></li>
+              <li class="divider"></li>
+              <li><%= link_to "仕入帳", purchasing_index_accounts_path %></li>
+              <li class="divider"></li>
+              <li><%= link_to "現金出納帳", cash_index_accounts_path %></li>
+              <li class="divider"></li>
+              <li><%= link_to "当座預金出納帳", current_index_accounts_path(accounting_date: @first_day) %></li>
             </ul>
           </li>
         <% end %>
@@ -50,6 +78,9 @@
           <ul class="dropdown-menu">
             <li><%= link_to "ユーザー情報", current_user %></li>
             <li><%= link_to "ユーザー情報変更", edit_user_path(current_user) %></li>
+            <% if current_user.admin? %>
+              <li><%= link_to "全てのユーザー", users_path %></li>
+            <% end %>
             <li class="divider"></li>
             <li>
               <%= link_to "ログアウト", logout_path, method: :delete %>

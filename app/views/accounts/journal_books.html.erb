@@ -1,8 +1,7 @@
-<%= provide(:title, '現金出納帳') %>
+<%= provide(:title, '仕訳帳') %>
 <%= provide(:class_text, 'account--form') %>
-<%= provide(:button_text, '送信') %>
 
-<h2>現金出納帳</h2>
+<h2><%= l(@first_day, format: :year) %>の仕訳帳</h2>
 
 <div class="panel panel-default">
   <div class="panel-heading">
@@ -28,7 +27,7 @@
         <div class="col-sm-4">
           <%= form_with(scope: :search, url: cash_index_accounts_path, method: :get, local: true) do |f| %>
             <div>
-              <%= f.label :account_title, '勘定科目', class: "label-#{yield(:class_text)}"  %>
+              <%= f.label :account_title, '科目', class: "label-#{yield(:class_text)}"  %>
             </div>
             <div>
               <%= f.text_field :account_title, class: 'datetime-form-control' %>
@@ -54,45 +53,25 @@
     <thead>
       <tr>
         <th>日付</th>
-        <th>勘定科目</th>
         <th>摘要</th>
-        <th>収入金額</th>
-        <th>支出金額</th>
-        <th>差引残高</th>
-        <th></th>
+        <th>元丁</th>
+        <th>借方</th>
+        <th>貸方</th>
+        <th>詳細</th>
       </tr>
     </thead>
+    
     <tbody>
-      <% zero = 0 %>
-      <% @cash_accounts.each do |account| %>
-      
         <tr>
-          <td><%= l(account.accounting_date, format: :short) %></td>
-          <td><%= account.account_title %></td>
-          <td><%= account.description %></td>
-          <td><%= account.income %>円</td>
-          <td><%= account.expense %>円</td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
           
-          <% if account.income.present? || account.expense.present? %>
-            <% a_id = Account.find(account.id) %>
-            <% balance = a_id.income - a_id.expense %>
-            <% sum_balance = zero += balance %>
-          <% end %>
-          
-          <td><%= sum_balance %>円</td>
-          
-          <td class="center">
-            <%= link_to "修正", cash_edit_account_path(account), remote: true, class: "btn btn-primary" %>
-            <%= link_to "削除", cash_destroy_account_path(account), method: :delete,
-                                  data: { confirm: "#{l(account.accounting_date, format: :long)}の現金出納帳データを削除してよろしいですか？" },
-                                  class: "btn btn-danger" %>
-            
-          </td>
         </tr>
-      <% end %>
     </tbody>
     
   </table>
 </div>
-
-<div id="cash_edit" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>

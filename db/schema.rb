@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20201206060705) do
+ActiveRecord::Schema.define(version: 20201218083000) do
 
   create_table "accounts", force: :cascade do |t|
     t.date "accounting_date"
@@ -29,10 +29,10 @@ ActiveRecord::Schema.define(version: 20201206060705) do
     t.string "customer"
     t.string "receiving_method"
     t.string "product_name"
-    t.decimal "quantity"
+    t.decimal "quantity", precision: 12, scale: 2
     t.integer "unit_price"
-    t.integer "breakdown"
-    t.integer "amount"
+    t.decimal "breakdown", precision: 12, scale: 2
+    t.decimal "amount", precision: 12, scale: 2
     t.integer "general_edger_number"
     t.integer "journal_books_number"
     t.string "notation"
@@ -44,6 +44,7 @@ ActiveRecord::Schema.define(version: 20201206060705) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "journal_description"
+    t.string "continue_check_box"
   end
 
   create_table "grounds", force: :cascade do |t|
@@ -54,9 +55,9 @@ ActiveRecord::Schema.define(version: 20201206060705) do
 
   create_table "landings", force: :cascade do |t|
     t.string "weather"
-    t.decimal "water_temperature"
+    t.decimal "water_temperature", precision: 12, scale: 2
     t.string "fish_species"
-    t.decimal "landing_amount"
+    t.decimal "landing_amount", precision: 12, scale: 2
     t.date "landing_date"
     t.string "wind"
     t.string "wave"

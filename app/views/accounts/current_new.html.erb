@@ -3,62 +3,44 @@
 
 <h2><%= l(@first_day, format: :year) %>の当座預金出納帳作成</h2>
 
+
 <div>
-  
-  <table class="table table-bordered table-condensed table-hover" id="table-account">
-    
-    
-    <thead>
-      <tr>
-        <th>日付</th>
-        <th>摘要</th>
-      </tr>
-    </thead>
-    
-    <tbody>
+  <%= form_with(model: @account, url: current_create_accounts_path, local: true) do |f| %>
+  <%= render 'shared/error_messages', object: f.object %>
+    <table class="table table-bordered table-condensed table-hover" id="table-account">
+      <thead>
+        <tr>
+          <th><%= f.label :accounting_date, class: "label-#{yield(:class_text)}" %></th>
+          <th><%= f.label :account_title, class: "label-#{yield(:class_text)}" %></th>
+          <th><%= f.label :description, class: "label-#{yield(:class_text)}" %></th>
+          <th><%= f.label :check_number, class: "label-#{yield(:class_text)}" %></th>
+          <th><%= f.label :deposit, class: "label-#{yield(:class_text)}" %></th>
+          <th><%= f.label :drawer, class: "label-#{yield(:class_text)}" %></th>
+        </tr>
+      </thead>
       
-      <% @one_month.each do |day| %>
-      
-      <tr>
-      
-        <td><%= l(day, format: :short2) %></td>
-        
-        <td>
-          <p>
-            <button type="button" class="btn btn-success account-button" data-toggle="collapse" data-target="#collapse<%= day %>" aria-expanded="false" aria-controls="collapseExample">
-              入力フォーム展開
-            </button>
-          </p>
-          <div class="collapse" id="collapse<%= day %>">
-            <div class="card card-body">
-            <%= form_with(model: @account, url: current_create_accounts_path, local: true) do |f| %>
-              <%= f.hidden_field :accounting_date, value: day %>
-              <%= f.hidden_field :subsidiary_journal_species, value: 2 %>
-              <%= f.label :check_number, class: "label-#{yield(:class_text)}" %>
-              <%= f.text_field :check_number, class: "form-control" %>
-              <%= f.label :deposit, class: "label-#{yield(:class_text)}" %>
-              <%= f.text_field :deposit, class: "form-control" %>
-              <%= f.label :drawer, class: "label-#{yield(:class_text)}" %>
-              <%= f.text_field :drawer, class: "form-control" %>
-              <%= f.label :debit_credit, class: "label-#{yield(:class_text)}" %>
-              <%= f.text_field :debit_credit, class: "form-control" %>
-              <%= f.label :balance, class: "label-#{yield(:class_text)}" %>
-              <%= f.text_field :balance, class: "form-control" %>
-              
-              <%= f.submit "作成", class: "btn btn-block btn-primary btn-#{yield(:class_text)}" %>
-            <% end %>
-            </div>
-          </div>
-        </td>
-        
-        
-        
-      </tr>
-      
-      <% end %>
-    </tbody>
-    
-    
-    
-  </table>
+      <tbody>
+        <tr>
+          <td><%= f.date_field :accounting_date, required: true, class: "form-control" %></td>
+          <td><%= f.text_field :account_title, required: true, placeholder: "入力必須", class: "form-control" %></td>
+          <td><%= f.text_field :description, required: true, placeholder: "入力必須", class: "form-control" %></td>
+          <td><%= f.text_field :check_number, required: true, placeholder: "入力必須", class: "form-control" %></td>
+          <td><%= f.text_field :deposit, class: "form-control" %></td>
+          <td><%= f.text_field :drawer, class: "form-control" %></td>
+          <%= f.hidden_field :subsidiary_journal_species, value: 2 %>
+        </tr>
+      </tbody>
+    </table>
+    <div><%= f.submit "作成", class: "btn btn-block btn-primary btn-#{yield(:class_text)}" %></div>
+  <% end %>
 </div>
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              

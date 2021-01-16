@@ -1,8 +1,8 @@
-<%= provide(:title, '売上帳一覧') %>
+<%= provide(:title, '売上帳') %>
 <%= provide(:class_text, 'account--form') %>
 <%= provide(:button_text, '送信') %>
 
-<h2><%= l(@first_day, format: :year) %>の売上帳一覧</h2>
+<h2>売上帳</h2>
 
 <div class="panel panel-default">
   <div class="panel-heading">
@@ -44,8 +44,6 @@
       
       
       
-      
-          
     </div>
   </div>
 </div>
@@ -71,25 +69,58 @@
     </thead>
     
     <tbody>
-      <% @accounts.each do |account| %>
-        <tr>
-          <td><%= l(account.accounting_date, format: :short) %></td>
-          <td><%= account.customer %></td>
-          <td><%= account.receiving_method %></td>
-          <td><%= account.product_name %></td>
-          <td><%= account.quantity %></td>
-          <td><%= account.unit_price %></td>
-          <td><%= account.breakdown %></td>
-          <td><%= account.amount %></td>
-          <td class="center">
-            <%= link_to "修正", edit_account_path(account), class: "btn btn-primary" %>
-            <%= link_to "削除", account_path(account), method: :delete,
-                                data: { confirm: "#{l(account.accounting_date, format: :long)}の売上帳データを削除してよろしいですか？" },
-                                class: "btn btn-danger" %>
-          </td>
-        </tr>
+      <% zero = 0 %>
+      <% @accounts.zip(@next_accounts, @before_accounts) do |account, next_a, before_a| %>
+          <tr>
+            <td><%= l(account.accounting_date, format: :short) %></td>
+            <td><%= account.customer %></td>
+            <td><%= account.receiving_method %></td>
+            <td><%= account.product_name %></td>
+            <td><%= account.quantity %></td>
+            <td>￥<%= account.unit_price %></td>
+            <% if account.quantity.present? && account.unit_price.present? %>
+              <td>￥<%= account.breakdown %></td>
+            <% else %>
+              <td></td>
+            <% end %>
+            
+            <% if account.quantity.present? && account.unit_price.present? %>
+            <!--amountの値を計算してデータベースに保存-->
+              
+              <% if account.accounting_date == before_a.accounting_date && account.customer == before_a.customer %>
+                <% am = zero += account.breakdown %>
+              <% elsif account.accounting_date != before_a.accounting_date || account.customer != before_a.customer %>
+                <% zero = 0 %>
+                <% am = zero += account.breakdown %>
+              <% end %>
+            
+            
+            
+              <!--日付または、得意先が次の要素と異なる場合true-->
+              <% if account.accounting_date != next_a.accounting_date || account.customer != next_a.customer %>
+                <td><%= am %></td>
+              <% else %>
+                <td></td>
+              <% end %>
+              
+              
+              
+              
+            <% else %>
+              <td></td>
+            <% end %>
+            
+            <td class="center">
+              <%= link_to "修正", edit_account_path(account), remote: true, class: "btn btn-primary" %>
+              <%= link_to "削除", account_path(account), method: :delete,
+                                  data: { confirm: "#{l(account.accounting_date, format: :long)}の売上帳データを削除してよろしいですか？" },
+                                  class: "btn btn-danger" %>
+            </td>
+          </tr>
       <% end %>
     </tbody>
     
   </table>
 </div>
+
+<div id="edit" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>

@@ -25,6 +25,7 @@
         <td><%= link_to ground.fishing_ground_name, ground %></td>
         <td>
           <% if current_user.admin? %>
+            <%= link_to "編集", edit_ground_path(ground), class: "btn btn-success" %>
             <%= link_to "削除", ground, method: :delete,
                 data: { confirm: "削除してよろしいですか？" },
                 class: "btn btn-danger" %>
