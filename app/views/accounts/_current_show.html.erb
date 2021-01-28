@@ -1,0 +1,49 @@
+<div class="modal-dialog modal-lg modal-dialog-center">
+  <div class="modal-content">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <h2 class="modal-title"><%= l(@account.accounting_date, format: :long) %>当座預金出納帳詳細</h2>
+    </div>
+    <div class="modal-body">
+      <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+          <table class="table table-bordered table-condensed table-hover" id="table-account">
+            <thead>
+              <tr>
+                <th>日付</th>
+                <th>小切手番号</th>
+                <th>勘定科目</th>
+                <th>適要</th>
+                <th>入金</th>
+                <th>出金</th>
+              </tr>
+            </thead>
+            
+            <tbody>
+              <tr>
+                <td><%= l(@account.accounting_date, format: :short) %></td>
+                <td><%= @account.check_number %></td>
+                <td><%= @account.account_title %></td>
+                <td><%= @account.description %></td>
+                
+                <% if @account.deposit.present? %>
+                  <td>￥<%= @account.deposit %></td>
+                <% else %>
+                  <td></td>
+                <% end %>
+                
+                <% if @account.drawer.present? %>
+                  <td>￥<%= @account.drawer %></td>
+                <% else %>
+                  <td></td>
+                <% end %>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

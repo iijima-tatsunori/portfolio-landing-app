@@ -1,40 +1,39 @@
-<%= provide(:title, '仕訳帳') %>
+<%= provide(:title, '総勘定元帳帳') %>
 
-<h2><%= l(@first_day, format: :year) %>仕訳帳</h2>
+<h2><%= l(@first_day, format: :year) %>総勘定元帳帳</h2>
 
 <div class="btn-users-show">
-  <% unless @first_day <= @journal_accounts.first.accounting_date %>
-    <%= link_to "⇦ 月", journal_books_accounts_path(accounting_date: @first_day.prev_month), class: "btn btn-info" %>
+  <% unless @first_day <= @general_ledger_accounts.first.accounting_date %>
+    <%= link_to "⇦ 月", general_ledger_accounts_path(accounting_date: @first_day.prev_month), class: "btn btn-info" %>
   <% else %>
-    <%= link_to "⇦ 月", journal_books_accounts_path(accounting_date: @first_day.prev_month), class: "btn btn-info disabled" %>
+    <%= link_to "⇦ 月", general_ledger_accounts_path(accounting_date: @first_day.prev_month), class: "btn btn-info disabled" %>
   <% end %>
-  <% unless @first_day >= @journal_accounts.last.accounting_date.beginning_of_month %>
-    <%= link_to "月 ⇨", journal_books_accounts_path(accounting_date: @first_day.next_month), class: "btn btn-info" %>
+  <% unless @first_day >= @general_ledger_accounts.last.accounting_date.beginning_of_month %>
+    <%= link_to "月 ⇨", general_ledger_accounts_path(accounting_date: @first_day.next_month), class: "btn btn-info" %>
   <% else %>
-    <%= link_to "月 ⇨", journal_books_accounts_path(accounting_date: @first_day.next_month), class: "btn btn-info disabled" %>
+    <%= link_to "月 ⇨", general_ledger_accounts_path(accounting_date: @first_day.next_month), class: "btn btn-info disabled" %>
   <% end %>
-  <% unless @first_day.prev_year <= @journal_accounts.first.accounting_date%>
-    <%= link_to "⇦ 年", journal_books_accounts_path(accounting_date: @first_day.prev_year), class: "btn btn-success" %>
+  <% unless @first_day.prev_year <= @general_ledger_accounts.first.accounting_date%>
+    <%= link_to "⇦ 年", general_ledger_accounts_path(accounting_date: @first_day.prev_year), class: "btn btn-success" %>
   <% else %>
-    <%= link_to "⇦ 年", journal_books_accounts_path(accounting_date: @first_day.prev_year), class: "btn btn-success disabled" %>
+    <%= link_to "⇦ 年", general_ledger_accounts_path(accounting_date: @first_day.prev_year), class: "btn btn-success disabled" %>
   <% end %>
-  <% unless @first_day.next_year >= @journal_accounts.last.accounting_date%>
-    <%= link_to "年 ⇨", journal_books_accounts_path(accounting_date: @first_day.next_year), class: "btn btn-success" %>
+  <% unless @first_day.next_year >= @general_ledger_accounts.last.accounting_date%>
+    <%= link_to "年 ⇨", general_ledger_accounts_path(accounting_date: @first_day.next_year), class: "btn btn-success" %>
   <% else %>
-    <%= link_to "年 ⇨", journal_books_accounts_path(accounting_date: @first_day.next_year), class: "btn btn-success disabled" %>
+    <%= link_to "年 ⇨", general_ledger_accounts_path(accounting_date: @first_day.next_year), class: "btn btn-success disabled" %>
   <% end %>
-  <% unless @first_day <= @journal_accounts.first.accounting_date %>
-    <%= link_to "⇦ 先頭", journal_books_accounts_path(accounting_date: @journal_accounts.first.accounting_date), class: "btn btn-danger" %>
+  <% unless @first_day <= @general_ledger_accounts.first.accounting_date %>
+    <%= link_to "⇦ 先頭", general_ledger_accounts_path(accounting_date: @general_ledger_accounts.first.accounting_date), class: "btn btn-danger" %>
   <% else %>
-    <%= link_to "⇦ 先頭", journal_books_accounts_path(accounting_date: @journal_accounts.first.accounting_date), class: "btn btn-danger disabled" %>
+    <%= link_to "⇦ 先頭", general_ledger_accounts_path(accounting_date: @general_ledger_accounts.first.accounting_date), class: "btn btn-danger disabled" %>
   <% end %>
-  <% unless @first_day >= @journal_accounts.last.accounting_date.beginning_of_month %>
-    <%= link_to "末尾 ⇨", journal_books_accounts_path(accounting_date: @journal_accounts.last.accounting_date), class: "btn btn-danger" %>
+  <% unless @first_day >= @general_ledger_accounts.last.accounting_date.beginning_of_month %>
+    <%= link_to "末尾 ⇨", general_ledger_accounts_path(accounting_date: @general_ledger_accounts.last.accounting_date), class: "btn btn-danger" %>
   <% else %>
-    <%= link_to "末尾 ⇨", journal_books_accounts_path(accounting_date: @journal_accounts.last.accounting_date), class: "btn btn-danger disabled" %>
+    <%= link_to "末尾 ⇨", general_ledger_accounts_path(accounting_date: @general_ledger_accounts.last.accounting_date), class: "btn btn-danger disabled" %>
   <% end %>
 </div>
-
 <div>
   <table class="table table-bordered table-condensed table-hover" id="table-account">
     
@@ -51,7 +50,7 @@
     </thead>
     
     <tbody>
-      <% @journal_accounts.each do |account| %>
+      <% @general_ledger_accounts.each do |account| %>
         <% if @this_month.include?(Date.parse(account[:accounting_date].to_s)) %>
         <% if account.subsidiary_journal_species == 1 %>
           <tr class="success">

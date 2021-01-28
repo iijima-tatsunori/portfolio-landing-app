@@ -4,5 +4,6 @@
   <%= f.label :fishing_ground_name, class: "label-#{yield(:class_text)}" %>
   <%= f.text_field :fishing_ground_name, class: "form-control" %>
 
-  <%= f.submit yield(:button_text), class: "btn btn-primary btn-block btn-#{yield(:class_text)}" %>
+  <%= f.submit yield(:button_text), class: "btn btn-primary btn-#{yield(:class_text)}" %>
+  <%= link_to "キャンセル", grounds_path, class: "btn btn-default btn-#{yield(:class_text)}" %>
 <% end %>

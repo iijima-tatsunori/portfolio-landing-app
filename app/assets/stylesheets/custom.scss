@@ -49,6 +49,10 @@ p {
   line-height: 1.7em;
 }
 
+.separator {
+  height: 50px;
+}
+
 /* header */
 
 #logo {
@@ -163,7 +167,6 @@ p {
   margin: 20px 0 10px 0;
 }
 
-
 #table-account {
   th {
     vertical-align: middle;
@@ -173,6 +176,10 @@ p {
     vertical-align: middle;
     text-align: center;
   }
+}
+
+.btn-users-show {
+  margin: 0 0 5px 0;
 }
 
 /* モーダルウィンドウ */

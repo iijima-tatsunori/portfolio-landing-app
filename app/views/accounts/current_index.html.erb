@@ -1,57 +1,47 @@
 <%= provide(:title, '当座預金出納帳') %>
-<%= provide(:class_text, 'account--form') %>
-<%= provide(:button_text, '送信') %>
 
-<h2>当座預金出納帳</h2>
-
-
-
-<div class="dropdown">
-  <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-    絞り込み検索 <b class="caret"></b>
-  </button>
-  <%= link_to "解除", current_index_accounts_path(accounting_date: @first_day), class: "btn btn-default" %>
-  <div class="panel panel-default dropdown-menu">
-    <div class="panel-heading">
-      <%= form_with(scope: :search, url: current_index_accounts_path(accounting_date: @first_day), method: :get, local: true) do |f| %>
-        <div>
-          <%= f.label :accounting_date, '日付', class: "label-#{yield(:class_text)}"  %>
-        </div>
-        <div>
-          <%= f.date_field :accounting_date, class: 'datetime-form-control' %>
-        </div>
-        <div>
-          <%= f.submit '検索', class: "btn btn-block btn-primary btn-#{yield(:class_text)}" %>
-        </div>
-      <% end %>
-    </div>
-  </div>
-</div>
-
+<h2><%= l(@first_day, format: :year) %>当座預金出納帳</h2>
 <div class="btn-users-show">
-  <% unless params[:accounting_date].to_date <= @accounts.first.accounting_date %>
-    <%= link_to "⇦ 前月へ", current_index_accounts_path(accounting_date: @first_day.prev_month), class: "btn bg-info text-info" %>
+  <% unless @first_day <= @current_accounts.first.accounting_date %>
+    <%= link_to "⇦ 月", current_index_accounts_path(accounting_date: @first_day.prev_month), class: "btn btn-info" %>
   <% else %>
-    <%= link_to "⇦ 前月へ", current_index_accounts_path(accounting_date: @first_day.prev_month), class: "btn bg-info text-danger disabled" %>
+    <%= link_to "⇦ 月", current_index_accounts_path(accounting_date: @first_day.prev_month), class: "btn btn-info disabled" %>
   <% end %>
-  <% unless params[:accounting_date].to_date >= @accounts.last.accounting_date.beginning_of_month %>
-    <%= link_to "次月へ ⇨", current_index_accounts_path(accounting_date: @first_day.next_month), class: "btn bg-info text-info" %>
+  <% unless @first_day >= @current_accounts.last.accounting_date.beginning_of_month %>
+    <%= link_to "月 ⇨", current_index_accounts_path(accounting_date: @first_day.next_month), class: "btn btn-info" %>
   <% else %>
-    <%= link_to "次月へ ⇨", current_index_accounts_path(accounting_date: @first_day.next_month), class: "btn bg-info text-danger disabled" %>
+    <%= link_to "月 ⇨", current_index_accounts_path(accounting_date: @first_day.next_month), class: "btn btn-info disabled" %>
+  <% end %>
+  <% unless @first_day.prev_year <= @current_accounts.first.accounting_date%>
+    <%= link_to "⇦ 年", current_index_accounts_path(accounting_date: @first_day.prev_year), class: "btn btn-success" %>
+  <% else %>
+    <%= link_to "⇦ 年", current_index_accounts_path(accounting_date: @first_day.prev_year), class: "btn btn-success disabled" %>
+  <% end %>
+  <% unless @first_day.next_year >= @current_accounts.last.accounting_date%>
+    <%= link_to "年 ⇨", current_index_accounts_path(accounting_date: @first_day.next_year), class: "btn btn-success" %>
+  <% else %>
+    <%= link_to "年 ⇨", current_index_accounts_path(accounting_date: @first_day.next_year), class: "btn btn-success disabled" %>
+  <% end %>
+  <% unless @first_day <= @current_accounts.first.accounting_date %>
+    <%= link_to "⇦ 先頭", current_index_accounts_path(accounting_date: @current_accounts.first.accounting_date), class: "btn btn-danger" %>
+  <% else %>
+    <%= link_to "⇦ 先頭", current_index_accounts_path(accounting_date: @current_accounts.first.accounting_date), class: "btn btn-danger disabled" %>
+  <% end %>
+  <% unless @first_day >= @current_accounts.last.accounting_date.beginning_of_month %>
+    <%= link_to "末尾 ⇨", current_index_accounts_path(accounting_date: @current_accounts.last.accounting_date), class: "btn btn-danger" %>
+  <% else %>
+    <%= link_to "末尾 ⇨", current_index_accounts_path(accounting_date: @current_accounts.last.accounting_date), class: "btn btn-danger disabled" %>
   <% end %>
 </div>
-
-
 
 <div>
   <table class="table table-bordered table-condensed table-hover" id="table-account">
-    
     <thead>
       <tr>
         <th>日付</th>
+        <th>小切手番号</th>
         <th>勘定科目</th>
         <th>適要</th>
-        <th>小切手番号</th>
         <th>入金</th>
         <th>出金</th>
         <th>残高</th>
@@ -61,26 +51,58 @@
     
     <tbody>
       <tr>
-        <td></td>
-        <td></td>
-        <td>前月より繰越</td>
-        <td></td>
-        <td></td>
-        <td></td>
+        <!--日付が当初月以前かつ、一番近い日付のデータの値が空かどうか-->
+        <% unless @amount_carried_forward.last.nil? %>
+          <td colspan="6">前月より繰越</td>
+        <% else %>
+          <td colspan="6">当座預金残高</td>
+        <% end %>
+        
         <% unless @amount_carried_forward.last.nil? %>
           <td>￥<%= @amount_carried_forward.last.balance %></td>
         <% else %>
-          <td>￥<%= @initial_deposit %></td>
+          <td>￥<%= @current_initial_deposit %></td>
         <% end %>
         <td></td>
       </tr>
-      <% @accounts.each do |account| %>
+      <% @current_accounts.each do |account| %>
         <% if @this_month.include?(Date.parse(account[:accounting_date].to_s)) %>
           <tr>
             <td><%= l(account.accounting_date, format: :short) %></td>
-            <td><%= account.account_title %></td>
-            <td><%= account.description %></td>
             <td><%= account.check_number %></td>
+            <td>
+              <div>
+                <%= account.account_title %>
+                <% if account.individual_amount.present? %>
+                　￥<%= account.individual_amount %>
+                <% end %>
+              </div>
+              <% if account.account_title_2.present? && account.individual_amount_2.present? %>
+                <div>
+                  <%= account.account_title_2 %>
+                  　￥<%= account.individual_amount_2 %>
+                </div>
+              <% end %>
+              <% if account.account_title_3.present? %>
+                <div>
+                  <%= account.account_title_3 %>
+                  　￥<%= account.individual_amount_3 %>
+                </div>
+              <% end %>
+              <% if account.account_title_4.present? %>
+                <div>
+                  <%= account.account_title_4 %>
+                  　￥<%= account.individual_amount_4 %>
+                </div>
+              <% end %>
+              <% if account.account_title_5.present? %>
+                <div>
+                  <%= account.account_title_5 %>
+                  　￥<%= account.individual_amount_5 %>
+                </div>
+              <% end %>
+            </td>
+            <td><%= account.description %></td>
             <% if account.deposit.present? %>
               <td>￥<%= account.deposit %></td>
             <% else %>
@@ -91,11 +113,16 @@
             <% else %>
               <td></td>
             <% end %>
-            <td>￥<%= account.balance %></td>
             
+            <% if account.balance.present? %>
+              <td>￥<%= account.balance %></td>
+            <% else %>
+              <td></td>
+            <% end %>
+              
             <td class="center">
-              <%= link_to "修正", current_edit_account_path(account, accounting_date: @first_day), remote: true, class: "btn btn-primary" %>
-              <%= link_to "削除", current_destroy_account_path(account, accounting_date: @first_day), method: :delete,
+              <%= link_to "修正", current_edit_account_path(account), remote: true, class: "btn btn-primary" %>
+              <%= link_to "削除", current_destroy_account_path(account), method: :delete,
                                   data: { confirm: "#{l(account.accounting_date, format: :long)}の当座預金出納帳データを削除してよろしいですか？" },
                                   class: "btn btn-danger" %>
             </td>
@@ -103,7 +130,6 @@
         <% end %>
       <% end %>
     </tbody>
-    
   </table>
 </div>
 

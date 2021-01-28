@@ -1,97 +1,135 @@
 <%= provide(:title, '現金出納帳') %>
-<%= provide(:class_text, 'account--form') %>
-<%= provide(:button_text, '送信') %>
 
-<h2>現金出納帳</h2>
-
-<div class="panel panel-default">
-  <div class="panel-heading">
-    <div class="container">
-      
-      <div class="badge badge-secondary">絞り込み検索</div>
-      
-      <div class="row">
-        <div class="col-sm-4">
-          <%= form_with(scope: :search, url: cash_index_accounts_path, method: :get, local: true) do |f| %>
-            <div>
-              <%= f.label :accounting_date, '日付', class: "label-#{yield(:class_text)}"  %>
-            </div>
-            <div>
-              <%= f.date_field :accounting_date, class: 'datetime-form-control' %>
-            </div>
-            <div>
-              <%= f.submit '検索', class: "btn btn-block btn-primary btn-#{yield(:class_text)}" %>
-            </div>
-          <% end %>
-        </div>
-        
-        <div class="col-sm-4">
-          <%= form_with(scope: :search, url: cash_index_accounts_path, method: :get, local: true) do |f| %>
-            <div>
-              <%= f.label :account_title, '勘定科目', class: "label-#{yield(:class_text)}"  %>
-            </div>
-            <div>
-              <%= f.text_field :account_title, class: 'datetime-form-control' %>
-            </div>
-            <div>
-              <%= f.submit '検索', class: "btn btn-block btn-primary btn-#{yield(:class_text)}" %>
-            </div>
-          <% end %>
-        </div>
-      </div>
-      
-    </div>
-  </div>
-</div>
-
-<div>
-  <%= link_to "絞り込み解除", cash_index_accounts_path, class: "btn btn-success" %>
+<h2><%= l(@first_day, format: :year) %>現金出納帳</h2>
+<div class="btn-users-show">
+  <% unless @first_day <= @cash_accounts.first.accounting_date %>
+    <%= link_to "⇦ 月", cash_index_accounts_path(accounting_date: @first_day.prev_month), class: "btn btn-info" %>
+  <% else %>
+    <%= link_to "⇦ 月", cash_index_accounts_path(accounting_date: @first_day.prev_month), class: "btn btn-info disabled" %>
+  <% end %>
+  <% unless @first_day >= @cash_accounts.last.accounting_date.beginning_of_month %>
+    <%= link_to "月 ⇨", cash_index_accounts_path(accounting_date: @first_day.next_month), class: "btn btn-info" %>
+  <% else %>
+    <%= link_to "月 ⇨", cash_index_accounts_path(accounting_date: @first_day.next_month), class: "btn btn-info disabled" %>
+  <% end %>
+  <% unless @first_day.prev_year <= @cash_accounts.first.accounting_date%>
+    <%= link_to "⇦ 年", cash_index_accounts_path(accounting_date: @first_day.prev_year), class: "btn btn-success" %>
+  <% else %>
+    <%= link_to "⇦ 年", cash_index_accounts_path(accounting_date: @first_day.prev_year), class: "btn btn-success disabled" %>
+  <% end %>
+  <% unless @first_day.next_year >= @cash_accounts.last.accounting_date%>
+    <%= link_to "年 ⇨", cash_index_accounts_path(accounting_date: @first_day.next_year), class: "btn btn-success" %>
+  <% else %>
+    <%= link_to "年 ⇨", cash_index_accounts_path(accounting_date: @first_day.next_year), class: "btn btn-success disabled" %>
+  <% end %>
+  <% unless @first_day <= @cash_accounts.first.accounting_date %>
+    <%= link_to "⇦ 先頭", cash_index_accounts_path(accounting_date: @cash_accounts.first.accounting_date), class: "btn btn-danger" %>
+  <% else %>
+    <%= link_to "⇦ 先頭", cash_index_accounts_path(accounting_date: @cash_accounts.first.accounting_date), class: "btn btn-danger disabled" %>
+  <% end %>
+  <% unless @first_day >= @cash_accounts.last.accounting_date.beginning_of_month %>
+    <%= link_to "末尾 ⇨", cash_index_accounts_path(accounting_date: @cash_accounts.last.accounting_date), class: "btn btn-danger" %>
+  <% else %>
+    <%= link_to "末尾 ⇨", cash_index_accounts_path(accounting_date: @cash_accounts.last.accounting_date), class: "btn btn-danger disabled" %>
+  <% end %>
 </div>
 
 <div>
   <table class="table table-bordered table-condensed table-hover" id="table-account">
-    
     <thead>
       <tr>
         <th>日付</th>
         <th>勘定科目</th>
         <th>摘要</th>
-        <th>収入金額</th>
-        <th>支出金額</th>
+        <th>収入</th>
+        <th>支出</th>
         <th>差引残高</th>
         <th></th>
       </tr>
     </thead>
     <tbody>
-      <% zero = 0 %>
+      <tr>
+        <!--日付が当初月以前かつ、一番近い日付のデータの値が空かどうか-->
+        <% unless @amount_carried_forward.last.nil? %>
+          <td colspan="5">前月より繰越</td>
+        <% else %>
+          <td colspan="5">当座預金残高</td>
+        <% end %>
+        
+        <% unless @amount_carried_forward.last.nil? %>
+          <td>￥<%= @amount_carried_forward.last.balance %></td>
+        <% else %>
+          <td>￥<%= @cash_initial_deposit %></td>
+        <% end %>
+        <td></td>
+      </tr>
       <% @cash_accounts.each do |account| %>
-      
-        <tr>
-          <td><%= l(account.accounting_date, format: :short) %></td>
-          <td><%= account.account_title %></td>
-          <td><%= account.description %></td>
-          <td><%= account.income %>円</td>
-          <td><%= account.expense %>円</td>
-          
-          <% if account.income.present? || account.expense.present? %>
-            <% a_id = Account.find(account.id) %>
-            <% balance = a_id.income - a_id.expense %>
-            <% sum_balance = zero += balance %>
-          <% end %>
-          
-          <td><%= sum_balance %>円</td>
-          
-          <td class="center">
-            <%= link_to "修正", cash_edit_account_path(account), remote: true, class: "btn btn-primary" %>
-            <%= link_to "削除", cash_destroy_account_path(account), method: :delete,
-                                  data: { confirm: "#{l(account.accounting_date, format: :long)}の現金出納帳データを削除してよろしいですか？" },
-                                  class: "btn btn-danger" %>
+        <% if @this_month.include?(Date.parse(account[:accounting_date].to_s)) %>
+          <tr>
+            <td><%= l(account.accounting_date, format: :short) %></td>
+            <td>
+              <div>
+                <%= account.account_title %>
+                <% if account.individual_amount.present? %>
+                　￥<%= account.individual_amount %>
+                <% end %>
+              </div>
+              <% if account.account_title_2.present? && account.individual_amount_2.present? %>
+                <div>
+                  <%= account.account_title_2 %>
+                  　￥<%= account.individual_amount_2 %>
+                </div>
+              <% end %>
+              <% if account.account_title_3.present? %>
+                <div>
+                  <%= account.account_title_3 %>
+                  　￥<%= account.individual_amount_3 %>
+                </div>
+              <% end %>
+              <% if account.account_title_4.present? %>
+                <div>
+                  <%= account.account_title_4 %>
+                  　￥<%= account.individual_amount_4 %>
+                </div>
+              <% end %>
+              <% if account.account_title_5.present? %>
+                <div>
+                  <%= account.account_title_5 %>
+                  　￥<%= account.individual_amount_5 %>
+                </div>
+              <% end %>
+            </td>
+            <td><%= account.description %></td>
             
-          </td>
-        </tr>
+            <% if account.income.present? %>
+              <td>￥<%= account.income %></td>
+            <% else %>
+              <td></td>
+            <% end %>
+            
+            <% if account.expense.present? %>
+              <td>￥<%= account.expense %></td>
+            <% else %>
+              <td></td>
+            <% end %>
+            
+            <% if account.income.present? || account.expense.present? %>
+              <td>￥<%= account.balance %></td>
+            <% else %>
+              <td></td>
+            <% end %>
+            
+            <td class="center">
+              <%= link_to "修正", cash_edit_account_path(account), remote: true, class: "btn btn-primary" %>
+              <%= link_to "削除", cash_destroy_account_path(account), method: :delete,
+                                    data: { confirm: "#{l(account.accounting_date, format: :long)}の現金出納帳データを削除してよろしいですか？" },
+                                    class: "btn btn-danger" %>
+              
+            </td>
+          </tr>
+        <% end %>
       <% end %>
     </tbody>
-    
   </table>
 </div>
 

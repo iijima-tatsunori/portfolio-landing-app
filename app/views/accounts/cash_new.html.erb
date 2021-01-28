@@ -2,7 +2,6 @@
 <%= provide(:class_text, 'account--form') %>
 
 <h2>現金出納帳作成</h2>
-
 <div>
   <%= form_with(model: @account, url: cash_create_accounts_path, local: true) do |f| %>
   <%= render 'shared/error_messages', object: f.object %>
@@ -10,23 +9,53 @@
       <thead>
         <tr>
           <th><%= f.label :accounting_date, class: "label-#{yield(:class_text)}" %></th>
-          <th><%= f.label :account_title, class: "label-#{yield(:class_text)}" %></th>
-          <th><%= f.label :description, class: "label-#{yield(:class_text)}" %></th>
-          <th><%= f.label :income, class: "label-#{yield(:class_text)}" %></th>
-          <th><%= f.label :expense, class: "label-#{yield(:class_text)}" %></th>
-        </tr>
-      </thead>
-      
-      <tbody>
-        <tr>
           <td><%= f.date_field :accounting_date, required: true, class: "form-control" %></td>
-          <td><%= f.text_field :account_title, required: true, placeholder: "入力必須", class: "form-control" %></td>
-          <td><%= f.text_field :description, required: true, placeholder: "入力必須", class: "form-control" %></td>
-          <td><%= f.text_field :income, class: "form-control", placeholder: "円" %></td>
-          <td><%= f.text_field :expense, class: "form-control", placeholder: "円" %></td>
-          <%= f.hidden_field :subsidiary_journal_species, value: 1 %>
         </tr>
-      </tbody>
+        </tr>
+          <th>
+            <%= f.label :account_title, class: "label-#{yield(:class_text)}" %>
+          </th>
+          <td>
+            <%= f.label :account_title, class: "label-#{yield(:class_text)}" %>
+            <%= f.text_field :account_title, required: true, placeholder: "入力必須", class: "form-control" %>
+            <div class="collapse" id="collapseNew">
+              <%= f.label :individual_amount, class: "label-#{yield(:class_text)} bg-success" %>
+              <%= f.text_field :individual_amount, class: "form-control" %>
+              <%= f.label :account_title_2, class: "label-#{yield(:class_text)}" %>
+              <%= f.text_field :account_title_2, class: "form-control" %>
+              <%= f.label :individual_amount_2, class: "label-#{yield(:class_text)} bg-success" %>
+              <%= f.text_field :individual_amount_2, class: "form-control" %>
+              <%= f.label :account_title_3, class: "label-#{yield(:class_text)}" %>
+              <%= f.text_field :account_title_3, class: "form-control" %>
+              <%= f.label :individual_amount_3, class: "label-#{yield(:class_text)} bg-success" %>
+              <%= f.text_field :individual_amount_3, class: "form-control" %>
+              <%= f.label :account_title_4, class: "label-#{yield(:class_text)}" %>
+              <%= f.text_field :account_title_4, class: "form-control" %>
+              <%= f.label :individual_amount_4, class: "label-#{yield(:class_text)} bg-success" %>
+              <%= f.text_field :individual_amount_4, class: "form-control" %>
+              <%= f.label :account_title_5, class: "label-#{yield(:class_text)}" %>
+              <%= f.text_field :account_title_5, class: "form-control" %>
+              <%= f.label :individual_amount_5, class: "label-#{yield(:class_text)} bg-success" %>
+              <%= f.text_field :individual_amount_5, class: "form-control" %>
+            </div>
+          <button type="button" class="btn btn-primary label-account--form" data-toggle="collapse" data-target="#collapseNew" aria-expanded="false" aria-controls="collapseNew">複合仕訳</button>
+          </td>
+        </tr>
+        <tr>
+          <th><%= f.label :description, class: "label-#{yield(:class_text)}" %></th>
+          <td><%= f.text_field :description, required: true, placeholder: "入力必須", class: "form-control" %></td>
+        </tr>
+        <tr>
+          <th><%= f.label :income, class: "label-#{yield(:class_text)}" %></th>
+          <td><%= f.text_field :income, class: "form-control", placeholder: "円" %></td>
+        </tr>
+        <tr>
+        </tr>
+          <th><%= f.label :expense, class: "label-#{yield(:class_text)}" %></th>
+          <td><%= f.text_field :expense, class: "form-control", placeholder: "円" %></td>
+        </tr>
+        <%= f.hidden_field :subsidiary_journal_species, value: 1 %>
+      </thead>
     </table>
     <div><%= f.submit "作成", class: "btn btn-block btn-primary btn-#{yield(:class_text)}" %></div>
   <% end %>

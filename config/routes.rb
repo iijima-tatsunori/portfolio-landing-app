@@ -31,20 +31,23 @@ Rails.application.routes.draw do
   get 'landing_pre_new', to: 'landings#pre_new'
   
   # 帳簿（売上帳）
-  resources :accounts, only: [:new, :create, :edit, :update, :index, :destroy] do
+  resources :accounts do
     
     member do
       # 帳簿（仕入帳）
+      get 'purchasing_show'
       get 'purchasing_edit'
       patch 'purchasing_update'
       delete 'purchasing_destroy'
       
       # 帳簿（現金出納帳）
+      get 'cash_show'
       get 'cash_edit'
       patch 'cash_update'
       delete 'cash_destroy'
       
       # 帳簿（当座預金出納帳）
+      get 'current_show'
       get 'current_edit'
       patch 'current_update'
       delete 'current_destroy'
@@ -66,7 +69,7 @@ Rails.application.routes.draw do
       # 仕訳帳
       get 'journal_books'
       # 総勘定元帳
-      get 'general_edger'
+      get 'general_ledger'
       
     end
     

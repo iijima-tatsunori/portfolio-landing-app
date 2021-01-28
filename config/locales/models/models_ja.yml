@@ -38,6 +38,15 @@ ja:
         account:
           accounting_date: 日付
           account_title: 勘定科目
+          account_title_2: 勘定科目2
+          account_title_3: 勘定科目3
+          account_title_4: 勘定科目4
+          account_title_5: 勘定科目5
+          individual_amount: 科目別単価
+          individual_amount_2: 科目別単価2
+          individual_amount_3: 科目別単価3
+          individual_amount_4: 科目別単価4
+          individual_amount_5: 科目別単価5
           description: 摘要
           income: 収入金額
           expense: 支出金額
@@ -56,7 +65,7 @@ ja:
           unit_price: 単価
           breakdown: 内訳
           amount: 金額
-          general_edger_number: 元丁（総勘定元帳口座番号）
+          general_ledger_number: 元丁（総勘定元帳口座番号）
           journal_books_number: 仕丁（仕訳帳の番号）
           notation: 小書き
           debit_account: 借方勘定科目（摘要）
@@ -65,4 +74,4 @@ ja:
           debit_amount: 借方金額
           credit_amount: 貸方金額
           journal_balance: 残高
-          continue_check_box: 連続作成
+          return_check_box: 返品

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20201218083000) do
+ActiveRecord::Schema.define(version: 20210125082342) do
 
   create_table "accounts", force: :cascade do |t|
     t.date "accounting_date"
@@ -33,7 +33,7 @@ ActiveRecord::Schema.define(version: 20201218083000) do
     t.integer "unit_price"
     t.decimal "breakdown", precision: 12, scale: 2
     t.decimal "amount", precision: 12, scale: 2
-    t.integer "general_edger_number"
+    t.integer "general_ledger_number"
     t.integer "journal_books_number"
     t.string "notation"
     t.string "debit_account"
@@ -44,7 +44,16 @@ ActiveRecord::Schema.define(version: 20201218083000) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "journal_description"
-    t.string "continue_check_box"
+    t.string "return_check_box"
+    t.decimal "individual_amount", precision: 12, scale: 2
+    t.decimal "individual_amount_2", precision: 12, scale: 2
+    t.decimal "individual_amount_3", precision: 12, scale: 2
+    t.decimal "individual_amount_4", precision: 12, scale: 2
+    t.decimal "individual_amount_5", precision: 12, scale: 2
+    t.string "account_title_2"
+    t.string "account_title_3"
+    t.string "account_title_4"
+    t.string "account_title_5"
   end
 
   create_table "grounds", force: :cascade do |t|

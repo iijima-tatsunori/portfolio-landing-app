@@ -16,27 +16,61 @@
               <table class="table table-bordered table-condensed table-hover" id="table-account">
                 <thead>
                   <tr>
+                    <th><%= f.label :accounting_date, class: "label-#{yield(:class_text)}" %></th>
+                    <td><%= f.date_field :accounting_date, required: true, class: "form-control" %></td>
+                  </tr>
+                  <tr>
                     <th><%= f.label :customer, class: "label-#{yield(:class_text)}" %></th>
-                    <th><%= f.label :receiving_method, class: "label-#{yield(:class_text)}" %></th>
+                    <td><%= f.text_field :customer, required: true, placeholder: "入力必須", class: "form-control" %></td>
+                  </tr>
+                  </tr>
+                    <th>
+                      <%= f.label :account_title, class: "label-#{yield(:class_text)}" %>
+                    </th>
+                    <td>
+                      勘定科目
+                      <%= f.text_field :account_title, required: true, placeholder: "入力必須", class: "form-control" %>
+                      科目別単価
+                      <%= f.text_field :individual_amount, required: true, placeholder: "入力必須", class: "form-control" %>
+                      <div class="collapse" id="collapsePurchasingEdit">
+                      勘定科目②
+                      <%= f.text_field :account_title_2, class: "form-control" %>
+                      科目別単価②
+                      <%= f.text_field :individual_amount_2, class: "form-control" %>
+                      勘定科目③
+                      <%= f.text_field :account_title_3, class: "form-control" %>
+                      科目別単価③
+                      <%= f.text_field :individual_amount_3, class: "form-control" %>
+                      勘定科目④
+                      <%= f.text_field :account_title_4, class: "form-control" %>
+                      科目別単価④
+                      <%= f.text_field :individual_amount_4, class: "form-control" %>
+                      勘定科目⑤
+                      <%= f.text_field :account_title_5, class: "form-control" %>
+                      科目別単価⑤
+                      <%= f.text_field :individual_amount_5, class: "form-control" %>
+                    </div>
+                    <button type="button" class="btn btn-primary label-account--form" data-toggle="collapse" data-target="#collapsePurchasingEdit" aria-expanded="false" aria-controls="collapsePurchasingEdit">複合仕訳</button>
+                    </td>
+                  </tr>
+                  <tr>
                     <th><%= f.label :product_name, class: "label-#{yield(:class_text)}" %></th>
+                    <td><%= f.text_field :product_name, class: "form-control" %></td>
+                  </tr>
+                  <tr>
                     <th><%= f.label :quantity, class: "label-#{yield(:class_text)}" %></th>
+                    <td><%= f.text_field :quantity, required: true, placeholder: "入力必須", class: "form-control" %></td>
+                  </tr>
+                  <tr>
                     <th><%= f.label :unit_price, class: "label-#{yield(:class_text)}" %></th>
-                    <th><%= f.label :breakdown, class: "label-#{yield(:class_text)}" %></th>
-                    <th><%= f.label :amount, class: "label-#{yield(:class_text)}" %></th>
+                    <td><%= f.text_field :unit_price, required: true, placeholder: "入力必須", class: "form-control" %></td>
                   </tr>
                 </thead>
-                <tbody>
-                  <tr>
-                    <td><%= f.text_field :customer, class: "form-control" %>
-                    <td><%= f.text_field :receiving_method, class: "form-control" %>
-                    <td><%= f.text_field :product_name, class: "form-control" %>
-                    <td><%= f.text_field :quantity, class: "form-control" %>
-                    <td><%= f.text_field :unit_price, class: "form-control" %>
-                    <td><%= f.text_field :breakdown, class: "form-control" %>
-                    <td><%= f.text_field :amount, class: "form-control" %></td>
-                  </tr>
-                </tbody>
               </table>
+              <div>
+                <label>仕入戻し</label>
+                <%= f.check_box :return_check_box, class: "form-check-input" %>
+              </div>
               <div><%= f.submit "変更", class: "btn btn-block btn-primary btn-#{yield(:class_text)}" %></div>
             <% end %>
           </div>
