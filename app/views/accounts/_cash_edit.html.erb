@@ -22,29 +22,29 @@
                     <%= f.label :account_title, class: "label-#{yield(:class_text)}" %>
                   </th>
                   <td>
-                    勘定科目
-                    <%= f.text_field :account_title, required: true, placeholder: "入力必須", class: "form-control" %>
-                    科目別単価
-                    <%= f.text_field :individual_amount, class: "form-control" %>
-                    <div class="collapse" id="collapseCashEdit">
-                    勘定科目②
-                    <%= f.text_field :account_title_2, class: "form-control" %>
-                    科目別単価②
-                    <%= f.text_field :individual_amount_2, class: "form-control" %>
-                    勘定科目③
-                    <%= f.text_field :account_title_3, class: "form-control" %>
-                    科目別単価③
-                    <%= f.text_field :individual_amount_3, class: "form-control" %>
-                    勘定科目④
-                    <%= f.text_field :account_title_4, class: "form-control" %>
-                    科目別単価④
-                    <%= f.text_field :individual_amount_4, class: "form-control" %>
-                    勘定科目⑤
-                    <%= f.text_field :account_title_5, class: "form-control" %>
-                    科目別単価⑤
-                    <%= f.text_field :individual_amount_5, class: "form-control" %>
-                  </div>
-                  <button type="button" class="btn btn-primary label-account--form" data-toggle="collapse" data-target="#collapseCashEdit" aria-expanded="false" aria-controls="collapseCashEdit">複合仕訳</button>
+                    <%= f.label :account_title, class: "label-#{yield(:class_text)}" %>
+                    <%= f.select :account_title, @cash_select_account_title, {}, required: true, class: "form-control" %>
+                    <div class="collapse" id="collapseNew">
+                      <%= f.label :individual_amount, class: "label-#{yield(:class_text)} bg-success" %>
+                      <%= f.number_field :individual_amount, step: "0.1", class: "form-control" %>
+                      <%= f.label :account_title_2, class: "label-#{yield(:class_text)}" %>
+                      <%= f.select :account_title_2, @cash_select_account_title, {include_blank: true}, class: "form-control" %>
+                      <%= f.label :individual_amount_2, class: "label-#{yield(:class_text)} bg-success" %>
+                      <%= f.number_field :individual_amount_2, step: "0.1", class: "form-control" %>
+                      <%= f.label :account_title_3, class: "label-#{yield(:class_text)}" %>
+                      <%= f.select :account_title_3, @cash_select_account_title, {include_blank: true}, include_blank: "", class: "form-control" %>
+                      <%= f.label :individual_amount_3, class: "label-#{yield(:class_text)} bg-success" %>
+                      <%= f.number_field :individual_amount_3, step: "0.1", class: "form-control" %>
+                      <%= f.label :account_title_4, class: "label-#{yield(:class_text)}" %>
+                      <%= f.select :account_title_4, @cash_select_account_title, {include_blank: true}, include_blank: "", class: "form-control" %>
+                      <%= f.label :individual_amount_4, class: "label-#{yield(:class_text)} bg-success" %>
+                      <%= f.number_field :individual_amount_4, step: "0.1", class: "form-control" %>
+                      <%= f.label :account_title_5, class: "label-#{yield(:class_text)}" %>
+                      <%= f.select :account_title_5, @cash_select_account_title, {include_blank: true}, include_blank: "", class: "form-control" %>
+                      <%= f.label :individual_amount_5, class: "label-#{yield(:class_text)} bg-success" %>
+                      <%= f.number_field :individual_amount_5, step: "0.1", class: "form-control" %>
+                    </div>
+                  <button type="button" class="btn btn-primary label-account--form" data-toggle="collapse" data-target="#collapseNew" aria-expanded="false" aria-controls="collapseNew">複合仕訳</button>
                   </td>
                 </tr>
                 <tr>

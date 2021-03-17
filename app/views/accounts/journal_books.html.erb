@@ -1,6 +1,6 @@
 <%= provide(:title, '仕訳帳') %>
 
-<h2><%= l(@first_day, format: :year) %>仕訳帳</h2>
+<h2><%= l(@first_day, format: :month) %>仕訳帳</h2>
 
 <div class="btn-users-show">
   <% unless @first_day <= @journal_accounts.first.accounting_date %>
@@ -8,30 +8,30 @@
   <% else %>
     <%= link_to "⇦ 月", journal_books_accounts_path(accounting_date: @first_day.prev_month), class: "btn btn-info disabled" %>
   <% end %>
-  <% unless @first_day >= @journal_accounts.last.accounting_date.beginning_of_month %>
+  <% unless @first_day >= @today.beginning_of_month %>
     <%= link_to "月 ⇨", journal_books_accounts_path(accounting_date: @first_day.next_month), class: "btn btn-info" %>
   <% else %>
     <%= link_to "月 ⇨", journal_books_accounts_path(accounting_date: @first_day.next_month), class: "btn btn-info disabled" %>
   <% end %>
-  <% unless @first_day.prev_year <= @journal_accounts.first.accounting_date%>
+  <% unless @first_day.prev_year <= @journal_accounts.first.accounting_date %>
     <%= link_to "⇦ 年", journal_books_accounts_path(accounting_date: @first_day.prev_year), class: "btn btn-success" %>
   <% else %>
     <%= link_to "⇦ 年", journal_books_accounts_path(accounting_date: @first_day.prev_year), class: "btn btn-success disabled" %>
   <% end %>
-  <% unless @first_day.next_year >= @journal_accounts.last.accounting_date%>
+  <% unless @first_day.next_year >= @today %>
     <%= link_to "年 ⇨", journal_books_accounts_path(accounting_date: @first_day.next_year), class: "btn btn-success" %>
   <% else %>
     <%= link_to "年 ⇨", journal_books_accounts_path(accounting_date: @first_day.next_year), class: "btn btn-success disabled" %>
   <% end %>
   <% unless @first_day <= @journal_accounts.first.accounting_date %>
-    <%= link_to "⇦ 先頭", journal_books_accounts_path(accounting_date: @journal_accounts.first.accounting_date), class: "btn btn-danger" %>
+    <%= link_to "⇦ 先頭", journal_books_accounts_path(accounting_date: @journal_accounts.first.accounting_date.beginning_of_month), class: "btn btn-danger" %>
   <% else %>
-    <%= link_to "⇦ 先頭", journal_books_accounts_path(accounting_date: @journal_accounts.first.accounting_date), class: "btn btn-danger disabled" %>
+    <%= link_to "⇦ 先頭", journal_books_accounts_path(accounting_date: @journal_accounts.first.accounting_date.beginning_of_month), class: "btn btn-danger disabled" %>
   <% end %>
   <% unless @first_day >= @journal_accounts.last.accounting_date.beginning_of_month %>
-    <%= link_to "末尾 ⇨", journal_books_accounts_path(accounting_date: @journal_accounts.last.accounting_date), class: "btn btn-danger" %>
+    <%= link_to "末尾 ⇨", journal_books_accounts_path(accounting_date: @journal_accounts.last.accounting_date.beginning_of_month), class: "btn btn-danger" %>
   <% else %>
-    <%= link_to "末尾 ⇨", journal_books_accounts_path(accounting_date: @journal_accounts.last.accounting_date), class: "btn btn-danger disabled" %>
+    <%= link_to "末尾 ⇨", journal_books_accounts_path(accounting_date: @journal_accounts.last.accounting_date.beginning_of_month), class: "btn btn-danger disabled" %>
   <% end %>
 </div>
 
@@ -62,353 +62,656 @@
         <% elsif account.subsidiary_journal_species == 4 %>
           <tr class="danger">
         <% end %>
+        
+          <!--借方勘定科目-->
           <% if account.subsidiary_journal_species == 1 %>
             <td><%= l(account.accounting_date, format: :short) %></td>
             <td><%= account.description %></td>
+            <!---------------->
             
+            <!--現金出納帳 借方勘定科目-->
             <% if account.expense.present? %>
-            <td>
-              <div>
-                <%= account.account_title %>
-                <% if account.individual_amount.present? %>
-                　￥<%= account.individual_amount %>
+              <td>
+                <% if account.account_title_2.present? || account.account_title_3.present? || account.account_title_4.present? || account.account_title_5.present? %>
+                  <div>（諸口）</div>
                 <% end %>
-              </div>
-              <% if account.account_title_2.present? && account.individual_amount_2.present? %>
                 <div>
-                  <%= account.account_title_2 %>
-                  　￥<%= account.individual_amount_2 %>
+                  <%= account.account_title %>
+                  <% if account.individual_amount.present? %>
+                  <% end %>
                 </div>
-              <% end %>
-              <% if account.account_title_3.present? %>
-                <div>
-                  <%= account.account_title_3 %>
-                  　￥<%= account.individual_amount_3 %>
-                </div>
-              <% end %>
-              <% if account.account_title_4.present? %>
-                <div>
-                  <%= account.account_title_4 %>
-                  　￥<%= account.individual_amount_4 %>
-                </div>
-              <% end %>
-              <% if account.account_title_5.present? %>
-                <div>
-                  <%= account.account_title_5 %>
-                  　￥<%= account.individual_amount_5 %>
-                </div>
-              <% end %>
-            </td>
+                <% if account.account_title_2.present? && account.individual_amount_2.present? %>
+                  <div>
+                    <%= account.account_title_2 %>
+                  </div>
+                <% end %>
+                <% if account.account_title_3.present? %>
+                  <div>
+                    <%= account.account_title_3 %>
+                  </div>
+                <% end %>
+                <% if account.account_title_4.present? %>
+                  <div>
+                    <%= account.account_title_4 %>
+                  </div>
+                <% end %>
+                <% if account.account_title_5.present? %>
+                  <div>
+                    <%= account.account_title_5 %>
+                  </div>
+                <% end %>
+              </td>
             <% else %>
               <td>現金</td>
             <% end %>
+            <!---------------->
             
+            <!--現金出納帳 借方金額-->
             <% if account.income.present? %>
               <td><%= account.income %></td>
             <% elsif account.expense.present? %>
-              <td><%= account.expense %></td>
+              <% if account.account_title_2.present? || account.account_title_3.present? || account.account_title_4.present? || account.account_title_5.present? %>
+                <td>
+                  <br>
+                  <% if account.individual_amount.present? %>
+                    <div>
+                      <%= account.individual_amount %>
+                    </div>
+                  <% end %>
+                  <% if account.account_title_2.present? && account.individual_amount_2.present? %>
+                    <div>
+                      <%= account.individual_amount_2 %>
+                    </div>
+                  <% end %>
+                  <% if account.account_title_3.present? %>
+                    <div>
+                      <%= account.individual_amount_3 %>
+                    </div>
+                  <% end %>
+                  <% if account.account_title_4.present? %>
+                    <div>
+                      <%= account.individual_amount_4 %>
+                    </div>
+                  <% end %>
+                  <% if account.account_title_5.present? %>
+                    <div>
+                      <%= account.individual_amount_5 %>
+                    </div>
+                  <% end %>
+                </td>
+              <% else %>
+                <td><%= account.expense %></td>
+              <% end %>
+            <% else %>
+              <td></td>
             <% end %>
+            <!---------------->
             
+            <!--現金出納帳 貸方勘定科目-->
             <% if account.income.present? %>
             <td>
+              <% if account.account_title_2.present? || account.account_title_3.present? || account.account_title_4.present? || account.account_title_5.present? %>
+                <div>（諸口）</div>
+              <% end %>
               <div>
                 <%= account.account_title %>
-                <% if account.individual_amount.present? %>
-                　￥<%= account.individual_amount %>
-                <% end %>
               </div>
               <% if account.account_title_2.present? && account.individual_amount_2.present? %>
                 <div>
                   <%= account.account_title_2 %>
-                  　￥<%= account.individual_amount_2 %>
                 </div>
               <% end %>
               <% if account.account_title_3.present? %>
                 <div>
                   <%= account.account_title_3 %>
-                  　￥<%= account.individual_amount_3 %>
                 </div>
               <% end %>
               <% if account.account_title_4.present? %>
                 <div>
                   <%= account.account_title_4 %>
-                  　￥<%= account.individual_amount_4 %>
                 </div>
               <% end %>
               <% if account.account_title_5.present? %>
                 <div>
                   <%= account.account_title_5 %>
-                  　￥<%= account.individual_amount_5 %>
                 </div>
               <% end %>
             </td>
             <% else %>
               <td>現金</td>
             <% end %>
+            <!---------------->
             
+            <!--現金出納帳 貸方金額-->
             <% if account.expense.present? %>
               <td><%= account.expense %></td>
             <% elsif account.income.present? %>
-              <td><%= account.income %></td>
+              <% if account.account_title_2.present? || account.account_title_3.present? || account.account_title_4.present? || account.account_title_5.present? %>
+                <td>
+                  <br>
+                  <% if account.individual_amount.present? %>
+                    <div>
+                      <%= account.individual_amount %>
+                    </div>
+                  <% end %>
+                  <% if account.account_title_2.present? && account.individual_amount_2.present? %>
+                    <div>
+                      <%= account.individual_amount_2 %>
+                    </div>
+                  <% end %>
+                  <% if account.account_title_3.present? %>
+                    <div>
+                      <%= account.individual_amount_3 %>
+                    </div>
+                  <% end %>
+                  <% if account.account_title_4.present? %>
+                    <div>
+                      <%= account.individual_amount_4 %>
+                    </div>
+                  <% end %>
+                  <% if account.account_title_5.present? %>
+                    <div>
+                      <%= account.individual_amount_5 %>
+                    </div>
+                  <% end %>
+                </td>
+              <% else %>
+                <td><%= account.income %></td>
+              <% end %>
+            <% else %>
+              <td></td>
             <% end %>
           <% end %>
-          
+          <!---------------->
+            
+          <!-- 預金出納帳 日付/摘要 -->
           <% if account.subsidiary_journal_species == 2 %>
             <td><%= l(account.accounting_date, format: :short) %></td>
             <td><%= account.description %></td>
+            <!---------------->
             
+            <!-- 預金出納帳 借方勘定科目 -->
             <% if account.drawer.present? %>
             <td>
+              <% if account.account_title_2.present? || account.account_title_3.present? || account.account_title_4.present? || account.account_title_5.present? %>
+                <div>（諸口）</div>
+              <% end %>
               <div>
                 <%= account.account_title %>
-                <% if account.individual_amount.present? %>
-                　￥<%= account.individual_amount %>
-                <% end %>
               </div>
               <% if account.account_title_2.present? && account.individual_amount_2.present? %>
                 <div>
                   <%= account.account_title_2 %>
-                  　￥<%= account.individual_amount_2 %>
                 </div>
               <% end %>
               <% if account.account_title_3.present? %>
                 <div>
                   <%= account.account_title_3 %>
-                  　￥<%= account.individual_amount_3 %>
                 </div>
               <% end %>
               <% if account.account_title_4.present? %>
                 <div>
                   <%= account.account_title_4 %>
-                  　￥<%= account.individual_amount_4 %>
                 </div>
               <% end %>
               <% if account.account_title_5.present? %>
                 <div>
                   <%= account.account_title_5 %>
-                  　￥<%= account.individual_amount_5 %>
                 </div>
               <% end %>
             </td>
             <% else %>
               <td>当座預金</td>
             <% end %>
+            <!---------------->
             
+            <!-- 預金出納帳 借方金額 -->
             <% if account.deposit.present? %>
               <td><%= account.deposit %></td>
             <% elsif account.drawer.present? %>
-              <td><%= account.drawer %></td>
+              <% if account.account_title_2.present? || account.account_title_3.present? || account.account_title_4.present? || account.account_title_5.present? %>
+                <td>
+                  <br>
+                  <% if account.individual_amount.present? %>
+                    <div>
+                      <%= account.individual_amount %>
+                    </div>
+                  <% end %>
+                  <% if account.account_title_2.present? && account.individual_amount_2.present? %>
+                    <div>
+                      <%= account.individual_amount_2 %>
+                    </div>
+                  <% end %>
+                  <% if account.account_title_3.present? %>
+                    <div>
+                      <%= account.individual_amount_3 %>
+                    </div>
+                  <% end %>
+                  <% if account.account_title_4.present? %>
+                    <div>
+                      <%= account.individual_amount_4 %>
+                    </div>
+                  <% end %>
+                  <% if account.account_title_5.present? %>
+                    <div>
+                      <%= account.individual_amount_5 %>
+                    </div>
+                  <% end %>
+                </td>
+              <% else %>
+                <td><%= account.drawer %></td>
+              <% end %>
+            <% else %>
+              <td></td>
             <% end %>
+            <!---------------->
             
+            <!-- 預金出納帳 貸方勘定科目 -->
             <% if account.deposit.present? %>
             <td>
+              <% if account.account_title_2.present? || account.account_title_3.present? || account.account_title_4.present? || account.account_title_5.present? %>
+                <div>（諸口）</div>
+              <% end %>
               <div>
                 <%= account.account_title %>
-                <% if account.individual_amount.present? %>
-                　￥<%= account.individual_amount %>
-                <% end %>
               </div>
               <% if account.account_title_2.present? && account.individual_amount_2.present? %>
                 <div>
                   <%= account.account_title_2 %>
-                  　￥<%= account.individual_amount_2 %>
                 </div>
               <% end %>
               <% if account.account_title_3.present? %>
                 <div>
                   <%= account.account_title_3 %>
-                  　￥<%= account.individual_amount_3 %>
                 </div>
               <% end %>
               <% if account.account_title_4.present? %>
                 <div>
                   <%= account.account_title_4 %>
-                  　￥<%= account.individual_amount_4 %>
                 </div>
               <% end %>
               <% if account.account_title_5.present? %>
                 <div>
                   <%= account.account_title_5 %>
-                  　￥<%= account.individual_amount_5 %>
                 </div>
               <% end %>
             </td>
             <% else %>
               <td>当座預金</td>
             <% end %>
+            <!---------------->
             
+            <!-- 預金出納帳 貸方金額 -->
             <% if account.drawer.present? %>
               <td><%= account.drawer %></td>
             <% elsif account.deposit.present? %>
-              <td><%= account.deposit %></td>
+              <% if account.account_title_2.present? || account.account_title_3.present? || account.account_title_4.present? || account.account_title_5.present? %>
+                <td>
+                  <br>
+                  <% if account.individual_amount.present? %>
+                    <div>
+                      <%= account.individual_amount %>
+                    </div>
+                  <% end %>
+                  <% if account.account_title_2.present? && account.individual_amount_2.present? %>
+                    <div>
+                      <%= account.individual_amount_2 %>
+                    </div>
+                  <% end %>
+                  <% if account.account_title_3.present? %>
+                    <div>
+                      <%= account.individual_amount_3 %>
+                    </div>
+                  <% end %>
+                  <% if account.account_title_4.present? %>
+                    <div>
+                      <%= account.individual_amount_4 %>
+                    </div>
+                  <% end %>
+                  <% if account.account_title_5.present? %>
+                    <div>
+                      <%= account.individual_amount_5 %>
+                    </div>
+                  <% end %>
+                </td>
+              <% else %>
+                <td><%= account.deposit %></td>
+              <% end %>
+            <% else %>
+              <td></td>
             <% end %>
           <% end %>
-          
+          <!---------------->
+            
+          <!-- 仕入帳 日付/摘要 -->
           <% if account.subsidiary_journal_species == 3 %>
             <td><%= l(account.accounting_date, format: :short) %></td>
-            <td><%= account.product_name %></td>
+            <% if account.return_check_box. == "0" %>
+              <td><%= account.product_name %></td>
+            <% elsif account.return_check_box. == "1" %>
+              <td><%= account.product_name %>仕入戻り</td>
+            <% else %>
+              <td></td>
+            <% end %>
+            <!---------------->
             
+            <!-- 仕入帳 借方勘定科目 -->
             <% if account.return_check_box. == "1" %>
             <td>
+              <% if account.account_title_2.present? || account.account_title_3.present? || account.account_title_4.present? || account.account_title_5.present? %>
+                <div>（諸口）</div>
+              <% end %>
               <div>
                 <%= account.account_title %>
-                <% if account.individual_amount.present? %>
-                　￥<%= account.individual_amount %>
-                <% end %>
               </div>
               <% if account.account_title_2.present? && account.individual_amount_2.present? %>
                 <div>
                   <%= account.account_title_2 %>
-                  　￥<%= account.individual_amount_2 %>
                 </div>
               <% end %>
               <% if account.account_title_3.present? %>
                 <div>
                   <%= account.account_title_3 %>
-                  　￥<%= account.individual_amount_3 %>
                 </div>
               <% end %>
               <% if account.account_title_4.present? %>
                 <div>
                   <%= account.account_title_4 %>
-                  　￥<%= account.individual_amount_4 %>
                 </div>
               <% end %>
               <% if account.account_title_5.present? %>
                 <div>
                   <%= account.account_title_5 %>
-                  　￥<%= account.individual_amount_5 %>
                 </div>
               <% end %>
             </td>
             <% else %>
               <td>仕入</td>
             <% end %>
-            <td><%= account.breakdown %></td>
+            <!---------------->
             
+            <!-- 仕入帳 借方金額 -->
+            <% if account.return_check_box. == "1" %>
+              <% if account.account_title_2.present? || account.account_title_3.present? || account.account_title_4.present? || account.account_title_5.present? %>
+                <td>
+                  <br>
+                  <% if account.individual_amount.present? %>
+                    <div>
+                      <%= account.individual_amount %>
+                    </div>
+                  <% end %>
+                  <% if account.account_title_2.present? && account.individual_amount_2.present? %>
+                    <div>
+                      <%= account.individual_amount_2 %>
+                    </div>
+                  <% end %>
+                  <% if account.account_title_3.present? %>
+                    <div>
+                      <%= account.individual_amount_3 %>
+                    </div>
+                  <% end %>
+                  <% if account.account_title_4.present? %>
+                    <div>
+                      <%= account.individual_amount_4 %>
+                    </div>
+                  <% end %>
+                  <% if account.account_title_5.present? %>
+                    <div>
+                      <%= account.individual_amount_5 %>
+                    </div>
+                  <% end %>
+                </td>
+              <% else %>
+                <td><%= account.breakdown %></td>
+              <% end %>
+            <% else %>
+              <td><%= account.breakdown %></td>
+            <% end %>
+            <!---------------->
+            
+            <!-- 仕入帳 貸方勘定科目 -->
             <% if account.return_check_box. == "0" %>
             <td>
+              <% if account.account_title_2.present? || account.account_title_3.present? || account.account_title_4.present? || account.account_title_5.present? %>
+                <div>（諸口）</div>
+              <% end %>
               <div>
                 <%= account.account_title %>
-                <% if account.individual_amount.present? %>
-                　￥<%= account.individual_amount %>
-                <% end %>
               </div>
               <% if account.account_title_2.present? && account.individual_amount_2.present? %>
                 <div>
                   <%= account.account_title_2 %>
-                  　￥<%= account.individual_amount_2 %>
                 </div>
               <% end %>
               <% if account.account_title_3.present? %>
                 <div>
                   <%= account.account_title_3 %>
-                  　￥<%= account.individual_amount_3 %>
                 </div>
               <% end %>
               <% if account.account_title_4.present? %>
                 <div>
                   <%= account.account_title_4 %>
-                  　￥<%= account.individual_amount_4 %>
                 </div>
               <% end %>
               <% if account.account_title_5.present? %>
                 <div>
                   <%= account.account_title_5 %>
-                  　￥<%= account.individual_amount_5 %>
                 </div>
               <% end %>
             </td>
             <% else %>
               <td>仕入</td>
             <% end %>
-            <td><%= account.breakdown %></td>
+            <!---------------->
+            
+            <!-- 仕入帳 借方金額 -->
+            <% if account.return_check_box. == "0" %>
+              <% if account.account_title_2.present? || account.account_title_3.present? || account.account_title_4.present? || account.account_title_5.present? %>
+                <td>
+                  <br>
+                  <% if account.individual_amount.present? %>
+                    <div>
+                      <%= account.individual_amount %>
+                    </div>
+                  <% end %>
+                  </div>
+                  <% if account.account_title_2.present? && account.individual_amount_2.present? %>
+                    <div>
+                      <%= account.individual_amount_2 %>
+                    </div>
+                  <% end %>
+                  <% if account.account_title_3.present? %>
+                    <div>
+                      <%= account.individual_amount_3 %>
+                    </div>
+                  <% end %>
+                  <% if account.account_title_4.present? %>
+                    <div>
+                      <%= account.individual_amount_4 %>
+                    </div>
+                  <% end %>
+                  <% if account.account_title_5.present? %>
+                    <div>
+                      <%= account.individual_amount_5 %>
+                    </div>
+                  <% end %>
+                </td>
+              <% else %>
+                <td><%= account.breakdown %></td>
+              <% end %>
+            <% else %>
+              <td><%= account.breakdown %></td>
+            <% end %>
+            <!---------------->
           <% end %>
           
+            
+          <!-- 売上 日付/適要 -->
           <% if account.subsidiary_journal_species == 4 %>
             <td><%= l(account.accounting_date, format: :short) %></td>
-            <td><%= account.product_name %></td>
-            
             <% if account.return_check_box. == "0" %>
-            <td>
-              <div>
-                <%= account.account_title %>
-                <% if account.individual_amount.present? %>
-                　￥<%= account.individual_amount %>
+              <td><%= account.product_name %></td>
+            <% elsif account.return_check_box. == "1" %>
+              <td><%= account.product_name %>売上戻り</td>
+            <% else %>
+              <td></td>
+            <% end %>
+            <!---------------->
+            
+            <!-- 売上 借方勘定科目 -->
+            <% if account.return_check_box. == "0" %>
+              <td>
+                <% if account.account_title_2.present? || account.account_title_3.present? || account.account_title_4.present? || account.account_title_5.present? %>
+                  <div>（諸口）</div>
                 <% end %>
-              </div>
-              <% if account.account_title_2.present? && account.individual_amount_2.present? %>
                 <div>
-                  <%= account.account_title_2 %>
-                  　￥<%= account.individual_amount_2 %>
+                  <%= account.account_title %>
                 </div>
-              <% end %>
-              <% if account.account_title_3.present? %>
-                <div>
-                  <%= account.account_title_3 %>
-                  　￥<%= account.individual_amount_3 %>
-                </div>
-              <% end %>
-              <% if account.account_title_4.present? %>
-                <div>
-                  <%= account.account_title_4 %>
-                  　￥<%= account.individual_amount_4 %>
-                </div>
-              <% end %>
-              <% if account.account_title_5.present? %>
-                <div>
-                  <%= account.account_title_5 %>
-                  　￥<%= account.individual_amount_5 %>
-                </div>
-              <% end %>
-            </td>
+                <% if account.account_title_2.present? && account.individual_amount_2.present? %>
+                  <div>
+                    <%= account.account_title_2 %>
+                  </div>
+                <% end %>
+                <% if account.account_title_3.present? %>
+                  <div>
+                    <%= account.account_title_3 %>
+                  </div>
+                <% end %>
+                <% if account.account_title_4.present? %>
+                  <div>
+                    <%= account.account_title_4 %>
+                  </div>
+                <% end %>
+                <% if account.account_title_5.present? %>
+                  <div>
+                    <%= account.account_title_5 %>
+                  </div>
+                <% end %>
+              </td>
             <% else %>
               <td>売上</td>
             <% end %>
-            <td><%= account.breakdown %></td>
+            <!---------------->
             
+            <!-- 売上 借方金額 -->
+            <% if account.return_check_box. == "0" %>
+              <% if account.account_title_2.present? || account.account_title_3.present? || account.account_title_4.present? || account.account_title_5.present? %>
+                <td>
+                  <br>
+                  <% if account.individual_amount.present? %>
+                    <div>
+                      <%= account.individual_amount %>
+                    </div>
+                  <% end %>
+                  <% if account.account_title_2.present? && account.individual_amount_2.present? %>
+                    <div>
+                      <%= account.individual_amount_2 %>
+                    </div>
+                  <% end %>
+                  <% if account.account_title_3.present? %>
+                    <div>
+                      <%= account.individual_amount_3 %>
+                    </div>
+                  <% end %>
+                  <% if account.account_title_4.present? %>
+                    <div>
+                      <%= account.individual_amount_4 %>
+                    </div>
+                  <% end %>
+                  <% if account.account_title_5.present? %>
+                    <div>
+                      <%= account.individual_amount_5 %>
+                    </div>
+                  <% end %>
+                </td>
+              <% else %>
+                <td><%= account.breakdown %></td>
+              <% end %>
+            <% else %>
+              <td><%= account.breakdown %></td>
+            <% end %>
+            <!---------------->
+            
+            <!-- 売上 貸方勘定科目 -->
             <% if account.return_check_box. == "1" %>
             <td>
+              <% if account.account_title_2.present? || account.account_title_3.present? || account.account_title_4.present? || account.account_title_5.present? %>
+                <div>（諸口）</div>
+              <% end %>
               <div>
                 <%= account.account_title %>
-                <% if account.individual_amount.present? %>
-                　￥<%= account.individual_amount %>
-                <% end %>
               </div>
               <% if account.account_title_2.present? && account.individual_amount_2.present? %>
                 <div>
                   <%= account.account_title_2 %>
-                  　￥<%= account.individual_amount_2 %>
                 </div>
               <% end %>
               <% if account.account_title_3.present? %>
                 <div>
                   <%= account.account_title_3 %>
-                  　￥<%= account.individual_amount_3 %>
                 </div>
               <% end %>
               <% if account.account_title_4.present? %>
                 <div>
                   <%= account.account_title_4 %>
-                  　￥<%= account.individual_amount_4 %>
                 </div>
               <% end %>
               <% if account.account_title_5.present? %>
                 <div>
                   <%= account.account_title_5 %>
-                  　￥<%= account.individual_amount_5 %>
                 </div>
               <% end %>
             </td>
             <% else %>
               <td>売上</td>
             <% end %>
-            <td><%= account.breakdown %></td>
+            <!---------------->
+            
+            <!-- 売上 貸方金額 -->
+            <% if account.return_check_box. == "1" %>
+              <% if account.account_title_2.present? || account.account_title_3.present? || account.account_title_4.present? || account.account_title_5.present? %>
+                <td>
+                  <br>
+                  <% if account.individual_amount.present? %>
+                    <div>
+                      <%= account.individual_amount %>
+                    </div>
+                  <% end %>
+                  <% if account.account_title_2.present? && account.individual_amount_2.present? %>
+                    <div>
+                      <%= account.individual_amount_2 %>
+                    </div>
+                  <% end %>
+                  <% if account.account_title_3.present? %>
+                    <div>
+                      <%= account.individual_amount_3 %>
+                    </div>
+                  <% end %>
+                  <% if account.account_title_4.present? %>
+                    <div>
+                      <%= account.individual_amount_4 %>
+                    </div>
+                  <% end %>
+                  <% if account.account_title_5.present? %>
+                    <div>
+                      <%= account.individual_amount_5 %>
+                    </div>
+                  <% end %>
+                </td>
+              <% else %>
+                <td><%= account.breakdown %></td>
+              <% end %>
+            <% else %>
+              <td><%= account.breakdown %></td>
+            <% end %>
+            <!---------------->
           <% end %>
+          
             <td>
               <%= link_to journal_species(account.subsidiary_journal_species), show_link(account, account.subsidiary_journal_species), remote: true, class: journal_btn(account.subsidiary_journal_species) %>
               <%= link_to "編集", edit_link(account, account.subsidiary_journal_species), remote: true, class: "btn btn-default" %>
             </td>
+            
           </tr>
         <% end %>
       <% end %>

@@ -1,36 +1,36 @@
 <%= provide(:title, '売上帳') %>
 
-<h2><%= l(@first_day, format: :year) %>売上帳</h2>
+<h2><%= l(@first_day, format: :month) %>売上帳</h2>
 <div class="btn-users-show">
   <% unless @first_day <= @accounts.first.accounting_date %>
     <%= link_to "⇦ 月", accounts_path(accounting_date: @first_day.prev_month), class: "btn btn-info" %>
   <% else %>
     <%= link_to "⇦ 月", accounts_path(accounting_date: @first_day.prev_month), class: "btn btn-info disabled" %>
   <% end %>
-  <% unless @first_day >= @accounts.last.accounting_date.beginning_of_month %>
+  <% unless @first_day >= @today.beginning_of_month %>
     <%= link_to "月 ⇨", accounts_path(accounting_date: @first_day.next_month), class: "btn btn-info" %>
   <% else %>
     <%= link_to "月 ⇨", accounts_path(accounting_date: @first_day.next_month), class: "btn btn-info disabled" %>
   <% end %>
-  <% unless @first_day.prev_year <= @accounts.first.accounting_date%>
+  <% unless @first_day.prev_year <= @accounts.first.accounting_date %>
     <%= link_to "⇦ 年", accounts_path(accounting_date: @first_day.prev_year), class: "btn btn-success" %>
   <% else %>
     <%= link_to "⇦ 年", accounts_path(accounting_date: @first_day.prev_year), class: "btn btn-success disabled" %>
   <% end %>
-  <% unless @first_day.next_year >= @accounts.last.accounting_date%>
+  <% unless @first_day.next_year >= @today %>
     <%= link_to "年 ⇨", accounts_path(accounting_date: @first_day.next_year), class: "btn btn-success" %>
   <% else %>
     <%= link_to "年 ⇨", accounts_path(accounting_date: @first_day.next_year), class: "btn btn-success disabled" %>
   <% end %>
   <% unless @first_day <= @accounts.first.accounting_date %>
-    <%= link_to "⇦ 先頭", accounts_path(accounting_date: @accounts.first.accounting_date), class: "btn btn-danger" %>
+    <%= link_to "⇦ 先頭", accounts_path(accounting_date: @accounts.first.accounting_date.beginning_of_month), class: "btn btn-danger" %>
   <% else %>
-    <%= link_to "⇦ 先頭", accounts_path(accounting_date: @accounts.first.accounting_date), class: "btn btn-danger disabled" %>
+    <%= link_to "⇦ 先頭", accounts_path(accounting_date: @accounts.first.accounting_date.beginning_of_month), class: "btn btn-danger disabled" %>
   <% end %>
   <% unless @first_day >= @accounts.last.accounting_date.beginning_of_month %>
-    <%= link_to "末尾 ⇨", accounts_path(accounting_date: @accounts.last.accounting_date), class: "btn btn-danger" %>
+    <%= link_to "末尾 ⇨", accounts_path(accounting_date: @accounts.last.accounting_date.beginning_of_month), class: "btn btn-danger" %>
   <% else %>
-    <%= link_to "末尾 ⇨", accounts_path(accounting_date: @accounts.last.accounting_date), class: "btn btn-danger disabled" %>
+    <%= link_to "末尾 ⇨", accounts_path(accounting_date: @accounts.last.accounting_date.beginning_of_month), class: "btn btn-danger disabled" %>
   <% end %>
 </div>
 
@@ -65,6 +65,9 @@
             <% end %>
             <td><%= account.customer %></td>
             <td>
+              <% if account.account_title_2.present? || account.account_title_3.present? || account.account_title_4.present? || account.account_title_5.present? %>
+                <div>（諸口）</div>
+              <% end %>
               <div>
                 <%= account.account_title %>
                 <% if account.individual_amount.present? %>

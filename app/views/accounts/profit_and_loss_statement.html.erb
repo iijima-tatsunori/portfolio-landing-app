@@ -1,0 +1,97 @@
+<%= provide(:title, '損益計算書') %>
+
+<h2><%= l(@this_year.first, format: :year) %>損益計算書</h2>
+
+<div class="btn-users-show">
+  <% unless @first_day.prev_year <= @accounts.first.accounting_date %>
+    <%= link_to "⇦ 年", profit_and_loss_statement_accounts_path(accounting_date: @first_day.prev_year), class: "btn btn-success" %>
+  <% else %>
+    <%= link_to "⇦ 年", profit_and_loss_statement_accounts_path(accounting_date: @first_day.prev_year), class: "btn btn-success disabled" %>
+  <% end %>
+  <% unless @first_day.next_year >= @today %>
+    <%= link_to "年 ⇨", profit_and_loss_statement_accounts_path(accounting_date: @first_day.next_year), class: "btn btn-success" %>
+  <% else %>
+    <%= link_to "年 ⇨", profit_and_loss_statement_accounts_path(accounting_date: @first_day.next_year), class: "btn btn-success disabled" %>
+  <% end %>
+  <% unless @first_day <= @accounts.first.accounting_date %>
+    <%= link_to "⇦ 先頭", profit_and_loss_statement_accounts_path(accounting_date: @accounts.first.accounting_date.beginning_of_month), class: "btn btn-danger" %>
+  <% else %>
+    <%= link_to "⇦ 先頭", profit_and_loss_statement_accounts_path(accounting_date: @accounts.first.accounting_date.beginning_of_month), class: "btn btn-danger disabled" %>
+  <% end %>
+  <% unless @first_day >= @accounts.last.accounting_date.beginning_of_month %>
+    <%= link_to "末尾 ⇨", profit_and_loss_statement_accounts_path(accounting_date: @accounts.last.accounting_date.beginning_of_month), class: "btn btn-danger" %>
+  <% else %>
+    <%= link_to "末尾 ⇨", profit_and_loss_statement_accounts_path(accounting_date: @accounts.last.accounting_date.beginning_of_month), class: "btn btn-danger disabled" %>
+  <% end %>
+</div>
+<div>
+  <table class="table table-bordered table-condensed table-hover" id="table-account">
+    <thead>
+      <tr>
+      </tr>
+    </thead>
+    
+    <tbody>
+      <tr>
+        <td>売上高</td>
+        <td><%= @this_year_last_balance.last.general_account_balance - @this_year_first_balance.first.general_account_balance %></td>
+      </tr>
+      <tr>
+        <td>売上原価</td>
+        <td>-</td>
+      </tr>
+      <tr class="bg-success">
+        <td>売上総利益</td>
+        <td><%= @this_year_last_balance.last.general_account_balance - @this_year_first_balance.first.general_account_balance %></td>
+      </tr>
+      <tr>
+        <td>販売費及一般管理費</td>
+        <td><%= @this_year_last_purchasing_balance.last.general_purchasing_balance - @this_year_first_purchasing_balance.first.general_purchasing_balance %></td>
+      </tr>
+      <tr class="bg-success">
+        <td>営業利益</td>
+        <td><%= (@this_year_last_balance.last.general_account_balance - @this_year_first_balance.first.general_account_balance) - (@this_year_last_purchasing_balance.last.general_purchasing_balance - @this_year_first_purchasing_balance.first.general_purchasing_balance)%></td>
+      </tr>
+      <tr class="bg-info">
+        <td>営業利益率</td>
+        <td>100%</td>
+      </tr>
+      <tr>
+        <td>営業外利益</td>
+        <td>-</td>
+      </tr>
+      <tr>
+        <td>営業外費用</td>
+        <td>-</td>
+      </tr>
+      <tr class="bg-success">
+        <td>経常利益</td>
+        <td><%= (@this_year_last_balance.last.general_account_balance - @this_year_first_balance.first.general_account_balance) - (@this_year_last_purchasing_balance.last.general_purchasing_balance - @this_year_first_purchasing_balance.first.general_purchasing_balance)%></td>
+      </tr>
+      <tr>
+        <td>特別利益</td>
+        <td>-</td>
+      </tr>
+      <tr>
+        <td>特別損失</td>
+        <td>-</td>
+      </tr>
+      <tr class="bg-success">
+        <td>税引前当期純利益</td>
+        <td><%= (@this_year_last_balance.last.general_account_balance - @this_year_first_balance.first.general_account_balance) - (@this_year_last_purchasing_balance.last.general_purchasing_balance - @this_year_first_purchasing_balance.first.general_purchasing_balance)%></td>
+      </tr>
+      <tr>
+        <td>法人税、住民税及事業税</td>
+        <td>-</td>
+      </tr>
+      <tr class="bg-success">
+        <td>当期純利益</td>
+        <td><%= (@this_year_last_balance.last.general_account_balance - @this_year_first_balance.first.general_account_balance) - (@this_year_last_purchasing_balance.last.general_purchasing_balance - @this_year_first_purchasing_balance.first.general_purchasing_balance)%></td>
+      </tr>
+    </tbody>
+    <tfoot>
+      <tr>
+      </tr>
+    </tfoot>
+  </table>
+</div>

@@ -1,13 +1,13 @@
 module AccountsHelper
   
-  # 売上帳合計(amount)用計算処理---コントローラー(create,update,destroy)
+  # 売上帳合計(amount)用計算処理---コントローラー(create, update, destroy)
   def account_amount_algorithm
     @accounts = Account.where(subsidiary_journal_species: 4).merge(Account.order("accounts.accounting_date ASC")).merge(Account.order("accounts.customer DESC")).merge(Account.order("accounts.return_check_box ASC"))
     @next_accounts = @accounts.drop(1).push(@accounts.first)
     @before_accounts = @accounts.drop(1).unshift(@accounts.last, @accounts.first)
     zero = 0
     @accounts.zip(@next_accounts, @before_accounts) do |account, next_a, before_a|
-    zero = 0 if account.accounting_date != before_a.accounting_date || account.customer != before_a.customer || account.return_check_box == "1" && before_a.return_check_box == "0"
+      zero = 0 if account.accounting_date != before_a.accounting_date || account.customer != before_a.customer || account.return_check_box == "1" && before_a.return_check_box == "0"
       if account.accounting_date == next_a.accounting_date && account.customer == next_a.customer || account.accounting_date == before_a.accounting_date && account.customer == before_a.customer
         amount = zero += account.breakdown
       else
@@ -50,32 +50,332 @@ module AccountsHelper
   
   # 現金出納帳用計算処理---コントローラー(cash_update, cash_destroy, cash_create)
   def cash_algorithm
-    @cash_accounts = Account.where(subsidiary_journal_species: 1).merge(Account.order("accounts.accounting_date ASC"))
+    @cash_accounts = Account.where("account_title = '現金'").or(Account.where("account_title_2 = '現金'")).or(Account.where("account_title_3 = '現金'")).or(Account.where("account_title_4 = '現金'").where("account_title_5 = '現金'")).or(Account.where(subsidiary_journal_species: 1)).merge(Account.order("accounts.accounting_date ASC"))
     @cash_accounts.each do |account|
-      if @cash_accounts[0] == account
-        balance = @cash_initial_deposit + account.income.to_i - account.expense.to_i
-      else
-        balance = @balance.to_i + account.income.to_i - account.expense.to_i
+      if account.subsidiary_journal_species == 1
+        if @cash_accounts[0] == account
+          if @cash_initial_deposit < 0
+            balance = @cash_initial_deposit - account.income.to_i - account.expense.to_i
+          else
+            balance = @cash_initial_deposit + account.income.to_i - account.expense.to_i
+          end
+        else
+          balance = @balance + account.income.to_i - account.expense.to_i
+        end
+      elsif account.subsidiary_journal_species == 4
+        if @cash_accounts[0] == account
+          if account.return_check_box == "0"
+            if account.account_title == "現金"
+              if account.individual_amount.present?
+                balance = @cash_initial_deposit + account.individual_amount
+              else
+                balance = @cash_initial_deposit + account.breakdown
+              end
+            elsif account.account_title_2 == "現金"
+              balance = @cash_initial_deposit + account.individual_amount_2
+            elsif account.account_title_3 == "現金"
+              balance = @cash_initial_deposit + account.individual_amount_3
+            elsif account.account_title_4 == "現金"
+              balance = @cash_initial_deposit + account.individual_amount_4
+            elsif account.account_title_5 == "現金"
+              balance = @cash_initial_deposit + account.individual_amount_5
+            end
+          elsif account.return_check_box == "1"
+            if account.account_title == "現金"
+              if account.individual_amount.present?
+                balance = @cash_initial_deposit - account.individual_amount
+              else
+                balance = @cash_initial_deposit - account.breakdown
+              end
+            elsif account.account_title_2 == "現金"
+              balance = @cash_initial_deposit - account.individual_amount_2
+            elsif account.account_title_3 == "現金"
+              balance = @cash_initial_deposit - account.individual_amount_3
+            elsif account.account_title_4 == "現金"
+              balance = @cash_initial_deposit - account.individual_amount_4
+            elsif account.account_title_5 == "現金"
+              balance = @cash_initial_deposit - account.individual_amount_5
+            end
+          else
+          end
+        else
+          if account.return_check_box == "0"
+            if account.account_title == "現金"
+              if account.individual_amount.present?
+                balance = @balance + account.individual_amount
+              else
+                balance = @balance + account.breakdown
+              end
+            elsif account.account_title_2 == "現金"
+              balance = @balance + account.individual_amount_2
+            elsif account.account_title_3 == "現金"
+              balance = @balance + account.individual_amount_3
+            elsif account.account_title_4 == "現金"
+              balance = @balance + account.individual_amount_4
+            elsif account.account_title_5 == "現金"
+              balance = @balance + account.individual_amount_5
+            end
+          elsif account.return_check_box == "1"
+            if account.account_title == "現金"
+              if account.individual_amount.present?
+                balance = @balance - account.individual_amount
+              else
+                balance = @balance - account.breakdown
+              end
+            elsif account.account_title_2 == "現金"
+              balance = @balance - account.individual_amount_2
+            elsif account.account_title_3 == "現金"
+              balance = @balance - account.individual_amount_3
+            elsif account.account_title_4 == "現金"
+              balance = @balance - account.individual_amount_4
+            elsif account.account_title_5 == "現金"
+              balance = @balance - account.individual_amount_5
+            end
+          else
+          end
+        end
+      elsif account.subsidiary_journal_species == 3
+        if @cash_accounts[0] == account
+          if account.return_check_box == "1"
+            if account.account_title == "現金"
+              if account.individual_amount.present?
+                balance = @cash_initial_deposit + account.individual_amount
+              else
+                balance = @cash_initial_deposit + account.breakdown
+              end
+            elsif account.account_title_2 == "現金"
+              balance = @cash_initial_deposit + account.individual_amount_2
+            elsif account.account_title_3 == "現金"
+              balance = @cash_initial_deposit + account.individual_amount_3
+            elsif account.account_title_4 == "現金"
+              balance = @cash_initial_deposit + account.individual_amount_4
+            elsif account.account_title_5 == "現金"
+              balance = @cash_initial_deposit + account.individual_amount_5
+            end
+          elsif account.return_check_box == "0"
+            if account.account_title == "現金"
+              if account.individual_amount.present?
+                balance = @cash_initial_deposit - account.individual_amount
+              else
+                balance = @cash_initial_deposit - account.breakdown
+              end
+            elsif account.account_title_2 == "現金"
+              balance = @cash_initial_deposit - account.individual_amount_2
+            elsif account.account_title_3 == "現金"
+              balance = @cash_initial_deposit - account.individual_amount_3
+            elsif account.account_title_4 == "現金"
+              balance = @cash_initial_deposit - account.individual_amount_4
+            elsif account.account_title_5 == "現金"
+              balance = @cash_initial_deposit - account.individual_amount_5
+            end
+          else 
+          end
+        else
+          if account.return_check_box == "1"
+            if account.account_title == "現金"
+              if account.individual_amount.present?
+                balance = @balance + account.individual_amount
+              else
+                balance = @balance + account.breakdown
+              end
+            elsif account.account_title_2 == "現金"
+              balance = @balance + account.individual_amount_2
+            elsif account.account_title_3 == "現金"
+              balance = @balance + account.individual_amount_3
+            elsif account.account_title_4 == "現金"
+              balance = @balance + account.individual_amount_4
+            elsif account.account_title_5 == "現金"
+              balance = @balance + account.individual_amount_5
+            end
+          elsif account.return_check_box == "0"
+            if account.account_title == "現金"
+              if account.individual_amount.present?
+                balance = @balance - account.individual_amount
+              else
+                balance = @balance - account.breakdown
+              end
+            elsif account.account_title_2 == "現金"
+              balance = @balance - account.individual_amount_2
+            elsif account.account_title_3 == "現金"
+              balance = @balance - account.individual_amount_3
+            elsif account.account_title_4 == "現金"
+              balance = @balance - account.individual_amount_4
+            elsif account.account_title_5 == "現金"
+              balance = @balance - account.individual_amount_5
+            end
+          else
+          end
+        end
       end
       a_id = Account.find(account.id)
       a_id.update_attributes(balance: balance)
-      @balance = balance
+      @balance = balance.to_i
     end
   end
   # -----------------------------------------
   
-  # 当座預金出納帳用計算処理---コントローラー(current_update, current_destroy, current_create)
+  # 預金出納帳用計算処理---コントローラー(current_update, current_destroy, current_create)
   def current_algorithm
-    @current_accounts = Account.where(subsidiary_journal_species: 2).merge(Account.order("accounts.accounting_date ASC"))
+    @current_accounts = Account.where("account_title = '預金'").or(Account.where("account_title_2 = '預金'")).or(Account.where("account_title_3 = '預金'")).or(Account.where("account_title_4 = '預金'").where("account_title_5 = '預金'")).or(Account.where(subsidiary_journal_species: 2)).merge(Account.order("accounts.accounting_date ASC"))
     @current_accounts.each do |account|
-      if @current_accounts[0] == account
-        balance = @current_initial_deposit + account.deposit.to_i - account.drawer.to_i
-      else
-        balance = @balance.to_i + account.deposit.to_i - account.drawer.to_i
+      if account.subsidiary_journal_species == 2
+        if @current_accounts[0] == account
+          if @cash_initial_deposit < 0
+            balance = @current_initial_deposit - account.deposit.to_i - account.drawer.to_i
+          else
+            balance = @current_initial_deposit + account.deposit.to_i - account.drawer.to_i
+          end
+        else
+          balance = @balance.to_i + account.deposit.to_i - account.drawer.to_i
+        end
+      elsif account.subsidiary_journal_species == 4
+        if @current_accounts[0] == account
+          if account.return_check_box == "0"
+            if account.account_title == "預金"
+              if account.individual_amount.present?
+                balance = @current_initial_deposit + account.individual_amount
+              else
+                balance = @current_initial_deposit + account.breakdown
+              end
+            elsif account.account_title_2 == "預金"
+              balance = @current_initial_deposit + account.individual_amount_2
+            elsif account.account_title_3 == "預金"
+              balance = @current_initial_deposit + account.individual_amount_3
+            elsif account.account_title_4 == "預金"
+              balance = @current_initial_deposit + account.individual_amount_4
+            elsif account.account_title_5 == "預金"
+              balance = @current_initial_deposit + account.individual_amount_5
+            end
+          elsif account.return_check_box == "1"
+            if account.account_title == "預金"
+              if account.individual_amount.present?
+                balance = @current_initial_deposit - account.individual_amount
+              else
+                balance = @current_initial_deposit - account.breakdown
+              end
+            elsif account.account_title_2 == "預金"
+              balance = @current_initial_deposit - account.individual_amount_2
+            elsif account.account_title_3 == "預金"
+              balance = @current_initial_deposit - account.individual_amount_3
+            elsif account.account_title_4 == "預金"
+              balance = @current_initial_deposit - account.individual_amount_4
+            elsif account.account_title_5 == "預金"
+              balance = @current_initial_deposit - account.individual_amount_5
+            end
+          else 
+          end
+        else
+          if account.return_check_box == "0"
+            if account.account_title == "預金"
+              if account.individual_amount.present?
+                balance = @balance + account.individual_amount
+              else
+                balance = @balance + account.breakdown
+              end
+            elsif account.account_title_2 == "預金"
+              balance = @balance + account.individual_amount_2
+            elsif account.account_title_3 == "預金"
+              balance = @balance + account.individual_amount_3
+            elsif account.account_title_4 == "預金"
+              balance = @balance + account.individual_amount_4
+            elsif account.account_title_5 == "預金"
+              balance = @balance + account.individual_amount_5
+            end
+          elsif account.return_check_box == "1"
+            if account.account_title == "預金"
+              if account.individual_amount.present?
+                balance = @balance - account.individual_amount
+              else
+                balance = @balance - account.breakdown
+              end
+            elsif account.account_title_2 == "預金"
+              balance = @balance - account.individual_amount_2
+            elsif account.account_title_3 == "預金"
+              balance = @balance - account.individual_amount_3
+            elsif account.account_title_4 == "預金"
+              balance = @balance - account.individual_amount_4
+            elsif account.account_title_5 == "預金"
+              balance = @balance - account.individual_amount_5
+            end
+          else
+          end
+        end
+      elsif account.subsidiary_journal_species == 3
+        if @current_accounts[0] == account
+          if account.return_check_box == "1"
+            if account.account_title == "預金"
+              if account.individual_amount.present?
+                balance = @current_initial_deposit + account.individual_amount
+              else
+                balance = @current_initial_deposit + account.breakdown
+              end
+            elsif account.account_title_2 == "預金"
+              balance = @current_initial_deposit + account.individual_amount_2
+            elsif account.account_title_3 == "預金"
+              balance = @current_initial_deposit + account.individual_amount_3
+            elsif account.account_title_4 == "預金"
+              balance = @current_initial_deposit + account.individual_amount_4
+            elsif account.account_title_5 == "預金"
+              balance = @current_initial_deposit + account.individual_amount_5
+            end
+          elsif account.return_check_box == "0"
+            if account.account_title == "預金"
+              if account.individual_amount.present?
+                balance = @current_initial_deposit - account.individual_amount
+              else
+                balance = @current_initial_deposit - account.breakdown
+              end
+            elsif account.account_title_2 == "預金"
+              balance = @current_initial_deposit - account.individual_amount_2
+            elsif account.account_title_3 == "預金"
+              balance = @current_initial_deposit - account.individual_amount_3
+            elsif account.account_title_4 == "預金"
+              balance = @current_initial_deposit - account.individual_amount_4
+            elsif account.account_title_5 == "預金"
+              balance = @current_initial_deposit - account.individual_amount_5
+            end
+          else 
+          end
+        else
+          if account.return_check_box == "1"
+            if account.account_title == "預金"
+              if account.individual_amount.present?
+                balance = @balance + account.individual_amount
+              else
+                balance = @balance + account.breakdown
+              end
+            elsif account.account_title_2 == "預金"
+              balance = @balance + account.individual_amount_2
+            elsif account.account_title_3 == "預金"
+              balance = @balance + account.individual_amount_3
+            elsif account.account_title_4 == "預金"
+              balance = @balance + account.individual_amount_4
+            elsif account.account_title_5 == "預金"
+              balance = @balance + account.individual_amount_5
+            end
+          elsif account.return_check_box == "0"
+            if account.account_title == "預金"
+              if account.individual_amount.present?
+                balance = @balance - account.individual_amount
+              else
+                balance = @balance - account.breakdown
+              end
+            elsif account.account_title_2 == "預金"
+              balance = @balance - account.individual_amount_2
+            elsif account.account_title_3 == "預金"
+              balance = @balance - account.individual_amount_3
+            elsif account.account_title_4 == "預金"
+              balance = @balance - account.individual_amount_4
+            elsif account.account_title_5 == "預金"
+              balance = @balance - account.individual_amount_5
+            end
+          else 
+          end
+        end
       end
       a_id = Account.find(account.id)
-      a_id.update_attributes(balance: balance)
-      @balance = balance
+      a_id.update_attributes(current_balance: balance)
+      @balance = balance.to_i
     end
   end
   # -----------------------------------------
@@ -86,7 +386,7 @@ module AccountsHelper
     when 1 then
       "現金出納帳"
     when 2 then
-      "当座預金出納帳"
+      "預金出納帳"
     when 3 then
       "仕入帳"
     when 4 then
@@ -203,4 +503,1906 @@ module AccountsHelper
     current
   end
   # -----------------------------------------
+  
+  # (売上)総勘定元帳用()--controller(create, update, destroy)
+  def account_amount_sum
+    @general_ledger_accounts = Account.where(subsidiary_journal_species: 4).merge(Account.order("accounts.accounting_date ASC"))
+    zero = 0
+    @general_ledger_accounts.each do |account|
+      if account.return_check_box == "0"
+        sum = zero += account.breakdown
+      elsif account.return_check_box == "1"
+        sum = zero -= account.breakdown
+      end
+      a_id = Account.find(account.id)
+      a_id.update_attributes(general_account_balance: sum)
+    end
+  end
+  # -----------------------------------------
+  
+  # (売上)総勘定元帳用(１ヶ月毎の借方合計金額と貸方合計金額を比較して、貸借毎の金額を出す。)--controller(general_ledger)
+  def account_balance_sum
+    # 借方
+    zero = 0
+    @general_ledger_accounts.each do |account|
+      if @this_month.include?(Date.parse(account[:accounting_date].to_s))
+        if account.return_check_box == "0"
+          if @general_ledger_accounts[0] == account
+            if @this_month_last_balance.last.general_account_balance > 0
+              @debit_amount = zero += account.breakdown
+            else
+              @debit_amount = @this_month_last_balance.last.general_account_balance.abs + (zero += account.breakdown)
+            end
+          else
+            if @amount_carried_forward.last.present?
+              if @amount_carried_forward.last.general_account_balance <= 0
+                if @this_month_last_balance.last.general_account_balance > 0
+                  @debit_amount = zero += account.breakdown
+                else
+                  @debit_amount = @this_month_last_balance.last.general_account_balance.abs + (zero += account.breakdown)
+                end
+              else
+                if @this_month_last_balance.last.general_account_balance < 0
+                  @debit_amount = (@amount_carried_forward.last.general_account_balance.abs + @this_month_last_balance.last.general_account_balance.abs) + (zero += account.breakdown)
+                else
+                  @debit_amount = @amount_carried_forward.last.general_account_balance.abs + (zero += account.breakdown)
+                end
+              end
+            else
+              if @this_month_last_balance.last.general_account_balance > 0
+                @debit_amount = zero += account.breakdown
+              else
+                @debit_amount = @this_month_last_balance.last.general_account_balance.abs + (zero += account.breakdown)
+              end
+            end
+          end
+        end
+      end
+    end
+    # 貸方
+    zero = 0
+    @general_ledger_accounts.each do |account|
+      if @this_month.include?(Date.parse(account[:accounting_date].to_s))
+        if account.return_check_box == "1"
+          if @general_ledger_accounts[0] == account
+            if @this_month_last_balance.last.general_account_balance < 0
+              @credit_amount = zero += account.breakdown
+            else
+              @credit_amount = @this_month_last_balance.last.general_account_balance.abs + (zero += account.breakdown)
+            end
+          else
+            if @amount_carried_forward.last.present?
+              if @amount_carried_forward.last.general_account_balance >= 0
+                if @this_month_last_balance.last.general_account_balance < 0
+                  @credit_amount = zero += account.breakdown
+                else
+                  @credit_amount = @this_month_last_balance.last.general_account_balance.abs + (zero += account.breakdown)
+                end
+              else
+                if @this_month_last_balance.last.general_account_balance > 0
+                  @credit_amount = (@amount_carried_forward.last.general_account_balance.abs + @this_month_last_balance.last.general_account_balance.abs) + (zero += account.breakdown)
+                else
+                  @credit_amount = @amount_carried_forward.last.general_account_balance.abs + (zero += account.breakdown)
+                end
+              end
+            else
+              if @this_month_last_balance.last.general_account_balance < 0
+                @credit_amount = zero += account.breakdown
+              else
+                @credit_amount = @this_month_last_balance.last.general_account_balance.abs + (zero += account.breakdown)
+              end
+            end
+          end
+        end
+      end
+    end
+  end
+  # -----------------------------------------
+  
+  # (仕入)総勘定元帳用()--controller(purchasing_create, purchasing_update, purchasing_destroy)
+  def purchasing_amount_sum
+    @general_ledger_accounts = Account.where(subsidiary_journal_species: 3).merge(Account.order("accounts.accounting_date ASC"))
+    zero = 0
+    @general_ledger_accounts.each do |account|
+      if account.return_check_box == "0"
+        sum = zero += account.breakdown
+      elsif account.return_check_box == "1"
+        sum = zero -= account.breakdown
+      end
+      a_id = Account.find(account.id)
+      a_id.update_attributes(general_purchasing_balance: sum)
+    end
+  end
+  # -----------------------------------------
+  
+  # (仕入)総勘定元帳用(１ヶ月毎の借方合計金額と貸方合計金額を比較して、貸借毎の金額を出す。)--controller(purchasing_general_ledger)
+  def purchasing_balance_sum
+    # 借方
+    zero = 0
+    @general_ledger_accounts.each do |account|
+      if @this_month.include?(Date.parse(account[:accounting_date].to_s))
+        if account.return_check_box == "0"
+          if @general_ledger_accounts[0] == account
+            if @this_month_last_balance.last.general_purchasing_balance > 0
+              @debit_amount = zero += account.breakdown
+            else
+              @debit_amount = @this_month_last_balance.last.general_purchasing_balance.abs + (zero += account.breakdown)
+            end
+          else
+            if @amount_carried_forward.last.present?
+              if @amount_carried_forward.last.general_purchasing_balance <= 0
+                if @this_month_last_balance.last.general_purchasing_balance > 0
+                  @debit_amount = zero += account.breakdown
+                else
+                  @debit_amount = @this_month_last_balance.last.general_purchasing_balance.abs + (zero += account.breakdown)
+                end
+              else
+                if @this_month_last_balance.last.general_purchasing_balance < 0
+                  @debit_amount = (@amount_carried_forward.last.general_purchasing_balance.abs + @this_month_last_balance.last.general_purchasing_balance.abs) + (zero += account.breakdown)
+                else
+                  @debit_amount = @amount_carried_forward.last.general_purchasing_balance.abs + (zero += account.breakdown)
+                end
+              end
+            else
+              if @this_month_last_balance.last.general_purchasing_balance > 0
+                @debit_amount = zero += account.breakdown
+              else
+                @debit_amount = @this_month_last_balance.last.general_purchasing_balance.abs + (zero += account.breakdown)
+              end
+            end
+          end
+        end
+      end
+    end
+    # 貸方
+    zero = 0
+    @general_ledger_accounts.each do |account|
+      if @this_month.include?(Date.parse(account[:accounting_date].to_s))
+        if account.return_check_box == "1"
+          if @general_ledger_accounts[0] == account
+            if @this_month_last_balance.last.general_purchasing_balance < 0
+              @credit_amount = zero += account.breakdown
+            else
+              @credit_amount = @this_month_last_balance.last.general_purchasing_balance.abs + (zero += account.breakdown)
+            end
+          else
+            if @amount_carried_forward.last.present?
+              if @amount_carried_forward.last.general_purchasing_balance >= 0
+                if @this_month_last_balance.last.general_purchasing_balance < 0
+                  @credit_amount = zero += account.breakdown
+                else
+                  @credit_amount = @this_month_last_balance.last.general_purchasing_balance.abs + (zero += account.breakdown)
+                end
+              else
+                if @this_month_last_balance.last.general_purchasing_balance > 0
+                  @credit_amount = (@amount_carried_forward.last.general_purchasing_balance.abs + @this_month_last_balance.last.general_purchasing_balance.abs) + (zero += account.breakdown)
+                else
+                  @credit_amount = @amount_carried_forward.last.general_purchasing_balance.abs + (zero += account.breakdown)
+                end
+              end
+            else
+              if @this_month_last_balance.last.general_purchasing_balance < 0
+                @credit_amount = zero += account.breakdown
+              else
+                @credit_amount = @this_month_last_balance.last.general_purchasing_balance.abs + (zero += account.breakdown)
+              end
+            end
+          end
+        end
+      end
+    end
+  end
+  # -----------------------------------------
+  
+  # (現金)総勘定元帳用(１ヶ月毎の借方合計金額と貸方合計金額を比較して、貸借毎の金額を出す。)--controller(cash_general_ledger)
+  def cash_balance_sum
+    # 借方
+    zero = 0
+    @general_ledger_accounts.each do |account|
+      if @this_month.include?(Date.parse(account[:accounting_date].to_s))
+        if @general_ledger_accounts[0] == account
+          if @this_month_last_balance.last.balance > 0
+            if @cash_initial_deposit > 0
+              if account.subsidiary_journal_species == 1
+                if account.income.present?
+                  @debit_amount = @cash_initial_deposit + (zero += account.income)
+                end
+              elsif account.subsidiary_journal_species == 3
+                if account.return_check_box == "1"
+                  if account.account_title == "現金" && account.individual_amount.nil?
+                    @debit_amount = @cash_initial_deposit + (zero += account.breakdown)
+                  elsif account.account_title == "現金" && account.individual_amount.present?
+                    @debit_amount = @cash_initial_deposit + (zero += account.individual_amount)
+                  elsif account.account_title_2 == "現金"
+                    @debit_amount = @cash_initial_deposit + (zero += account.individual_amount_2)
+                  elsif account.account_title_3 == "現金"
+                    @debit_amount = @cash_initial_deposit + (zero += account.individual_amount_3)
+                  elsif account.account_title_4 == "現金"
+                    @debit_amount = @cash_initial_deposit + (zero += account.individual_amount_4)
+                  elsif account.account_title_5 == "現金"
+                    @debit_amount = @cash_initial_deposit + (zero += account.individual_amount_5)
+                  else
+                  end
+                end
+              elsif account.subsidiary_journal_species == 4
+                if account.return_check_box == "0"
+                  if account.account_title == "現金" && account.individual_amount.nil?
+                    @debit_amount = @cash_initial_deposit + (zero += account.breakdown)
+                  elsif account.account_title == "現金" && account.individual_amount.present?
+                    @debit_amount = @cash_initial_deposit + (zero += account.individual_amount)
+                  elsif account.account_title_2 == "現金"
+                    @debit_amount = @cash_initial_deposit + (zero += account.individual_amount_2)
+                  elsif account.account_title_3 == "現金"
+                    @debit_amount = @cash_initial_deposit + (zero += account.individual_amount_3)
+                  elsif account.account_title_4 == "現金"
+                    @debit_amount = @cash_initial_deposit + (zero += account.individual_amount_4)
+                  elsif account.account_title_5 == "現金"
+                    @debit_amount = @cash_initial_deposit + (zero += account.individual_amount_5)
+                  else
+                  end
+                end
+              else
+              end
+            else
+              if account.subsidiary_journal_species == 1
+                if account.income.present?
+                  @debit_amount = zero += account.income
+                end
+              elsif account.subsidiary_journal_species == 3
+                if account.return_check_box == "1"
+                  if account.account_title == "現金" && account.individual_amount.nil?
+                    @debit_amount = zero += account.breakdown
+                  elsif account.account_title == "現金" && account.individual_amount.present?
+                    @debit_amount = zero += account.individual_amount
+                  elsif account.account_title_2 == "現金"
+                    @debit_amount = zero += account.individual_amount_2
+                  elsif account.account_title_3 == "現金"
+                    @debit_amount = zero += account.individual_amount_3
+                  elsif account.account_title_4 == "現金"
+                    @debit_amount = zero += account.individual_amount_4
+                  elsif account.account_title_5 == "現金"
+                    @debit_amount = zero += account.individual_amount_5
+                  else
+                  end
+                end
+              elsif account.subsidiary_journal_species == 4
+                if account.return_check_box == "0"
+                  if account.account_title == "現金" && account.individual_amount.nil?
+                    @debit_amount = zero += account.breakdown
+                  elsif account.account_title == "現金" && account.individual_amount.present?
+                    @debit_amount = zero += account.individual_amount
+                  elsif account.account_title_2 == "現金"
+                    @debit_amount = zero += account.individual_amount_2
+                  elsif account.account_title_3 == "現金"
+                    @debit_amount = zero += account.individual_amount_3
+                  elsif account.account_title_4 == "現金"
+                    @debit_amount = zero += account.individual_amount_4
+                  elsif account.account_title_5 == "現金"
+                    @debit_amount = zero += account.individual_amount_5
+                  end
+                end
+              end
+            end
+          else
+            if @cash_initial_deposit > 0
+              if account.subsidiary_journal_species == 1
+                if account.income.present?
+                  @debit_amount = (@cash_initial_deposit + @this_month_last_balance.last.balance.abs) + (zero += account.income)
+                end
+              elsif account.subsidiary_journal_species == 3
+                if account.return_check_box == "1"
+                  if account.account_title == "現金" && account.individual_amount.nil?
+                    @debit_amount = (@cash_initial_deposit + @this_month_last_balance.last.balance.abs) + (zero += account.breakdown)
+                  elsif account.account_title == "現金" && account.individual_amount.present?
+                    @debit_amount = (@cash_initial_deposit + @this_month_last_balance.last.balance.abs) + (zero += account.individual_amount)
+                  elsif account.account_title_2 == "現金"
+                    @debit_amount = (@cash_initial_deposit + @this_month_last_balance.last.balance.abs) + (zero += account.individual_amount_2)
+                  elsif account.account_title_3 == "現金"
+                    @debit_amount = (@cash_initial_deposit + @this_month_last_balance.last.balance.abs) + (zero += account.individual_amount_3)
+                  elsif account.account_title_4 == "現金"
+                    @debit_amount = (@cash_initial_deposit + @this_month_last_balance.last.balance.abs) + (zero += account.individual_amount_4)
+                  elsif account.account_title_5 == "現金"
+                    @debit_amount = (@cash_initial_deposit + @this_month_last_balance.last.balance.abs) + (zero += account.individual_amount_5)
+                  end
+                end
+              elsif account.subsidiary_journal_species == 4
+                if account.return_check_box == "0"
+                  if account.account_title == "現金" && account.individual_amount.nil?
+                    @debit_amount = (@cash_initial_deposit + @this_month_last_balance.last.balance.abs) + (zero += account.breakdown)
+                  elsif account.account_title == "現金" && account.individual_amount.present?
+                    @debit_amount = (@cash_initial_deposit + @this_month_last_balance.last.balance.abs) + (zero += account.individual_amount)
+                  elsif account.account_title_2 == "現金"
+                    @debit_amount = (@cash_initial_deposit + @this_month_last_balance.last.balance.abs) + (zero += account.individual_amount_2)
+                  elsif account.account_title_3 == "現金"
+                    @debit_amount = (@cash_initial_deposit + @this_month_last_balance.last.balance.abs) + (zero += account.individual_amount_3)
+                  elsif account.account_title_4 == "現金"
+                    @debit_amount = (@cash_initial_deposit + @this_month_last_balance.last.balance.abs) + (zero += account.individual_amount_4)
+                  elsif account.account_title_5 == "現金"
+                    @debit_amount = (@cash_initial_deposit + @this_month_last_balance.last.balance.abs) + (zero += account.individual_amount_5)
+                  end
+                end
+              end
+            else
+              if account.subsidiary_journal_species == 1
+                if account.income.present?
+                  @debit_amount = @this_month_last_balance.last.balance.abs + (zero += account.income)
+                end
+              elsif account.subsidiary_journal_species == 3
+                if account.return_check_box == "1"
+                  if account.account_title == "現金" && account.individual_amount.nil?
+                    @debit_amount = @this_month_last_balance.last.balance.abs + (zero += account.breakdown)
+                  elsif account.account_title == "現金" && account.individual_amount.present?
+                    @debit_amount = @this_month_last_balance.last.balance.abs + (zero += account.individual_amount)
+                  elsif account.account_title_2 == "現金"
+                    @debit_amount = @this_month_last_balance.last.balance.abs + (zero += account.individual_amount_2)
+                  elsif account.account_title_3 == "現金"
+                    @debit_amount = @this_month_last_balance.last.balance.abs + (zero += account.individual_amount_3)
+                  elsif account.account_title_4 == "現金"
+                    @debit_amount = @this_month_last_balance.last.balance.abs + (zero += account.individual_amount_4)
+                  elsif account.account_title_5 == "現金"
+                    @debit_amount = @this_month_last_balance.last.balance.abs + (zero += account.individual_amount_5)
+                  end
+                end
+              elsif account.subsidiary_journal_species == 4
+                if account.return_check_box == "0"
+                  if account.account_title == "現金" && account.individual_amount.nil?
+                    @debit_amount = @this_month_last_balance.last.balance.abs + (zero += account.breakdown)
+                  elsif account.account_title == "現金" && account.individual_amount.present?
+                    @debit_amount = @this_month_last_balance.last.balance.abs + (zero += account.individual_amount)
+                  elsif account.account_title_2 == "現金"
+                    @debit_amount = @this_month_last_balance.last.balance.abs + (zero += account.individual_amount_2)
+                  elsif account.account_title_3 == "現金"
+                    @debit_amount = @this_month_last_balance.last.balance.abs + (zero += account.individual_amount_3)
+                  elsif account.account_title_4 == "現金"
+                    @debit_amount = @this_month_last_balance.last.balance.abs + (zero += account.individual_amount_4)
+                  elsif account.account_title_5 == "現金"
+                    @debit_amount = @this_month_last_balance.last.balance.abs + (zero += account.individual_amount_5)
+                  end
+                end
+              end
+            end
+          end
+        else
+          if @amount_carried_forward.last.present?
+            if @amount_carried_forward.last.balance <= 0
+              if @this_month_last_balance.last.balance > 0
+                if account.subsidiary_journal_species == 1
+                  if account.income.present?
+                    @debit_amount = zero += account.income
+                  end
+                elsif account.subsidiary_journal_species == 3
+                  if account.return_check_box == "1"
+                    if account.account_title == "現金" && account.individual_amount.nil?
+                      @debit_amount = zero += account.breakdown
+                    elsif account.account_title == "現金" && account.individual_amount.present?
+                      @debit_amount = zero += account.individual_amount
+                    elsif account.account_title_2 == "現金"
+                      @debit_amount = zero += account.individual_amount_2
+                    elsif account.account_title_3 == "現金"
+                      @debit_amount = zero += account.individual_amount_3
+                    elsif account.account_title_4 == "現金"
+                      @debit_amount = zero += account.individual_amount_4
+                    elsif account.account_title_5 == "現金"
+                      @debit_amount = zero += account.individual_amount_5
+                    else
+                    end
+                  end
+                elsif account.subsidiary_journal_species == 4
+                  if account.return_check_box == "0"
+                    if account.account_title == "現金" && account.individual_amount.nil?
+                      @debit_amount = zero += account.breakdown
+                    elsif account.account_title == "現金" && account.individual_amount.present?
+                      @debit_amount = zero += account.individual_amount
+                    elsif account.account_title_2 == "現金"
+                      @debit_amount = zero += account.individual_amount_2
+                    elsif account.account_title_3 == "現金"
+                      @debit_amount = zero += account.individual_amount_3
+                    elsif account.account_title_4 == "現金"
+                      @debit_amount = zero += account.individual_amount_4
+                    elsif account.account_title_5 == "現金"
+                      @debit_amount = zero += account.individual_amount_5
+                    else
+                    end
+                  else
+                  end
+                end
+              else
+                if account.subsidiary_journal_species == 1
+                  if account.income.present?
+                    @debit_amount =  @this_month_last_balance.last.balance.abs + (zero += account.income)
+                  end
+                elsif account.subsidiary_journal_species == 3
+                  if account.return_check_box == "1"
+                    if account.account_title == "現金" && account.individual_amount.nil?
+                      @debit_amount = @this_month_last_balance.last.balance.abs + (zero += account.breakdown)
+                    elsif account.account_title == "現金" && account.individual_amount.present?
+                      @debit_amount = @this_month_last_balance.last.balance.abs + (zero += account.individual_amount)
+                    elsif account.account_title_2 == "現金"
+                      @debit_amount = @this_month_last_balance.last.balance.abs + (zero += account.individual_amount_2)
+                    elsif account.account_title_3 == "現金"
+                      @debit_amount = @this_month_last_balance.last.balance.abs + (zero += account.individual_amount_3)
+                    elsif account.account_title_4 == "現金"
+                      @debit_amount = @this_month_last_balance.last.balance.abs + (zero += account.individual_amount_4)
+                    elsif account.account_title_5 == "現金"
+                      @debit_amount = @this_month_last_balance.last.balance.abs + (zero += account.individual_amount_5)
+                    else
+                    end
+                  end
+                elsif account.subsidiary_journal_species == 4
+                  if account.return_check_box == "0"
+                    if account.account_title == "現金" && account.individual_amount.nil?
+                      @debit_amount = @this_month_last_balance.last.balance.abs + (zero += account.breakdown)
+                    elsif account.account_title == "現金" && account.individual_amount.present?
+                      @debit_amount = @this_month_last_balance.last.balance.abs + (zero += account.individual_amount)
+                    elsif account.account_title_2 == "現金"
+                      @debit_amount = @this_month_last_balance.last.balance.abs + (zero += account.individual_amount_2)
+                    elsif account.account_title_3 == "現金"
+                      @debit_amount = @this_month_last_balance.last.balance.abs + (zero += account.individual_amount_3)
+                    elsif account.account_title_4 == "現金"
+                      @debit_amount = @this_month_last_balance.last.balance.abs + (zero += account.individual_amount_4)
+                    elsif account.account_title_5 == "現金"
+                      @debit_amount = @this_month_last_balance.last.balance.abs + (zero += account.individual_amount_5)
+                    else
+                    end
+                  else
+                  end
+                end
+              end
+            else
+              if @this_month_last_balance.last.balance < 0
+                if account.subsidiary_journal_species == 1
+                  if account.income.present?
+                    @debit_amount = (@amount_carried_forward.last.balance.abs + @this_month_last_balance.last.balance.abs) + (zero += account.income)
+                  end
+                elsif account.subsidiary_journal_species == 3
+                  if account.return_check_box == "1"
+                    if account.account_title == "現金" && account.individual_amount.nil?
+                      @debit_amount = (@amount_carried_forward.last.balance.abs + @this_month_last_balance.last.balance.abs) + (zero += account.breakdown)
+                    elsif account.account_title == "現金" && account.individual_amount.present?
+                      @debit_amount = (@amount_carried_forward.last.balance.abs + @this_month_last_balance.last.balance.abs) + (zero += account.individual_amount)
+                    elsif account.account_title_2 == "現金"
+                      @debit_amount = (@amount_carried_forward.last.balance.abs + @this_month_last_balance.last.balance.abs) + (zero += account.individual_amount_2)
+                    elsif account.account_title_3 == "現金"
+                      @debit_amount = (@amount_carried_forward.last.balance.abs + @this_month_last_balance.last.balance.abs) + (zero += account.individual_amount_3)
+                    elsif account.account_title_4 == "現金"
+                      @debit_amount = (@amount_carried_forward.last.balance.abs + @this_month_last_balance.last.balance.abs) + (zero += account.individual_amount_4)
+                    elsif account.account_title_5 == "現金"
+                      @debit_amount = (@amount_carried_forward.last.balance.abs + @this_month_last_balance.last.balance.abs) + (zero += account.individual_amount_5)
+                    else
+                    end
+                  end
+                elsif account.subsidiary_journal_species == 4
+                  if account.return_check_box == "0"
+                    if account.account_title == "現金" && account.individual_amount.nil?
+                      @debit_amount = (@amount_carried_forward.last.balance.abs + @this_month_last_balance.last.balance.abs) + (zero += account.breakdown)
+                    elsif account.account_title == "現金" && account.individual_amount.present?
+                      @debit_amount = (@amount_carried_forward.last.balance.abs + @this_month_last_balance.last.balance.abs) + (zero += account.individual_amount)
+                    elsif account.account_title_2 == "現金"
+                      @debit_amount = (@amount_carried_forward.last.balance.abs + @this_month_last_balance.last.balance.abs) + (zero += account.individual_amount_2)
+                    elsif account.account_title_3 == "現金"
+                      @debit_amount = (@amount_carried_forward.last.balance.abs + @this_month_last_balance.last.balance.abs) + (zero += account.individual_amount_3)
+                    elsif account.account_title_4 == "現金"
+                      @debit_amount = (@amount_carried_forward.last.balance.abs + @this_month_last_balance.last.balance.abs) + (zero += account.individual_amount_4)
+                    elsif account.account_title_5 == "現金"
+                      @debit_amount = (@amount_carried_forward.last.balance.abs + @this_month_last_balance.last.balance.abs) + (zero += account.individual_amount_5)
+                    else
+                    end
+                  else
+                  end
+                end
+              else
+                if account.subsidiary_journal_species == 1
+                  if account.income.present?
+                    @debit_amount = @amount_carried_forward.last.balance.abs + (zero += account.income)
+                  end
+                elsif account.subsidiary_journal_species == 3
+                  if account.return_check_box == "1"
+                    if account.account_title == "現金" && account.individual_amount.nil?
+                      @debit_amount = @amount_carried_forward.last.balance.abs + (zero += account.breakdown)
+                    elsif account.account_title == "現金" && account.individual_amount.present?
+                      @debit_amount = @amount_carried_forward.last.balance.abs + (zero += account.individual_amount)
+                    elsif account.account_title_2 == "現金"
+                      @debit_amount = @amount_carried_forward.last.balance.abs + (zero += account.individual_amount_2)
+                    elsif account.account_title_3 == "現金"
+                      @debit_amount = @amount_carried_forward.last.balance.abs + (zero += account.individual_amount_3)
+                    elsif account.account_title_4 == "現金"
+                      @debit_amount = @amount_carried_forward.last.balance.abs + (zero += account.individual_amount_4)
+                    elsif account.account_title_5 == "現金"
+                      @debit_amount = @amount_carried_forward.last.balance.abs + (zero += account.individual_amount_5)
+                    else
+                    end
+                  end
+                elsif account.subsidiary_journal_species == 4
+                  if account.return_check_box == "0"
+                    if account.account_title == "現金" && account.individual_amount.nil?
+                      @debit_amount = @amount_carried_forward.last.balance.abs + (zero += account.breakdown)
+                    elsif account.account_title == "現金" && account.individual_amount.present?
+                      @debit_amount = @amount_carried_forward.last.balance.abs + (zero += account.individual_amount)
+                    elsif account.account_title_2 == "現金"
+                      @debit_amount = @amount_carried_forward.last.balance.abs + (zero += account.individual_amount_2)
+                    elsif account.account_title_3 == "現金"
+                      @debit_amount = @amount_carried_forward.last.balance.abs + (zero += account.individual_amount_3)
+                    elsif account.account_title_4 == "現金"
+                      @debit_amount = @amount_carried_forward.last.balance.abs + (zero += account.individual_amount_4)
+                    elsif account.account_title_5 == "現金"
+                      @debit_amount = @amount_carried_forward.last.balance.abs + (zero += account.individual_amount_5)
+                    else
+                    end
+                  else
+                  end
+                end
+              end
+            end
+          else
+            if @this_month_last_balance.last.balance > 0
+              if account.subsidiary_journal_species == 1
+                if account.income.present?
+                  @debit_amount = zero += account.income
+                end
+              elsif account.subsidiary_journal_species == 3
+                if account.return_check_box == "1"
+                  if account.account_title == "現金" && account.individual_amount.nil?
+                    @debit_amount = zero += account.breakdown
+                  elsif account.account_title == "現金" && account.individual_amount.present?
+                    @debit_amount = zero += account.individual_amount
+                  elsif account.account_title_2 == "現金"
+                    @debit_amount = zero += account.individual_amount_2
+                  elsif account.account_title_3 == "現金"
+                    @debit_amount = zero += account.individual_amount_3
+                  elsif account.account_title_4 == "現金"
+                    @debit_amount = zero += account.individual_amount_4
+                  elsif account.account_title_5 == "現金"
+                    @debit_amount = zero += account.individual_amount_5
+                  else
+                  end
+                end
+              elsif account.subsidiary_journal_species == 4
+                if account.return_check_box == "0"
+                  if account.account_title == "現金" && account.individual_amount.nil?
+                    @debit_amount = zero += account.breakdown
+                  elsif account.account_title == "現金" && account.individual_amount.present?
+                    @debit_amount = zero += account.individual_amount
+                  elsif account.account_title_2 == "現金"
+                    @debit_amount = zero += account.individual_amount_2
+                  elsif account.account_title_3 == "現金"
+                    @debit_amount = zero += account.individual_amount_3
+                  elsif account.account_title_4 == "現金"
+                    @debit_amount = zero += account.individual_amount_4
+                  elsif account.account_title_5 == "現金"
+                    @debit_amount = zero += account.individual_amount_5
+                  else
+                  end
+                else
+                end
+              end
+            else
+              if account.subsidiary_journal_species == 1
+                if account.income.present?
+                  @debit_amount =  @this_month_last_balance.last.balance.abs + (zero += account.income)
+                end
+              elsif account.subsidiary_journal_species == 3
+                if account.return_check_box == "1"
+                  if account.account_title == "現金" && account.individual_amount.nil?
+                    @debit_amount = @this_month_last_balance.last.balance.abs + (zero += account.breakdown)
+                  elsif account.account_title == "現金" && account.individual_amount.present?
+                    @debit_amount = @this_month_last_balance.last.balance.abs + (zero += account.individual_amount)
+                  elsif account.account_title_2 == "現金"
+                    @debit_amount = @this_month_last_balance.last.balance.abs + (zero += account.individual_amount_2)
+                  elsif account.account_title_3 == "現金"
+                    @debit_amount = @this_month_last_balance.last.balance.abs + (zero += account.individual_amount_3)
+                  elsif account.account_title_4 == "現金"
+                    @debit_amount = @this_month_last_balance.last.balance.abs + (zero += account.individual_amount_4)
+                  elsif account.account_title_5 == "現金"
+                    @debit_amount = @this_month_last_balance.last.balance.abs + (zero += account.individual_amount_5)
+                  else
+                  end
+                end
+              elsif account.subsidiary_journal_species == 4
+                if account.return_check_box == "0"
+                  if account.account_title == "現金" && account.individual_amount.nil?
+                    @debit_amount = @this_month_last_balance.last.balance.abs + (zero += account.breakdown)
+                  elsif account.account_title == "現金" && account.individual_amount.present?
+                    @debit_amount = @this_month_last_balance.last.balance.abs + (zero += account.individual_amount)
+                  elsif account.account_title_2 == "現金"
+                    @debit_amount = @this_month_last_balance.last.balance.abs + (zero += account.individual_amount_2)
+                  elsif account.account_title_3 == "現金"
+                    @debit_amount = @this_month_last_balance.last.balance.abs + (zero += account.individual_amount_3)
+                  elsif account.account_title_4 == "現金"
+                    @debit_amount = @this_month_last_balance.last.balance.abs + (zero += account.individual_amount_4)
+                  elsif account.account_title_5 == "現金"
+                    @debit_amount = @this_month_last_balance.last.balance.abs + (zero += account.individual_amount_5)
+                  else
+                  end
+                else
+                end
+              end
+            end
+          end
+        end
+      end
+    end
+    # 貸方
+    zero = 0
+    @general_ledger_accounts.each do |account|
+      if @this_month.include?(Date.parse(account[:accounting_date].to_s))
+        if @general_ledger_accounts[0] == account
+          if @this_month_last_balance.last.balance < 0
+            if @cash_initial_deposit < 0
+              if account.subsidiary_journal_species == 1
+                if account.expense.present?
+                  @credit_amount = @cash_initial_deposit - (zero += account.expense)
+                end
+              elsif account.subsidiary_journal_species == 3
+                if account.return_check_box == "0"
+                  if account.account_title == "現金" && account.individual_amount.nil?
+                    @credit_amount = @cash_initial_deposit - (zero += account.breakdown)
+                  elsif account.account_title == "現金" && account.individual_amount.present?
+                    @credit_amount = @cash_initial_deposit - (zero += account.individual_amount)
+                  elsif account.account_title_2 == "現金"
+                    @credit_amount = @cash_initial_deposit - (zero += account.individual_amount_2)
+                  elsif account.account_title_3 == "現金"
+                    @credit_amount = @cash_initial_deposit - (zero += account.individual_amount_3)
+                  elsif account.account_title_4 == "現金"
+                    @credit_amount = @cash_initial_deposit - (zero += account.individual_amount_4)
+                  elsif account.account_title_5 == "現金"
+                    @credit_amount = @cash_initial_deposit - (zero += account.individual_amount_5)
+                  else
+                  end
+                end
+              elsif account.subsidiary_journal_species == 4
+                if account.return_check_box == "1"
+                  if account.account_title == "現金" && account.individual_amount.nil?
+                    @credit_amount = @cash_initial_deposit - (zero += account.breakdown)
+                  elsif account.account_title == "現金" && account.individual_amount.present?
+                    @credit_amount = @cash_initial_deposit - (zero += account.individual_amount)
+                  elsif account.account_title_2 == "現金"
+                    @credit_amount = @cash_initial_deposit - (zero += account.individual_amount_2)
+                  elsif account.account_title_3 == "現金"
+                    @credit_amount = @cash_initial_deposit - (zero += account.individual_amount_3)
+                  elsif account.account_title_4 == "現金"
+                    @credit_amount = @cash_initial_deposit - (zero += account.individual_amount_4)
+                  elsif account.account_title_5 == "現金"
+                    @credit_amount = @cash_initial_deposit - (zero += account.individual_amount_5)
+                  else
+                  end
+                end
+              else
+              end
+            else
+              if account.subsidiary_journal_species == 1
+                if account.expense.present?
+                  @credit_amount = zero += account.expense
+                end
+              elsif account.subsidiary_journal_species == 3
+                if account.return_check_box == "0"
+                  if account.account_title == "現金" && account.individual_amount.nil?
+                    @credit_amount = zero += account.breakdown
+                  elsif account.account_title == "現金" && account.individual_amount.present?
+                    @credit_amount = zero += account.individual_amount
+                  elsif account.account_title_2 == "現金"
+                    @credit_amount = zero += account.individual_amount_2
+                  elsif account.account_title_3 == "現金"
+                    @credit_amount = zero += account.individual_amount_3
+                  elsif account.account_title_4 == "現金"
+                    @credit_amount = zero += account.individual_amount_4
+                  elsif account.account_title_5 == "現金"
+                    @credit_amount = zero += account.individual_amount_5
+                  else
+                  end
+                end
+              elsif account.subsidiary_journal_species == 4
+                if account.return_check_box == "1"
+                  if account.account_title == "現金" && account.individual_amount.nil?
+                    @credit_amount = zero += account.breakdown
+                  elsif account.account_title == "現金" && account.individual_amount.present?
+                    @credit_amount = zero += account.individual_amount
+                  elsif account.account_title_2 == "現金"
+                    @credit_amount = zero += account.individual_amount_2
+                  elsif account.account_title_3 == "現金"
+                    @credit_amount = zero += account.individual_amount_3
+                  elsif account.account_title_4 == "現金"
+                    @credit_amount = zero += account.individual_amount_4
+                  elsif account.account_title_5 == "現金"
+                    @credit_amount = zero += account.individual_amount_5
+                  else
+                  end
+                end
+              else
+              end
+            end
+          else
+            if @cash_initial_deposit < 0
+              if account.subsidiary_journal_species == 1
+                if account.expense.present?
+                  @credit_amount = (@cash_initial_deposit + @this_month_last_balance.last.balance.abs) + (zero += account.expense)
+                end
+              elsif account.subsidiary_journal_species == 3
+                if account.return_check_box == "0"
+                  if account.account_title == "現金" && account.individual_amount.nil?
+                    @credit_amount = (@cash_initial_deposit + @this_month_last_balance.last.balance.abs) + (zero += account.breakdown)
+                  elsif account.account_title == "現金" && account.individual_amount.present?
+                    @credit_amount = (@cash_initial_deposit + @this_month_last_balance.last.balance.abs) + (zero += account.individual_amount)
+                  elsif account.account_title_2 == "現金"
+                    @credit_amount = (@cash_initial_deposit + @this_month_last_balance.last.balance.abs) + (zero += account.individual_amount_2)
+                  elsif account.account_title_3 == "現金"
+                    @credit_amount = (@cash_initial_deposit + @this_month_last_balance.last.balance.abs) + (zero += account.individual_amount_3)
+                  elsif account.account_title_4 == "現金"
+                    @credit_amount = (@cash_initial_deposit + @this_month_last_balance.last.balance.abs) + (zero += account.individual_amount_4)
+                  elsif account.account_title_5 == "現金"
+                    @credit_amount = (@cash_initial_deposit + @this_month_last_balance.last.balance.abs) + (zero += account.individual_amount_5)
+                  else
+                  end
+                end
+              elsif account.subsidiary_journal_species == 4
+                if account.return_check_box == "1"
+                  if account.account_title == "現金" && account.individual_amount.nil?
+                    @credit_amount = (@cash_initial_deposit + @this_month_last_balance.last.balance.abs) + (zero += account.breakdown)
+                  elsif account.account_title == "現金" && account.individual_amount.present?
+                    @credit_amount = (@cash_initial_deposit + @this_month_last_balance.last.balance.abs) + (zero += account.individual_amount)
+                  elsif account.account_title_2 == "現金"
+                    @credit_amount = (@cash_initial_deposit + @this_month_last_balance.last.balance.abs) + (zero += account.individual_amount_2)
+                  elsif account.account_title_3 == "現金"
+                    @credit_amount = (@cash_initial_deposit + @this_month_last_balance.last.balance.abs) + (zero += account.individual_amount_3)
+                  elsif account.account_title_4 == "現金"
+                    @credit_amount = (@cash_initial_deposit + @this_month_last_balance.last.balance.abs) + (zero += account.individual_amount_4)
+                  elsif account.account_title_5 == "現金"
+                    @credit_amount = (@cash_initial_deposit + @this_month_last_balance.last.balance.abs) + (zero += account.individual_amount_5)
+                  else
+                  end
+                end
+              end
+            else
+              if account.subsidiary_journal_species == 1
+                if account.expense.present?
+                  @credit_amount = @this_month_last_balance.last.balance.abs + (zero += account.expense)
+                end
+              elsif account.subsidiary_journal_species == 3
+                if account.return_check_box == "0"
+                  if account.account_title == "現金" && account.individual_amount.nil?
+                    @credit_amount = @this_month_last_balance.last.balance.abs + (zero += account.breakdown)
+                  elsif account.account_title == "現金" && account.individual_amount.present?
+                    @credit_amount = @this_month_last_balance.last.balance.abs + (zero += account.individual_amount)
+                  elsif account.account_title_2 == "現金"
+                    @credit_amount = @this_month_last_balance.last.balance.abs + (zero += account.individual_amount_2)
+                  elsif account.account_title_3 == "現金"
+                    @credit_amount = @this_month_last_balance.last.balance.abs + (zero += account.individual_amount_3)
+                  elsif account.account_title_4 == "現金"
+                    @credit_amount = @this_month_last_balance.last.balance.abs + (zero += account.individual_amount_4)
+                  elsif account.account_title_5 == "現金"
+                    @credit_amount = @this_month_last_balance.last.balance.abs + (zero += account.individual_amount_5)
+                  else
+                  end
+                end
+              elsif account.subsidiary_journal_species == 4
+                if account.return_check_box == "1"
+                  if account.account_title == "現金" && account.individual_amount.nil?
+                    @credit_amount = @this_month_last_balance.last.balance.abs + (zero += account.breakdown)
+                  elsif account.account_title == "現金" && account.individual_amount.present?
+                    @credit_amount = @this_month_last_balance.last.balance.abs + (zero += account.individual_amount)
+                  elsif account.account_title_2 == "現金"
+                    @credit_amount = @this_month_last_balance.last.balance.abs + (zero += account.individual_amount_2)
+                  elsif account.account_title_3 == "現金"
+                    @credit_amount = @this_month_last_balance.last.balance.abs + (zero += account.individual_amount_3)
+                  elsif account.account_title_4 == "現金"
+                    @credit_amount = @this_month_last_balance.last.balance.abs + (zero += account.individual_amount_4)
+                  elsif account.account_title_5 == "現金"
+                    @credit_amount = @this_month_last_balance.last.balance.abs + (zero += account.individual_amount_5)
+                  else
+                  end
+                end
+              end
+            end
+          end
+        else
+          if @amount_carried_forward.last.present?
+            if @amount_carried_forward.last.balance >= 0
+              if @this_month_last_balance.last.balance < 0
+                if account.subsidiary_journal_species == 1
+                  if account.expense.present?
+                    @credit_amount = zero += account.expense
+                  end
+                elsif account.subsidiary_journal_species == 3
+                  if account.return_check_box == "0"
+                    if account.account_title == "現金" && account.individual_amount.nil?
+                      @credit_amount = zero += account.breakdown
+                    elsif account.account_title == "現金" && account.individual_amount.present?
+                      @credit_amount = zero += account.individual_amount
+                    elsif account.account_title_2 == "現金"
+                      @credit_amount = zero += account.individual_amount_2
+                    elsif account.account_title_3 == "現金"
+                      @credit_amount = zero += account.individual_amount_3
+                    elsif account.account_title_4 == "現金"
+                      @credit_amount = zero += account.individual_amount_4
+                    elsif account.account_title_5 == "現金"
+                      @credit_amount = zero += account.individual_amount_5
+                    else
+                    end
+                  end
+                elsif account.subsidiary_journal_species == 4
+                  if account.return_check_box == "1"
+                    if account.account_title == "現金" && account.individual_amount.nil?
+                      @credit_amount = zero += account.breakdown
+                    elsif account.account_title == "現金" && account.individual_amount.present?
+                      @credit_amount = zero += account.individual_amount
+                    elsif account.account_title_2 == "現金"
+                      @credit_amount = zero += account.individual_amount_2
+                    elsif account.account_title_3 == "現金"
+                      @credit_amount = zero += account.individual_amount_3
+                    elsif account.account_title_4 == "現金"
+                      @credit_amount = zero += account.individual_amount_4
+                    elsif account.account_title_5 == "現金"
+                      @credit_amount = zero += account.individual_amount_5
+                    else
+                    end
+                  else
+                  end
+                end
+              else
+                if account.subsidiary_journal_species == 1
+                  if account.expense.present?
+                    @credit_amount =  @this_month_last_balance.last.balance.abs + (zero += account.expense)
+                  end
+                elsif account.subsidiary_journal_species == 3
+                  if account.return_check_box == "0"
+                    if account.account_title == "現金" && account.individual_amount.nil?
+                      @credit_amount = @this_month_last_balance.last.balance.abs + (zero += account.breakdown)
+                    elsif account.account_title == "現金" && account.individual_amount.present?
+                      @credit_amount = @this_month_last_balance.last.balance.abs + (zero += account.individual_amount)
+                    elsif account.account_title_2 == "現金"
+                      @credit_amount = @this_month_last_balance.last.balance.abs + (zero += account.individual_amount_2)
+                    elsif account.account_title_3 == "現金"
+                      @credit_amount = @this_month_last_balance.last.balance.abs + (zero += account.individual_amount_3)
+                    elsif account.account_title_4 == "現金"
+                      @credit_amount = @this_month_last_balance.last.balance.abs + (zero += account.individual_amount_4)
+                    elsif account.account_title_5 == "現金"
+                      @credit_amount = @this_month_last_balance.last.balance.abs + (zero += account.individual_amount_5)
+                    else
+                    end
+                  end
+                elsif account.subsidiary_journal_species == 4
+                  if account.return_check_box == "1"
+                    if account.account_title == "現金" && account.individual_amount.nil?
+                      @credit_amount = @this_month_last_balance.last.balance.abs + (zero += account.breakdown)
+                    elsif account.account_title == "現金" && account.individual_amount.present?
+                      @credit_amount = @this_month_last_balance.last.balance.abs + (zero += account.individual_amount)
+                    elsif account.account_title_2 == "現金"
+                      @credit_amount = @this_month_last_balance.last.balance.abs + (zero += account.individual_amount_2)
+                    elsif account.account_title_3 == "現金"
+                      @credit_amount = @this_month_last_balance.last.balance.abs + (zero += account.individual_amount_3)
+                    elsif account.account_title_4 == "現金"
+                      @credit_amount = @this_month_last_balance.last.balance.abs + (zero += account.individual_amount_4)
+                    elsif account.account_title_5 == "現金"
+                      @credit_amount = @this_month_last_balance.last.balance.abs + (zero += account.individual_amount_5)
+                    else
+                    end
+                  else
+                  end
+                end
+              end
+            else
+              if @this_month_last_balance.last.balance > 0
+                if account.subsidiary_journal_species == 1
+                  if account.expense.present?
+                    @credit_amount = (@amount_carried_forward.last.balance.abs + @this_month_last_balance.last.balance.abs) + (zero += account.expense)
+                  end
+                elsif account.subsidiary_journal_species == 3
+                  if account.return_check_box == "0"
+                    if account.account_title == "現金" && account.individual_amount.nil?
+                      @credit_amount = (@amount_carried_forward.last.balance.abs + @this_month_last_balance.last.balance.abs) + (zero += account.breakdown)
+                    elsif account.account_title == "現金" && account.individual_amount.present?
+                      @credit_amount = (@amount_carried_forward.last.balance.abs + @this_month_last_balance.last.balance.abs) + (zero += account.individual_amount)
+                    elsif account.account_title_2 == "現金"
+                      @credit_amount = (@amount_carried_forward.last.balance.abs + @this_month_last_balance.last.balance.abs) + (zero += account.individual_amount_2)
+                    elsif account.account_title_3 == "現金"
+                      @credit_amount = (@amount_carried_forward.last.balance.abs + @this_month_last_balance.last.balance.abs) + (zero += account.individual_amount_3)
+                    elsif account.account_title_4 == "現金"
+                      @credit_amount = (@amount_carried_forward.last.balance.abs + @this_month_last_balance.last.balance.abs) + (zero += account.individual_amount_4)
+                    elsif account.account_title_5 == "現金"
+                      @credit_amount = (@amount_carried_forward.last.balance.abs + @this_month_last_balance.last.balance.abs) + (zero += account.individual_amount_5)
+                    else
+                    end
+                  end
+                elsif account.subsidiary_journal_species == 4
+                  if account.return_check_box == "1"
+                    if account.account_title == "現金" && account.individual_amount.nil?
+                      @credit_amount = (@amount_carried_forward.last.balance.abs + @this_month_last_balance.last.balance.abs) + (zero += account.breakdown)
+                    elsif account.account_title == "現金" && account.individual_amount.present?
+                      @credit_amount = (@amount_carried_forward.last.balance.abs + @this_month_last_balance.last.balance.abs) + (zero += account.individual_amount)
+                    elsif account.account_title_2 == "現金"
+                      @credit_amount = (@amount_carried_forward.last.balance.abs + @this_month_last_balance.last.balance.abs) + (zero += account.individual_amount_2)
+                    elsif account.account_title_3 == "現金"
+                      @credit_amount = (@amount_carried_forward.last.balance.abs + @this_month_last_balance.last.balance.abs) + (zero += account.individual_amount_3)
+                    elsif account.account_title_4 == "現金"
+                      @credit_amount = (@amount_carried_forward.last.balance.abs + @this_month_last_balance.last.balance.abs) + (zero += account.individual_amount_4)
+                    elsif account.account_title_5 == "現金"
+                      @credit_amount = (@amount_carried_forward.last.balance.abs + @this_month_last_balance.last.balance.abs) + (zero += account.individual_amount_5)
+                    else
+                    end
+                  else
+                  end
+                end
+              else
+                if account.subsidiary_journal_species == 1
+                  if account.expense.present?
+                    @credit_amount = @amount_carried_forward.last.balance.abs + (zero += account.expense)
+                  end
+                elsif account.subsidiary_journal_species == 3
+                  if account.return_check_box == "0"
+                    if account.account_title == "現金" && account.individual_amount.nil?
+                      @credit_amount = @amount_carried_forward.last.balance.abs + (zero += account.breakdown)
+                    elsif account.account_title == "現金" && account.individual_amount.present?
+                      @credit_amount = @amount_carried_forward.last.balance.abs + (zero += account.individual_amount)
+                    elsif account.account_title_2 == "現金"
+                      @credit_amount = @amount_carried_forward.last.balance.abs + (zero += account.individual_amount_2)
+                    elsif account.account_title_3 == "現金"
+                      @credit_amount = @amount_carried_forward.last.balance.abs + (zero += account.individual_amount_3)
+                    elsif account.account_title_4 == "現金"
+                      @credit_amount = @amount_carried_forward.last.balance.abs + (zero += account.individual_amount_4)
+                    elsif account.account_title_5 == "現金"
+                      @credit_amount = @amount_carried_forward.last.balance.abs + (zero += account.individual_amount_5)
+                    else
+                    end
+                  end
+                elsif account.subsidiary_journal_species == 4
+                  if account.return_check_box == "1"
+                    if account.account_title == "現金" && account.individual_amount.nil?
+                      @credit_amount = @amount_carried_forward.last.balance.abs + (zero += account.breakdown)
+                    elsif account.account_title == "現金" && account.individual_amount.present?
+                      @credit_amount = @amount_carried_forward.last.balance.abs + (zero += account.individual_amount)
+                    elsif account.account_title_2 == "現金"
+                      @credit_amount = @amount_carried_forward.last.balance.abs + (zero += account.individual_amount_2)
+                    elsif account.account_title_3 == "現金"
+                      @credit_amount = @amount_carried_forward.last.balance.abs + (zero += account.individual_amount_3)
+                    elsif account.account_title_4 == "現金"
+                      @credit_amount = @amount_carried_forward.last.balance.abs + (zero += account.individual_amount_4)
+                    elsif account.account_title_5 == "現金"
+                      @credit_amount = @amount_carried_forward.last.balance.abs + (zero += account.individual_amount_5)
+                    else
+                    end
+                  else
+                  end
+                end
+              end
+            end
+          else
+            if @this_month_last_balance.last.balance < 0
+              if account.subsidiary_journal_species == 1
+                if account.expense.present?
+                  @credit_amount = zero += account.expense
+                end
+              elsif account.subsidiary_journal_species == 3
+                if account.return_check_box == "0"
+                  if account.account_title == "現金" && account.individual_amount.nil?
+                    @credit_amount = zero += account.breakdown
+                  elsif account.account_title == "現金" && account.individual_amount.present?
+                    @credit_amount = zero += account.individual_amount
+                  elsif account.account_title_2 == "現金"
+                    @credit_amount = zero += account.individual_amount_2
+                  elsif account.account_title_3 == "現金"
+                    @credit_amount = zero += account.individual_amount_3
+                  elsif account.account_title_4 == "現金"
+                    @credit_amount = zero += account.individual_amount_4
+                  elsif account.account_title_5 == "現金"
+                    @credit_amount = zero += account.individual_amount_5
+                  else
+                  end
+                end
+              elsif account.subsidiary_journal_species == 4
+                if account.return_check_box == "1"
+                  if account.account_title == "現金" && account.individual_amount.nil?
+                    @credit_amount = zero += account.breakdown
+                  elsif account.account_title == "現金" && account.individual_amount.present?
+                    @credit_amount = zero += account.individual_amount
+                  elsif account.account_title_2 == "現金"
+                    @credit_amount = zero += account.individual_amount_2
+                  elsif account.account_title_3 == "現金"
+                    @credit_amount = zero += account.individual_amount_3
+                  elsif account.account_title_4 == "現金"
+                    @credit_amount = zero += account.individual_amount_4
+                  elsif account.account_title_5 == "現金"
+                    @credit_amount = zero += account.individual_amount_5
+                  else
+                  end
+                else
+                end
+              end
+            else
+              if account.subsidiary_journal_species == 1
+                if account.expense.present?
+                  @credit_amount =  @this_month_last_balance.last.balance.abs + (zero += account.expense)
+                end
+              elsif account.subsidiary_journal_species == 3
+                if account.return_check_box == "0"
+                  if account.account_title == "現金" && account.individual_amount.nil?
+                    @credit_amount = @this_month_last_balance.last.balance.abs + (zero += account.breakdown)
+                  elsif account.account_title == "現金" && account.individual_amount.present?
+                    @credit_amount = @this_month_last_balance.last.balance.abs + (zero += account.individual_amount)
+                  elsif account.account_title_2 == "現金"
+                    @credit_amount = @this_month_last_balance.last.balance.abs + (zero += account.individual_amount_2)
+                  elsif account.account_title_3 == "現金"
+                    @credit_amount = @this_month_last_balance.last.balance.abs + (zero += account.individual_amount_3)
+                  elsif account.account_title_4 == "現金"
+                    @credit_amount = @this_month_last_balance.last.balance.abs + (zero += account.individual_amount_4)
+                  elsif account.account_title_5 == "現金"
+                    @credit_amount = @this_month_last_balance.last.balance.abs + (zero += account.individual_amount_5)
+                  else
+                  end
+                end
+              elsif account.subsidiary_journal_species == 4
+                if account.return_check_box == "1"
+                  if account.account_title == "現金" && account.individual_amount.nil?
+                    @credit_amount = @this_month_last_balance.last.balance.abs + (zero += account.breakdown)
+                  elsif account.account_title == "現金" && account.individual_amount.present?
+                    @credit_amount = @this_month_last_balance.last.balance.abs + (zero += account.individual_amount)
+                  elsif account.account_title_2 == "現金"
+                    @credit_amount = @this_month_last_balance.last.balance.abs + (zero += account.individual_amount_2)
+                  elsif account.account_title_3 == "現金"
+                    @credit_amount = @this_month_last_balance.last.balance.abs + (zero += account.individual_amount_3)
+                  elsif account.account_title_4 == "現金"
+                    @credit_amount = @this_month_last_balance.last.balance.abs + (zero += account.individual_amount_4)
+                  elsif account.account_title_5 == "現金"
+                    @credit_amount = @this_month_last_balance.last.balance.abs + (zero += account.individual_amount_5)
+                  else
+                  end
+                else
+                end
+              end
+            end
+          end
+        end
+      end
+    end
+  end
+  # -----------------------------------------
+  
+  # (預金)総勘定元帳用(１ヶ月毎の借方合計金額と貸方合計金額を比較して、貸借毎の金額を出す。)--controller(current_general_ledger)
+  def current_balance_sum
+    # 借方
+    zero = 0
+    @general_ledger_accounts.each do |account|
+      if @this_month.include?(Date.parse(account[:accounting_date].to_s))
+        if @general_ledger_accounts[0] == account
+          if @this_month_last_balance.last.current_balance > 0
+            if @current_initial_deposit > 0
+              if account.subsidiary_journal_species == 2
+                if account.deposit.present?
+                  @debit_amount = @current_initial_deposit + (zero += account.deposit)
+                end
+              elsif account.subsidiary_journal_species == 3
+                if account.return_check_box == "1"
+                  if account.account_title == "預金" && account.individual_amount.nil?
+                    @debit_amount = @current_initial_deposit + (zero += account.breakdown)
+                  elsif account.account_title == "預金" && account.individual_amount.present?
+                    @debit_amount = @current_initial_deposit + (zero += account.individual_amount)
+                  elsif account.account_title_2 == "預金"
+                    @debit_amount = @current_initial_deposit + (zero += account.individual_amount_2)
+                  elsif account.account_title_3 == "預金"
+                    @debit_amount = @current_initial_deposit + (zero += account.individual_amount_3)
+                  elsif account.account_title_4 == "預金"
+                    @debit_amount = @current_initial_deposit + (zero += account.individual_amount_4)
+                  elsif account.account_title_5 == "預金"
+                    @debit_amount = @current_initial_deposit + (zero += account.individual_amount_5)
+                  else
+                  end
+                end
+              elsif account.subsidiary_journal_species == 4
+                if account.return_check_box == "0"
+                  if account.account_title == "預金" && account.individual_amount.nil?
+                    @debit_amount = @current_initial_deposit + (zero += account.breakdown)
+                  elsif account.account_title == "預金" && account.individual_amount.present?
+                    @debit_amount = @current_initial_deposit + (zero += account.individual_amount)
+                  elsif account.account_title_2 == "預金"
+                    @debit_amount = @current_initial_deposit + (zero += account.individual_amount_2)
+                  elsif account.account_title_3 == "預金"
+                    @debit_amount = @current_initial_deposit + (zero += account.individual_amount_3)
+                  elsif account.account_title_4 == "預金"
+                    @debit_amount = @current_initial_deposit + (zero += account.individual_amount_4)
+                  elsif account.account_title_5 == "預金"
+                    @debit_amount = @current_initial_deposit + (zero += account.individual_amount_5)
+                  else
+                  end
+                end
+              else
+              end
+            else
+              if account.subsidiary_journal_species == 2
+                if account.deposit.present?
+                  @debit_amount = zero += account.deposit
+                end
+              elsif account.subsidiary_journal_species == 3
+                if account.return_check_box == "1"
+                  if account.account_title == "預金" && account.individual_amount.nil?
+                    @debit_amount = zero += account.breakdown
+                  elsif account.account_title == "預金" && account.individual_amount.present?
+                    @debit_amount = zero += account.individual_amount
+                  elsif account.account_title_2 == "預金"
+                    @debit_amount = zero += account.individual_amount_2
+                  elsif account.account_title_3 == "預金"
+                    @debit_amount = zero += account.individual_amount_3
+                  elsif account.account_title_4 == "預金"
+                    @debit_amount = zero += account.individual_amount_4
+                  elsif account.account_title_5 == "預金"
+                    @debit_amount = zero += account.individual_amount_5
+                  end
+                end
+              elsif account.subsidiary_journal_species == 4
+                if account.return_check_box == "0"
+                  if account.account_title == "預金" && account.individual_amount.nil?
+                    @debit_amount = zero += account.breakdown
+                  elsif account.account_title == "預金" && account.individual_amount.present?
+                    @debit_amount = zero += account.individual_amount
+                  elsif account.account_title_2 == "預金"
+                    @debit_amount = zero += account.individual_amount_2
+                  elsif account.account_title_3 == "預金"
+                    @debit_amount = zero += account.individual_amount_3
+                  elsif account.account_title_4 == "預金"
+                    @debit_amount = zero += account.individual_amount_4
+                  elsif account.account_title_5 == "預金"
+                    @debit_amount = zero += account.individual_amount_5
+                  end
+                end
+              end
+            end
+          else
+            if @current_initial_deposit > 0
+              if account.subsidiary_journal_species == 2
+                if account.deposit.present?
+                  @debit_amount = (@current_initial_deposit + @this_month_last_balance.last.current_balance.abs) + (zero += account.deposit)
+                end
+              elsif account.subsidiary_journal_species == 3
+                if account.return_check_box == "1"
+                  if account.account_title == "預金" && account.individual_amount.nil?
+                    @debit_amount = (@current_initial_deposit + @this_month_last_balance.last.current_balance.abs) + (zero += account.breakdown)
+                  elsif account.account_title == "預金" && account.individual_amount.present?
+                    @debit_amount = (@current_initial_deposit + @this_month_last_balance.last.current_balance.abs) + (zero += account.individual_amount)
+                  elsif account.account_title_2 == "預金"
+                    @debit_amount = (@current_initial_deposit + @this_month_last_balance.last.current_balance.abs) + (zero += account.individual_amount_2)
+                  elsif account.account_title_3 == "預金"
+                    @debit_amount = (@current_initial_deposit + @this_month_last_balance.last.current_balance.abs) + (zero += account.individual_amount_3)
+                  elsif account.account_title_4 == "預金"
+                    @debit_amount = (@current_initial_deposit + @this_month_last_balance.last.current_balance.abs) + (zero += account.individual_amount_4)
+                  elsif account.account_title_5 == "預金"
+                    @debit_amount = (@current_initial_deposit + @this_month_last_balance.last.current_balance.abs) + (zero += account.individual_amount_5)
+                  else
+                  end
+                end
+              elsif account.subsidiary_journal_species == 4
+                if account.return_check_box == "0"
+                  if account.account_title == "預金" && account.individual_amount.nil?
+                    @debit_amount = (@current_initial_deposit + @this_month_last_balance.last.current_balance.abs) + (zero += account.breakdown)
+                  elsif account.account_title == "預金" && account.individual_amount.present?
+                    @debit_amount = (@current_initial_deposit + @this_month_last_balance.last.current_balance.abs) + (zero += account.individual_amount)
+                  elsif account.account_title_2 == "預金"
+                    @debit_amount = (@current_initial_deposit + @this_month_last_balance.last.current_balance.abs) + (zero += account.individual_amount_2)
+                  elsif account.account_title_3 == "預金"
+                    @debit_amount = (@current_initial_deposit + @this_month_last_balance.last.current_balance.abs) + (zero += account.individual_amount_3)
+                  elsif account.account_title_4 == "預金"
+                    @debit_amount = (@current_initial_deposit + @this_month_last_balance.last.current_balance.abs) + (zero += account.individual_amount_4)
+                  elsif account.account_title_5 == "預金"
+                    @debit_amount = (@current_initial_deposit + @this_month_last_balance.last.current_balance.abs) + (zero += account.individual_amount_5)
+                  end
+                end
+              end
+            else
+              if account.subsidiary_journal_species == 2
+                if account.deposit.present?
+                  @debit_amount = @this_month_last_balance.last.current_balance.abs + (zero += account.deposit)
+                end
+              elsif account.subsidiary_journal_species == 3
+                if account.return_check_box == "1"
+                  if account.account_title == "預金" && account.individual_amount.nil?
+                    @debit_amount = @this_month_last_balance.last.current_balance.abs + (zero += account.breakdown)
+                  elsif account.account_title == "預金" && account.individual_amount.present?
+                    @debit_amount = @this_month_last_balance.last.current_balance.abs + (zero += account.individual_amount)
+                  elsif account.account_title_2 == "預金"
+                    @debit_amount = @this_month_last_balance.last.current_balance.abs + (zero += account.individual_amount_2)
+                  elsif account.account_title_3 == "預金"
+                    @debit_amount = @this_month_last_balance.last.current_balance.abs + (zero += account.individual_amount_3)
+                  elsif account.account_title_4 == "預金"
+                    @debit_amount = @this_month_last_balance.last.current_balance.abs + (zero += account.individual_amount_4)
+                  elsif account.account_title_5 == "預金"
+                    @debit_amount = @this_month_last_balance.last.current_balance.abs + (zero += account.individual_amount_5)
+                  else
+                  end
+                end
+              elsif account.subsidiary_journal_species == 4
+                if account.return_check_box == "0"
+                  if account.account_title == "預金" && account.individual_amount.nil?
+                    @debit_amount = @this_month_last_balance.last.current_balance.abs + (zero += account.breakdown)
+                  elsif account.account_title == "預金" && account.individual_amount.present?
+                    @debit_amount = @this_month_last_balance.last.current_balance.abs + (zero += account.individual_amount)
+                  elsif account.account_title_2 == "預金"
+                    @debit_amount = @this_month_last_balance.last.current_balance.abs + (zero += account.individual_amount_2)
+                  elsif account.account_title_3 == "預金"
+                    @debit_amount = @this_month_last_balance.last.current_balance.abs + (zero += account.individual_amount_3)
+                  elsif account.account_title_4 == "預金"
+                    @debit_amount = @this_month_last_balance.last.current_balance.abs + (zero += account.individual_amount_4)
+                  elsif account.account_title_5 == "預金"
+                    @debit_amount = @this_month_last_balance.last.current_balance.abs + (zero += account.individual_amount_5)
+                  end
+                end
+              end
+            end
+          end
+        else
+          if @amount_carried_forward.last.present?
+            if @amount_carried_forward.last.current_balance <= 0
+              if @this_month_last_balance.last.current_balance > 0
+                if account.subsidiary_journal_species == 2
+                  if account.deposit.present?
+                    @debit_amount = zero += account.deposit
+                  end
+                elsif account.subsidiary_journal_species == 3
+                  if account.return_check_box == "1"
+                    if account.account_title == "預金" && account.individual_amount.nil?
+                      @debit_amount = zero += account.breakdown
+                    elsif account.account_title == "預金" && account.individual_amount.present?
+                      @debit_amount = zero += account.individual_amount
+                    elsif account.account_title_2 == "預金"
+                      @debit_amount = zero += account.individual_amount_2
+                    elsif account.account_title_3 == "預金"
+                      @debit_amount = zero += account.individual_amount_3
+                    elsif account.account_title_4 == "預金"
+                      @debit_amount = zero += account.individual_amount_4
+                    elsif account.account_title_5 == "預金"
+                      @debit_amount = zero += account.individual_amount_5
+                    else
+                    end
+                  end
+                elsif account.subsidiary_journal_species == 4
+                  if account.return_check_box == "0"
+                    if account.account_title == "預金" && account.individual_amount.nil?
+                      @debit_amount = zero += account.breakdown
+                    elsif account.account_title == "預金" && account.individual_amount.present?
+                      @debit_amount = zero += account.individual_amount
+                    elsif account.account_title_2 == "預金"
+                      @debit_amount = zero += account.individual_amount_2
+                    elsif account.account_title_3 == "預金"
+                      @debit_amount = zero += account.individual_amount_3
+                    elsif account.account_title_4 == "預金"
+                      @debit_amount = zero += account.individual_amount_4
+                    elsif account.account_title_5 == "預金"
+                      @debit_amount = zero += account.individual_amount_5
+                    else
+                    end
+                  else
+                  end
+                end
+              else
+                if account.subsidiary_journal_species == 2
+                  if account.deposit.present?
+                    @debit_amount =  @this_month_last_balance.last.current_balance.abs + (zero += account.deposit)
+                  end
+                elsif account.subsidiary_journal_species == 3
+                  if account.return_check_box == "1"
+                    if account.account_title == "預金" && account.individual_amount.nil?
+                      @debit_amount = @this_month_last_balance.last.current_balance.abs + (zero += account.breakdown)
+                    elsif account.account_title == "預金" && account.individual_amount.present?
+                      @debit_amount = @this_month_last_balance.last.current_balance.abs + (zero += account.individual_amount)
+                    elsif account.account_title_2 == "預金"
+                      @debit_amount = @this_month_last_balance.last.current_balance.abs + (zero += account.individual_amount_2)
+                    elsif account.account_title_3 == "預金"
+                      @debit_amount = @this_month_last_balance.last.current_balance.abs + (zero += account.individual_amount_3)
+                    elsif account.account_title_4 == "預金"
+                      @debit_amount = @this_month_last_balance.last.current_balance.abs + (zero += account.individual_amount_4)
+                    elsif account.account_title_5 == "預金"
+                      @debit_amount = @this_month_last_balance.last.current_balance.abs + (zero += account.individual_amount_5)
+                    else
+                    end
+                  end
+                elsif account.subsidiary_journal_species == 4
+                  if account.return_check_box == "0"
+                    if account.account_title == "預金" && account.individual_amount.nil?
+                      @debit_amount = @this_month_last_balance.last.current_balance.abs + (zero += account.breakdown)
+                    elsif account.account_title == "預金" && account.individual_amount.present?
+                      @debit_amount = @this_month_last_balance.last.current_balance.abs + (zero += account.individual_amount)
+                    elsif account.account_title_2 == "預金"
+                      @debit_amount = @this_month_last_balance.last.current_balance.abs + (zero += account.individual_amount_2)
+                    elsif account.account_title_3 == "預金"
+                      @debit_amount = @this_month_last_balance.last.current_balance.abs + (zero += account.individual_amount_3)
+                    elsif account.account_title_4 == "預金"
+                      @debit_amount = @this_month_last_balance.last.current_balance.abs + (zero += account.individual_amount_4)
+                    elsif account.account_title_5 == "預金"
+                      @debit_amount = @this_month_last_balance.last.current_balance.abs + (zero += account.individual_amount_5)
+                    else
+                    end
+                  else
+                  end
+                end
+              end
+            else
+              if @this_month_last_balance.last.current_balance < 0
+                if account.subsidiary_journal_species == 2
+                  if account.deposit.present?
+                    @debit_amount = (@amount_carried_forward.last.current_balance.abs + @this_month_last_balance.last.current_balance.abs) + (zero += account.deposit)
+                  end
+                elsif account.subsidiary_journal_species == 3
+                  if account.return_check_box == "1"
+                    if account.account_title == "預金" && account.individual_amount.nil?
+                      @debit_amount = (@amount_carried_forward.last.current_balance.abs + @this_month_last_balance.last.current_balance.abs) + (zero += account.breakdown)
+                    elsif account.account_title == "預金" && account.individual_amount.present?
+                      @debit_amount = (@amount_carried_forward.last.current_balance.abs + @this_month_last_balance.last.current_balance.abs) + (zero += account.individual_amount)
+                    elsif account.account_title_2 == "預金"
+                      @debit_amount = (@amount_carried_forward.last.current_balance.abs + @this_month_last_balance.last.current_balance.abs) + (zero += account.individual_amount_2)
+                    elsif account.account_title_3 == "預金"
+                      @debit_amount = (@amount_carried_forward.last.current_balance.abs + @this_month_last_balance.last.current_balance.abs) + (zero += account.individual_amount_3)
+                    elsif account.account_title_4 == "預金"
+                      @debit_amount = (@amount_carried_forward.last.current_balance.abs + @this_month_last_balance.last.current_balance.abs) + (zero += account.individual_amount_4)
+                    elsif account.account_title_5 == "預金"
+                      @debit_amount = (@amount_carried_forward.last.current_balance.abs + @this_month_last_balance.last.current_balance.abs) + (zero += account.individual_amount_5)
+                    else
+                    end
+                  end
+                elsif account.subsidiary_journal_species == 4
+                  if account.return_check_box == "0"
+                    if account.account_title == "預金" && account.individual_amount.nil?
+                      @debit_amount = (@amount_carried_forward.last.current_balance.abs + @this_month_last_balance.last.current_balance.abs) + (zero += account.breakdown)
+                    elsif account.account_title == "預金" && account.individual_amount.present?
+                      @debit_amount = (@amount_carried_forward.last.current_balance.abs + @this_month_last_balance.last.current_balance.abs) + (zero += account.individual_amount)
+                    elsif account.account_title_2 == "預金"
+                      @debit_amount = (@amount_carried_forward.last.current_balance.abs + @this_month_last_balance.last.current_balance.abs) + (zero += account.individual_amount_2)
+                    elsif account.account_title_3 == "預金"
+                      @debit_amount = (@amount_carried_forward.last.current_balance.abs + @this_month_last_balance.last.current_balance.abs) + (zero += account.individual_amount_3)
+                    elsif account.account_title_4 == "預金"
+                      @debit_amount = (@amount_carried_forward.last.current_balance.abs + @this_month_last_balance.last.current_balance.abs) + (zero += account.individual_amount_4)
+                    elsif account.account_title_5 == "預金"
+                      @debit_amount = (@amount_carried_forward.last.current_balance.abs + @this_month_last_balance.last.current_balance.abs) + (zero += account.individual_amount_5)
+                    else
+                    end
+                  else
+                  end
+                end
+              else
+                if account.subsidiary_journal_species == 2
+                  if account.deposit.present?
+                    @debit_amount = @amount_carried_forward.last.current_balance.abs + (zero += account.deposit)
+                  end
+                elsif account.subsidiary_journal_species == 3
+                  if account.return_check_box == "1"
+                    if account.account_title == "預金" && account.individual_amount.nil?
+                      @debit_amount = @amount_carried_forward.last.current_balance.abs + (zero += account.breakdown)
+                    elsif account.account_title == "預金" && account.individual_amount.present?
+                      @debit_amount = @amount_carried_forward.last.current_balance.abs + (zero += account.individual_amount)
+                    elsif account.account_title_2 == "預金"
+                      @debit_amount = @amount_carried_forward.last.current_balance.abs + (zero += account.individual_amount_2)
+                    elsif account.account_title_3 == "預金"
+                      @debit_amount = @amount_carried_forward.last.current_balance.abs + (zero += account.individual_amount_3)
+                    elsif account.account_title_4 == "預金"
+                      @debit_amount = @amount_carried_forward.last.current_balance.abs + (zero += account.individual_amount_4)
+                    elsif account.account_title_5 == "預金"
+                      @debit_amount = @amount_carried_forward.last.current_balance.abs + (zero += account.individual_amount_5)
+                    else
+                    end
+                  end
+                elsif account.subsidiary_journal_species == 4
+                  if account.return_check_box == "0"
+                    if account.account_title == "預金" && account.individual_amount.nil?
+                      @debit_amount = @amount_carried_forward.last.current_balance.abs + (zero += account.breakdown)
+                    elsif account.account_title == "預金" && account.individual_amount.present?
+                      @debit_amount = @amount_carried_forward.last.current_balance.abs + (zero += account.individual_amount)
+                    elsif account.account_title_2 == "預金"
+                      @debit_amount = @amount_carried_forward.last.current_balance.abs + (zero += account.individual_amount_2)
+                    elsif account.account_title_3 == "預金"
+                      @debit_amount = @amount_carried_forward.last.current_balance.abs + (zero += account.individual_amount_3)
+                    elsif account.account_title_4 == "預金"
+                      @debit_amount = @amount_carried_forward.last.current_balance.abs + (zero += account.individual_amount_4)
+                    elsif account.account_title_5 == "預金"
+                      @debit_amount = @amount_carried_forward.last.current_balance.abs + (zero += account.individual_amount_5)
+                    end
+                  end
+                end
+              end
+            end
+          else
+            if @this_month_last_balance.last.current_balance > 0
+              if account.subsidiary_journal_species == 2
+                if account.deposit.present?
+                  @debit_amount = zero += account.deposit
+                end
+              elsif account.subsidiary_journal_species == 3
+                if account.return_check_box == "1"
+                  if account.account_title == "預金" && account.individual_amount.nil?
+                    @debit_amount = zero += account.breakdown
+                  elsif account.account_title == "預金" && account.individual_amount.present?
+                    @debit_amount = zero += account.individual_amount
+                  elsif account.account_title_2 == "預金"
+                    @debit_amount = zero += account.individual_amount_2
+                  elsif account.account_title_3 == "預金"
+                    @debit_amount = zero += account.individual_amount_3
+                  elsif account.account_title_4 == "預金"
+                    @debit_amount = zero += account.individual_amount_4
+                  elsif account.account_title_5 == "預金"
+                    @debit_amount = zero += account.individual_amount_5
+                  else
+                  end
+                end
+              elsif account.subsidiary_journal_species == 4
+                if account.return_check_box == "0"
+                  if account.account_title == "預金" && account.individual_amount.nil?
+                    @debit_amount = zero += account.breakdown
+                  elsif account.account_title == "預金" && account.individual_amount.present?
+                    @debit_amount = zero += account.individual_amount
+                  elsif account.account_title_2 == "預金"
+                    @debit_amount = zero += account.individual_amount_2
+                  elsif account.account_title_3 == "預金"
+                    @debit_amount = zero += account.individual_amount_3
+                  elsif account.account_title_4 == "預金"
+                    @debit_amount = zero += account.individual_amount_4
+                  elsif account.account_title_5 == "預金"
+                    @debit_amount = zero += account.individual_amount_5
+                  else
+                  end
+                else
+                end
+              end
+            else
+              if account.subsidiary_journal_species == 2
+                if account.deposit.present?
+                  @debit_amount =  @this_month_last_balance.last.current_balance.abs + (zero += account.deposit)
+                end
+              elsif account.subsidiary_journal_species == 3
+                if account.return_check_box == "1"
+                  if account.account_title == "預金" && account.individual_amount.nil?
+                    @debit_amount = @this_month_last_balance.last.current_balance.abs + (zero += account.breakdown)
+                  elsif account.account_title == "預金" && account.individual_amount.present?
+                    @debit_amount = @this_month_last_balance.last.current_balance.abs + (zero += account.individual_amount)
+                  elsif account.account_title_2 == "預金"
+                    @debit_amount = @this_month_last_balance.last.current_balance.abs + (zero += account.individual_amount_2)
+                  elsif account.account_title_3 == "預金"
+                    @debit_amount = @this_month_last_balance.last.current_balance.abs + (zero += account.individual_amount_3)
+                  elsif account.account_title_4 == "預金"
+                    @debit_amount = @this_month_last_balance.last.current_balance.abs + (zero += account.individual_amount_4)
+                  elsif account.account_title_5 == "預金"
+                    @debit_amount = @this_month_last_balance.last.current_balance.abs + (zero += account.individual_amount_5)
+                  else
+                  end
+                end
+              elsif account.subsidiary_journal_species == 4
+                if account.return_check_box == "0"
+                  if account.account_title == "預金" && account.individual_amount.nil?
+                    @debit_amount = @this_month_last_balance.last.current_balance.abs + (zero += account.breakdown)
+                  elsif account.account_title == "預金" && account.individual_amount.present?
+                    @debit_amount = @this_month_last_balance.last.current_balance.abs + (zero += account.individual_amount)
+                  elsif account.account_title_2 == "預金"
+                    @debit_amount = @this_month_last_balance.last.current_balance.abs + (zero += account.individual_amount_2)
+                  elsif account.account_title_3 == "預金"
+                    @debit_amount = @this_month_last_balance.last.current_balance.abs + (zero += account.individual_amount_3)
+                  elsif account.account_title_4 == "預金"
+                    @debit_amount = @this_month_last_balance.last.current_balance.abs + (zero += account.individual_amount_4)
+                  elsif account.account_title_5 == "預金"
+                    @debit_amount = @this_month_last_balance.last.current_balance.abs + (zero += account.individual_amount_5)
+                  else
+                  end
+                else
+                end
+              end
+            end
+          end
+        end
+      end
+    end
+    # 貸方
+    zero = 0
+    @general_ledger_accounts.each do |account|
+      if @this_month.include?(Date.parse(account[:accounting_date].to_s))
+        if @general_ledger_accounts[0] == account
+          if @this_month_last_balance.last.current_balance < 0
+            if @current_initial_deposit < 0
+              if account.subsidiary_journal_species == 2
+                if account.drawer.present?
+                  @credit_amount = @current_initial_deposit - (zero += account.drawer)
+                end
+              elsif account.subsidiary_journal_species == 3
+                if account.return_check_box == "0"
+                  if account.account_title == "預金" && account.individual_amount.nil?
+                    @credit_amount = @cash_initial_deposit - (zero += account.breakdown)
+                  elsif account.account_title == "預金" && account.individual_amount.present?
+                    @credit_amount = @cash_initial_deposit - (zero += account.individual_amount)
+                  elsif account.account_title_2 == "預金"
+                    @credit_amount = @cash_initial_deposit - (zero += account.individual_amount_2)
+                  elsif account.account_title_3 == "預金"
+                    @credit_amount = @cash_initial_deposit - (zero += account.individual_amount_3)
+                  elsif account.account_title_4 == "預金"
+                    @credit_amount = @cash_initial_deposit - (zero += account.individual_amount_4)
+                  elsif account.account_title_5 == "預金"
+                    @credit_amount = @cash_initial_deposit - (zero += account.individual_amount_5)
+                  else
+                  end
+                end
+              elsif account.subsidiary_journal_species == 4
+                if account.return_check_box == "1"
+                  if account.account_title == "預金" && account.individual_amount.nil?
+                    @credit_amount = @cash_initial_deposit - (zero += account.breakdown)
+                  elsif account.account_title == "預金" && account.individual_amount.present?
+                    @credit_amount = @cash_initial_deposit - (zero += account.individual_amount)
+                  elsif account.account_title_2 == "預金"
+                    @credit_amount = @cash_initial_deposit - (zero += account.individual_amount_2)
+                  elsif account.account_title_3 == "預金"
+                    @credit_amount = @cash_initial_deposit - (zero += account.individual_amount_3)
+                  elsif account.account_title_4 == "預金"
+                    @credit_amount = @cash_initial_deposit - (zero += account.individual_amount_4)
+                  elsif account.account_title_5 == "預金"
+                    @credit_amount = @cash_initial_deposit - (zero += account.individual_amount_5)
+                  else
+                  end
+                end
+              else
+              end
+            else
+              if account.subsidiary_journal_species == 2
+                if account.drawer.present?
+                  @credit_amount = zero += account.drawer
+                end
+              elsif account.subsidiary_journal_species == 3
+                if account.return_check_box == "0"
+                  if account.account_title == "預金" && account.individual_amount.nil?
+                    @credit_amount = zero += account.breakdown
+                  elsif account.account_title == "預金" && account.individual_amount.present?
+                    @credit_amount = zero += account.individual_amount
+                  elsif account.account_title_2 == "預金"
+                    @credit_amount = zero += account.individual_amount_2
+                  elsif account.account_title_3 == "預金"
+                    @credit_amount = zero += account.individual_amount_3
+                  elsif account.account_title_4 == "預金"
+                    @credit_amount = zero += account.individual_amount_4
+                  elsif account.account_title_5 == "預金"
+                    @credit_amount = zero += account.individual_amount_5
+                  else
+                  end
+                end
+              elsif account.subsidiary_journal_species == 4
+                if account.return_check_box == "1"
+                  if account.account_title == "預金" && account.individual_amount.nil?
+                    @credit_amount = zero += account.breakdown
+                  elsif account.account_title == "預金" && account.individual_amount.present?
+                    @credit_amount = zero += account.individual_amount
+                  elsif account.account_title_2 == "預金"
+                    @credit_amount = zero += account.individual_amount_2
+                  elsif account.account_title_3 == "預金"
+                    @credit_amount = zero += account.individual_amount_3
+                  elsif account.account_title_4 == "預金"
+                    @credit_amount = zero += account.individual_amount_4
+                  elsif account.account_title_5 == "預金"
+                    @credit_amount = zero += account.individual_amount_5
+                  else
+                  end
+                end
+              else
+              end
+            end
+          else
+            if @current_initial_deposit < 0
+              if account.subsidiary_journal_species == 2
+                if account.drawer.present?
+                  @credit_amount = (@current_initial_deposit + @this_month_last_balance.last.current_balance.abs) + (zero += account.drawer)
+                end
+              elsif account.subsidiary_journal_species == 3
+                if account.return_check_box == "0"
+                  if account.account_title == "預金" && account.individual_amount.nil?
+                    @credit_amount = (@current_initial_deposit + @this_month_last_balance.last.current_balance.abs) + (zero += account.breakdown)
+                  elsif account.account_title == "預金" && account.individual_amount.present?
+                    @credit_amount = (@current_initial_deposit + @this_month_last_balance.last.current_balance.abs) + (zero += account.individual_amount)
+                  elsif account.account_title_2 == "預金"
+                    @credit_amount = (@current_initial_deposit + @this_month_last_balance.last.current_balance.abs) + (zero += account.individual_amount_2)
+                  elsif account.account_title_3 == "預金"
+                    @credit_amount = (@current_initial_deposit + @this_month_last_balance.last.current_balance.abs) + (zero += account.individual_amount_3)
+                  elsif account.account_title_4 == "預金"
+                    @credit_amount = (@current_initial_deposit + @this_month_last_balance.last.current_balance.abs) + (zero += account.individual_amount_4)
+                  elsif account.account_title_5 == "預金"
+                    @credit_amount = (@current_initial_deposit + @this_month_last_balance.last.current_balance.abs) + (zero += account.individual_amount_5)
+                  end
+                end
+              elsif account.subsidiary_journal_species == 4
+                if account.return_check_box == "1"
+                  if account.account_title == "預金" && account.individual_amount.nil?
+                    @credit_amount = (@current_initial_deposit + @this_month_last_balance.last.current_balance.abs) + (zero += account.breakdown)
+                  elsif account.account_title == "預金" && account.individual_amount.present?
+                    @credit_amount = (@current_initial_deposit + @this_month_last_balance.last.current_balance.abs) + (zero += account.individual_amount)
+                  elsif account.account_title_2 == "預金"
+                    @credit_amount = (@current_initial_deposit + @this_month_last_balance.last.current_balance.abs) + (zero += account.individual_amount_2)
+                  elsif account.account_title_3 == "預金"
+                    @credit_amount = (@current_initial_deposit + @this_month_last_balance.last.current_balance.abs) + (zero += account.individual_amount_3)
+                  elsif account.account_title_4 == "預金"
+                    @credit_amount = (@current_initial_deposit + @this_month_last_balance.last.current_balance.abs) + (zero += account.individual_amount_4)
+                  elsif account.account_title_5 == "預金"
+                    @credit_amount = (@current_initial_deposit + @this_month_last_balance.last.current_balance.abs) + (zero += account.individual_amount_5)
+                  end
+                end
+              end
+            else
+              if account.subsidiary_journal_species == 2
+                if account.drawer.present?
+                  @credit_amount = @this_month_last_balance.last.current_balance.abs + (zero += account.drawer)
+                end
+              elsif account.subsidiary_journal_species == 3
+                if account.return_check_box == "0"
+                  if account.account_title == "預金" && account.individual_amount.nil?
+                    @credit_amount = @this_month_last_balance.last.current_balance.abs + (zero += account.breakdown)
+                  elsif account.account_title == "預金" && account.individual_amount.present?
+                    @credit_amount = @this_month_last_balance.last.current_balance.abs + (zero += account.individual_amount)
+                  elsif account.account_title_2 == "預金"
+                    @credit_amount = @this_month_last_balance.last.current_balance.abs + (zero += account.individual_amount_2)
+                  elsif account.account_title_3 == "預金"
+                    @credit_amount = @this_month_last_balance.last.current_balance.abs + (zero += account.individual_amount_3)
+                  elsif account.account_title_4 == "預金"
+                    @credit_amount = @this_month_last_balance.last.current_balance.abs + (zero += account.individual_amount_4)
+                  elsif account.account_title_5 == "預金"
+                    @credit_amount = @this_month_last_balance.last.current_balance.abs + (zero += account.individual_amount_5)
+                  end
+                end
+              elsif account.subsidiary_journal_species == 4
+                if account.return_check_box == "1"
+                  if account.account_title == "預金" && account.individual_amount.nil?
+                    @credit_amount = @this_month_last_balance.last.current_balance.abs + (zero += account.breakdown)
+                  elsif account.account_title == "預金" && account.individual_amount.present?
+                    @credit_amount = @this_month_last_balance.last.current_balance.abs + (zero += account.individual_amount)
+                  elsif account.account_title_2 == "預金"
+                    @credit_amount = @this_month_last_balance.last.current_balance.abs + (zero += account.individual_amount_2)
+                  elsif account.account_title_3 == "預金"
+                    @credit_amount = @this_month_last_balance.last.current_balance.abs + (zero += account.individual_amount_3)
+                  elsif account.account_title_4 == "預金"
+                    @credit_amount = @this_month_last_balance.last.current_balance.abs + (zero += account.individual_amount_4)
+                  elsif account.account_title_5 == "預金"
+                    @credit_amount = @this_month_last_balance.last.current_balance.abs + (zero += account.individual_amount_5)
+                  end
+                end
+              end
+            end
+          end
+        else
+          if @amount_carried_forward.last.present?
+            if @amount_carried_forward.last.current_balance >= 0
+              if @this_month_last_balance.last.current_balance < 0
+                if account.subsidiary_journal_species == 2
+                  if account.drawer.present?
+                    @credit_amount = zero += account.drawer
+                  end
+                elsif account.subsidiary_journal_species == 3
+                  if account.return_check_box == "0"
+                    if account.account_title == "預金" && account.individual_amount.nil?
+                      @credit_amount = zero += account.breakdown
+                    elsif account.account_title == "預金" && account.individual_amount.present?
+                      @credit_amount = zero += account.individual_amount
+                    elsif account.account_title_2 == "預金"
+                      @credit_amount = zero += account.individual_amount_2
+                    elsif account.account_title_3 == "預金"
+                      @credit_amount = zero += account.individual_amount_3
+                    elsif account.account_title_4 == "預金"
+                      @credit_amount = zero += account.individual_amount_4
+                    elsif account.account_title_5 == "預金"
+                      @credit_amount = zero += account.individual_amount_5
+                    else
+                    end
+                  end
+                elsif account.subsidiary_journal_species == 4
+                  if account.return_check_box == "1"
+                    if account.account_title == "預金" && account.individual_amount.nil?
+                      @credit_amount = zero += account.breakdown
+                    elsif account.account_title == "預金" && account.individual_amount.present?
+                      @credit_amount = zero += account.individual_amount
+                    elsif account.account_title_2 == "預金"
+                      @credit_amount = zero += account.individual_amount_2
+                    elsif account.account_title_3 == "預金"
+                      @credit_amount = zero += account.individual_amount_3
+                    elsif account.account_title_4 == "預金"
+                      @credit_amount = zero += account.individual_amount_4
+                    elsif account.account_title_5 == "預金"
+                      @credit_amount = zero += account.individual_amount_5
+                    else
+                    end
+                  else
+                  end
+                end
+              else
+                if account.subsidiary_journal_species == 2
+                  if account.drawer.present?
+                    @credit_amount =  @this_month_last_balance.last.current_balance.abs + (zero += account.drawer)
+                  end
+                elsif account.subsidiary_journal_species == 3
+                  if account.return_check_box == "0"
+                    if account.account_title == "預金" && account.individual_amount.nil?
+                      @credit_amount = @this_month_last_balance.last.current_balance.abs + (zero += account.breakdown)
+                    elsif account.account_title == "預金" && account.individual_amount.present?
+                      @credit_amount = @this_month_last_balance.last.current_balance.abs + (zero += account.individual_amount)
+                    elsif account.account_title_2 == "預金"
+                      @credit_amount = @this_month_last_balance.last.current_balance.abs + (zero += account.individual_amount_2)
+                    elsif account.account_title_3 == "預金"
+                      @credit_amount = @this_month_last_balance.last.current_balance.abs + (zero += account.individual_amount_3)
+                    elsif account.account_title_4 == "預金"
+                      @credit_amount = @this_month_last_balance.last.current_balance.abs + (zero += account.individual_amount_4)
+                    elsif account.account_title_5 == "預金"
+                      @credit_amount = @this_month_last_balance.last.current_balance.abs + (zero += account.individual_amount_5)
+                    else
+                    end
+                  end
+                elsif account.subsidiary_journal_species == 4
+                  if account.return_check_box == "1"
+                    if account.account_title == "預金" && account.individual_amount.nil?
+                      @credit_amount = @this_month_last_balance.last.current_balance.abs + (zero += account.breakdown)
+                    elsif account.account_title == "預金" && account.individual_amount.present?
+                      @credit_amount = @this_month_last_balance.last.current_balance.abs + (zero += account.individual_amount)
+                    elsif account.account_title_2 == "預金"
+                      @credit_amount = @this_month_last_balance.last.current_balance.abs + (zero += account.individual_amount_2)
+                    elsif account.account_title_3 == "預金"
+                      @credit_amount = @this_month_last_balance.last.current_balance.abs + (zero += account.individual_amount_3)
+                    elsif account.account_title_4 == "預金"
+                      @credit_amount = @this_month_last_balance.last.current_balance.abs + (zero += account.individual_amount_4)
+                    elsif account.account_title_5 == "預金"
+                      @credit_amount = @this_month_last_balance.last.current_balance.abs + (zero += account.individual_amount_5)
+                    else
+                    end
+                  else
+                  end
+                end
+              end
+            else
+              if @this_month_last_balance.last.current_balance > 0
+                if account.subsidiary_journal_species == 2
+                  if account.drawer.present?
+                    @credit_amount = (@amount_carried_forward.last.current_balance.abs + @this_month_last_balance.last.current_balance.abs) + (zero += account.drawer)
+                  end
+                elsif account.subsidiary_journal_species == 3
+                  if account.return_check_box == "0"
+                    if account.account_title == "預金" && account.individual_amount.nil?
+                      @credit_amount = (@amount_carried_forward.last.current_balance.abs + @this_month_last_balance.last.current_balance.abs) + (zero += account.breakdown)
+                    elsif account.account_title == "預金" && account.individual_amount.present?
+                      @credit_amount = (@amount_carried_forward.last.current_balance.abs + @this_month_last_balance.last.current_balance.abs) + (zero += account.individual_amount)
+                    elsif account.account_title_2 == "預金"
+                      @credit_amount = (@amount_carried_forward.last.current_balance.abs + @this_month_last_balance.last.current_balance.abs) + (zero += account.individual_amount_2)
+                    elsif account.account_title_3 == "預金"
+                      @credit_amount = (@amount_carried_forward.last.current_balance.abs + @this_month_last_balance.last.current_balance.abs) + (zero += account.individual_amount_3)
+                    elsif account.account_title_4 == "預金"
+                      @credit_amount = (@amount_carried_forward.last.current_balance.abs + @this_month_last_balance.last.current_balance.abs) + (zero += account.individual_amount_4)
+                    elsif account.account_title_5 == "預金"
+                      @credit_amount = (@amount_carried_forward.last.current_balance.abs + @this_month_last_balance.last.current_balance.abs) + (zero += account.individual_amount_5)
+                    else
+                    end
+                  end
+                elsif account.subsidiary_journal_species == 4
+                  if account.return_check_box == "1"
+                    if account.account_title == "預金" && account.individual_amount.nil?
+                      @credit_amount = (@amount_carried_forward.last.current_balance.abs + @this_month_last_balance.last.current_balance.abs) + (zero += account.breakdown)
+                    elsif account.account_title == "預金" && account.individual_amount.present?
+                      @credit_amount = (@amount_carried_forward.last.current_balance.abs + @this_month_last_balance.last.current_balance.abs) + (zero += account.individual_amount)
+                    elsif account.account_title_2 == "預金"
+                      @credit_amount = (@amount_carried_forward.last.current_balance.abs + @this_month_last_balance.last.current_balance.abs) + (zero += account.individual_amount_2)
+                    elsif account.account_title_3 == "預金"
+                      @credit_amount = (@amount_carried_forward.last.current_balance.abs + @this_month_last_balance.last.current_balance.abs) + (zero += account.individual_amount_3)
+                    elsif account.account_title_4 == "預金"
+                      @credit_amount = (@amount_carried_forward.last.current_balance.abs + @this_month_last_balance.last.current_balance.abs) + (zero += account.individual_amount_4)
+                    elsif account.account_title_5 == "預金"
+                      @credit_amount = (@amount_carried_forward.last.current_balance.abs + @this_month_last_balance.last.current_balance.abs) + (zero += account.individual_amount_5)
+                    else
+                    end
+                  else
+                  end
+                end
+              else
+                if account.subsidiary_journal_species == 2
+                  if account.drawer.present?
+                    @credit_amount = @amount_carried_forward.last.current_balance.abs + (zero += account.drawer)
+                  end
+                elsif account.subsidiary_journal_species == 3
+                  if account.return_check_box == "0"
+                    if account.account_title == "預金" && account.individual_amount.nil?
+                      @credit_amount = @amount_carried_forward.last.current_balance.abs + (zero += account.breakdown)
+                    elsif account.account_title == "預金" && account.individual_amount.present?
+                      @credit_amount = @amount_carried_forward.last.current_balance.abs + (zero += account.individual_amount)
+                    elsif account.account_title_2 == "預金"
+                      @credit_amount = @amount_carried_forward.last.current_balance.abs + (zero += account.individual_amount_2)
+                    elsif account.account_title_3 == "預金"
+                      @credit_amount = @amount_carried_forward.last.current_balance.abs + (zero += account.individual_amount_3)
+                    elsif account.account_title_4 == "預金"
+                      @credit_amount = @amount_carried_forward.last.current_balance.abs + (zero += account.individual_amount_4)
+                    elsif account.account_title_5 == "預金"
+                      @credit_amount = @amount_carried_forward.last.current_balance.abs + (zero += account.individual_amount_5)
+                    else
+                    end
+                  end
+                elsif account.subsidiary_journal_species == 4
+                  if account.return_check_box == "1"
+                    if account.account_title == "預金" && account.individual_amount.nil?
+                      @credit_amount = @amount_carried_forward.last.current_balance.abs + (zero += account.breakdown)
+                    elsif account.account_title == "預金" && account.individual_amount.present?
+                      @credit_amount = @amount_carried_forward.last.current_balance.abs + (zero += account.individual_amount)
+                    elsif account.account_title_2 == "預金"
+                      @credit_amount = @amount_carried_forward.last.current_balance.abs + (zero += account.individual_amount_2)
+                    elsif account.account_title_3 == "預金"
+                      @credit_amount = @amount_carried_forward.last.current_balance.abs + (zero += account.individual_amount_3)
+                    elsif account.account_title_4 == "預金"
+                      @credit_amount = @amount_carried_forward.last.current_balance.abs + (zero += account.individual_amount_4)
+                    elsif account.account_title_5 == "預金"
+                      @credit_amount = @amount_carried_forward.last.current_balance.abs + (zero += account.individual_amount_5)
+                    else
+                    end
+                  else
+                  end
+                end
+              end
+            end
+          else
+            if @this_month_last_balance.last.current_balance < 0
+              if account.subsidiary_journal_species == 2
+                if account.drawer.present?
+                  @credit_amount = zero += account.drawer
+                end
+              elsif account.subsidiary_journal_species == 3
+                if account.return_check_box == "0"
+                  if account.account_title == "預金" && account.individual_amount.nil?
+                    @credit_amount = zero += account.breakdown
+                  elsif account.account_title == "預金" && account.individual_amount.present?
+                    @credit_amount = zero += account.individual_amount
+                  elsif account.account_title_2 == "預金"
+                    @credit_amount = zero += account.individual_amount_2
+                  elsif account.account_title_3 == "預金"
+                    @credit_amount = zero += account.individual_amount_3
+                  elsif account.account_title_4 == "預金"
+                    @credit_amount = zero += account.individual_amount_4
+                  elsif account.account_title_5 == "預金"
+                    @credit_amount = zero += account.individual_amount_5
+                  end
+                end
+              elsif account.subsidiary_journal_species == 4
+                if account.return_check_box == "1"
+                  if account.account_title == "預金" && account.individual_amount.nil?
+                    @credit_amount = zero += account.breakdown
+                  elsif account.account_title == "預金" && account.individual_amount.present?
+                    @credit_amount = zero += account.individual_amount
+                  elsif account.account_title_2 == "預金"
+                    @credit_amount = zero += account.individual_amount_2
+                  elsif account.account_title_3 == "預金"
+                    @credit_amount = zero += account.individual_amount_3
+                  elsif account.account_title_4 == "預金"
+                    @credit_amount = zero += account.individual_amount_4
+                  elsif account.account_title_5 == "預金"
+                    @credit_amount = zero += account.individual_amount_5
+                  end
+                end
+              end
+            else
+              if account.subsidiary_journal_species == 2
+                if account.drawer.present?
+                  @credit_amount =  @this_month_last_balance.last.current_balance.abs + (zero += account.drawer)
+                end
+              elsif account.subsidiary_journal_species == 3
+                if account.return_check_box == "0"
+                  if account.account_title == "預金" && account.individual_amount.nil?
+                    @credit_amount = @this_month_last_balance.last.current_balance.abs + (zero += account.breakdown)
+                  elsif account.account_title == "預金" && account.individual_amount.present?
+                    @credit_amount = @this_month_last_balance.last.current_balance.abs + (zero += account.individual_amount)
+                  elsif account.account_title_2 == "預金"
+                    @credit_amount = @this_month_last_balance.last.current_balance.abs + (zero += account.individual_amount_2)
+                  elsif account.account_title_3 == "預金"
+                    @credit_amount = @this_month_last_balance.last.current_balance.abs + (zero += account.individual_amount_3)
+                  elsif account.account_title_4 == "預金"
+                    @credit_amount = @this_month_last_balance.last.current_balance.abs + (zero += account.individual_amount_4)
+                  elsif account.account_title_5 == "預金"
+                    @credit_amount = @this_month_last_balance.last.current_balance.abs + (zero += account.individual_amount_5)
+                  end
+                end
+              elsif account.subsidiary_journal_species == 4
+                if account.return_check_box == "1"
+                  if account.account_title == "預金" && account.individual_amount.nil?
+                    @credit_amount = @this_month_last_balance.last.current_balance.abs + (zero += account.breakdown)
+                  elsif account.account_title == "預金" && account.individual_amount.present?
+                    @credit_amount = @this_month_last_balance.last.current_balance.abs + (zero += account.individual_amount)
+                  elsif account.account_title_2 == "預金"
+                    @credit_amount = @this_month_last_balance.last.current_balance.abs + (zero += account.individual_amount_2)
+                  elsif account.account_title_3 == "預金"
+                    @credit_amount = @this_month_last_balance.last.current_balance.abs + (zero += account.individual_amount_3)
+                  elsif account.account_title_4 == "預金"
+                    @credit_amount = @this_month_last_balance.last.current_balance.abs + (zero += account.individual_amount_4)
+                  elsif account.account_title_5 == "預金"
+                    @credit_amount = @this_month_last_balance.last.current_balance.abs + (zero += account.individual_amount_5)
+                  end
+                end
+              end
+            end
+          end
+        end
+      end
+    end
+  end
+  # -----------------------------------------
+ 
 end

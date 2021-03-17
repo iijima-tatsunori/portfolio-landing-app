@@ -4,7 +4,7 @@
       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
         <span aria-hidden="true">&times;</span>
       </button>
-      <h2 class="modal-title"><%= l(@account.accounting_date, format: :long) %>当座預金出納帳詳細</h2>
+      <h2 class="modal-title"><%= l(@account.accounting_date, format: :long) %>預金出納帳詳細</h2>
     </div>
     <div class="modal-body">
       <div class="row">
@@ -13,7 +13,6 @@
             <thead>
               <tr>
                 <th>日付</th>
-                <th>小切手番号</th>
                 <th>勘定科目</th>
                 <th>適要</th>
                 <th>入金</th>
@@ -24,7 +23,6 @@
             <tbody>
               <tr>
                 <td><%= l(@account.accounting_date, format: :short) %></td>
-                <td><%= @account.check_number %></td>
                 <td><%= @account.account_title %></td>
                 <td><%= @account.description %></td>
                 

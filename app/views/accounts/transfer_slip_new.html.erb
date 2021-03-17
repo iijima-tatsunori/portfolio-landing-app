@@ -1,0 +1,53 @@
+<%= provide(:title, '振替伝票入力') %>
+<%= provide(:class_text, 'account--form') %>
+
+<h2>振替伝票入力</h2>
+
+<div>
+  <%= form_with(model: @account, local: true, method: :post) do |f| %>
+  <%= render 'shared/error_messages', object: f.object %>
+    <table class="table table-bordered table-condensed table-hover" id="table-account">
+      <thead>
+        <tr>
+          <th colspan="2"><%= f.label :accounting_date, class: "label-#{yield(:class_text)}" %></th>
+          <td colspan="2"><%= f.date_field :accounting_date, required: true, class: "form-control" %></td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th colspan="3">借方</th>
+          <th colspan="3">貸方</th>
+          <th><%= f.label :description, class: "label-#{yield(:class_text)}" %></th>
+        </tr>
+        <tr>
+          <th>
+            勘定科目
+          </th>
+          <th>税区分</th>
+          <th class="bg-info">金額</th>
+          <th>勘定科目</th>
+          <th>税区分</th>
+          <th class="bg-info">金額</th>
+          <td></td>
+        </tr>
+        <tr>
+          <div id="transfer-slip-form">
+            <td><%= f.select :account_title, @assets_account_title, {include_blank: true}, required: true, class: "form-control", id: "assets-account-title" %></td>
+            <td><%= f.select :account_title, @assets_account_title, {include_blank: true}, required: true, class: "form-control", id: "assets-account-title" %></td>
+            <td class="bg-info"><%= f.text_field :individual_amount, required: true, placeholder: "入力必須", class: "form-control" %></td>
+            <td><%= f.select :account_title, @assets_account_title, {include_blank: true}, required: true, class: "form-control", id: "assets-account-title" %></td>
+            <td><%= f.select :account_title, @assets_account_title, {include_blank: true}, required: true, class: "form-control", id: "assets-account-title" %></td>
+            <td class="bg-info"><%= f.text_field :individual_amount, required: true, placeholder: "入力必須", class: "form-control" %></td>
+            <td><%= f.text_field :description, class: "form-control" %></td>
+          </div>
+        </tr>
+        <tr>
+          <th colspan="3"></th>
+          <th colspan="3"></th>
+          <td><%= button_to "行追加", "#", class: "btn btn-#{yield(:class_text)}", id: "transfer-slip-add-row" %></td>
+        </tr>
+      </tbody>
+    </table>
+    <div><%= f.submit "登録", class: "btn btn-block btn-primary btn-#{yield(:class_text)}" %></div>
+  <% end %>
+</div>

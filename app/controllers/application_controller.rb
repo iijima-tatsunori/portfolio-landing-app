@@ -61,6 +61,8 @@ class ApplicationController < ActionController::Base
     @last_day = @first_day.end_of_month
     @one_month = [*@first_day..@last_day]
     @this_month = @first_day.all_month
+    @today = Date.current
+    @this_year = @first_day.all_year
   end
   
   

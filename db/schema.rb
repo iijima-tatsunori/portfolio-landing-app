@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20210125082342) do
+ActiveRecord::Schema.define(version: 20210308082150) do
 
   create_table "accounts", force: :cascade do |t|
     t.date "accounting_date"
@@ -31,8 +31,8 @@ ActiveRecord::Schema.define(version: 20210125082342) do
     t.string "product_name"
     t.decimal "quantity", precision: 12, scale: 2
     t.integer "unit_price"
-    t.decimal "breakdown", precision: 12, scale: 2
-    t.decimal "amount", precision: 12, scale: 2
+    t.integer "breakdown"
+    t.integer "amount"
     t.integer "general_ledger_number"
     t.integer "journal_books_number"
     t.string "notation"
@@ -45,15 +45,25 @@ ActiveRecord::Schema.define(version: 20210125082342) do
     t.datetime "updated_at", null: false
     t.string "journal_description"
     t.string "return_check_box"
-    t.decimal "individual_amount", precision: 12, scale: 2
-    t.decimal "individual_amount_2", precision: 12, scale: 2
-    t.decimal "individual_amount_3", precision: 12, scale: 2
-    t.decimal "individual_amount_4", precision: 12, scale: 2
-    t.decimal "individual_amount_5", precision: 12, scale: 2
+    t.integer "individual_amount"
+    t.integer "individual_amount_2"
+    t.integer "individual_amount_3"
+    t.integer "individual_amount_4"
+    t.integer "individual_amount_5"
     t.string "account_title_2"
     t.string "account_title_3"
     t.string "account_title_4"
     t.string "account_title_5"
+    t.integer "current_balance"
+    t.integer "general_account_balance"
+    t.integer "general_purchasing_balance"
+    t.integer "general_cash_balance"
+    t.integer "general_current_balance"
+    t.integer "general_payable_balance"
+    t.integer "general_recievable_balance"
+    t.integer "general_profit_and_loss_balance"
+    t.integer "general_capital_stock_balance"
+    t.integer "balance_items"
   end
 
   create_table "grounds", force: :cascade do |t|

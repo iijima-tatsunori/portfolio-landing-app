@@ -54,6 +54,9 @@ Rails.application.routes.draw do
     end
     
     collection do
+      get 'transfer_slip_new'
+      post 'transfer_slip_create'
+      
       get 'purchasing_new'
       post 'purchasing_create'
       get 'purchasing_index'
@@ -70,6 +73,15 @@ Rails.application.routes.draw do
       get 'journal_books'
       # 総勘定元帳
       get 'general_ledger'
+      get 'purchasing_general_ledger'
+      get 'cash_general_ledger'
+      get 'current_general_ledger'
+      get 'payable_general_ledger'
+      get 'receivable_general_ledger'
+      # 貸借対照表
+      get 'balance_sheet'
+      # 損益計算書
+      get 'profit_and_loss_statement'
       
     end
     

@@ -43,7 +43,8 @@ ja:
       middle: "%Y年%m月"
       short: "%-m/%-d"
       short2: "%-m/%-d(%a)"
-      year: "%Y年%m月"
+      year: "%Y年"
+      month: "%Y年%m月"
       time: "%H:%M"
     month_names:
     - 

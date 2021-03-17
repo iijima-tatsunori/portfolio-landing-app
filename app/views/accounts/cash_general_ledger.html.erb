@@ -1,0 +1,359 @@
+<%= provide(:title, '総勘定元帳(現金)') %>
+
+<h2><%= l(@first_day, format: :month) %>総勘定元帳（現金）</h2>
+
+<div class="btn-users-show">
+  <% unless @first_day <= @general_ledger_accounts.first.accounting_date %>
+    <%= link_to "⇦ 月", cash_general_ledger_accounts_path(accounting_date: @first_day.prev_month), class: "btn btn-info" %>
+  <% else %>
+    <%= link_to "⇦ 月", cash_general_ledger_accounts_path(accounting_date: @first_day.prev_month), class: "btn btn-info disabled" %>
+  <% end %>
+  <% unless @first_day >= @today.beginning_of_month %>
+    <%= link_to "月 ⇨", cash_general_ledger_accounts_path(accounting_date: @first_day.next_month), class: "btn btn-info" %>
+  <% else %>
+    <%= link_to "月 ⇨", cash_general_ledger_accounts_path(accounting_date: @first_day.next_month), class: "btn btn-info disabled" %>
+  <% end %>
+  <% unless @first_day.prev_year <= @general_ledger_accounts.first.accounting_date %>
+    <%= link_to "⇦ 年", cash_general_ledger_accounts_path(accounting_date: @first_day.prev_year), class: "btn btn-success" %>
+  <% else %>
+    <%= link_to "⇦ 年", cash_general_ledger_accounts_path(accounting_date: @first_day.prev_year), class: "btn btn-success disabled" %>
+  <% end %>
+  <% unless @first_day.next_year >= @today %>
+    <%= link_to "年 ⇨", cash_general_ledger_accounts_path(accounting_date: @first_day.next_year), class: "btn btn-success" %>
+  <% else %>
+    <%= link_to "年 ⇨", cash_general_ledger_accounts_path(accounting_date: @first_day.next_year), class: "btn btn-success disabled" %>
+  <% end %>
+  <% unless @first_day <= @general_ledger_accounts.first.accounting_date %>
+    <%= link_to "⇦ 先頭", cash_general_ledger_accounts_path(accounting_date: @general_ledger_accounts.first.accounting_date.beginning_of_month), class: "btn btn-danger" %>
+  <% else %>
+    <%= link_to "⇦ 先頭", cash_general_ledger_accounts_path(accounting_date: @general_ledger_accounts.first.accounting_date.beginning_of_month), class: "btn btn-danger disabled" %>
+  <% end %>
+  <% unless @first_day >= @general_ledger_accounts.last.accounting_date.beginning_of_month %>
+    <%= link_to "末尾 ⇨", cash_general_ledger_accounts_path(accounting_date: @general_ledger_accounts.last.accounting_date.beginning_of_month), class: "btn btn-danger" %>
+  <% else %>
+    <%= link_to "末尾 ⇨", cash_general_ledger_accounts_path(accounting_date: @general_ledger_accounts.last.accounting_date.beginning_of_month), class: "btn btn-danger disabled" %>
+  <% end %>
+</div>
+<div>
+  <table class="table table-bordered table-condensed table-hover" id="table-account">
+    <thead>
+      <tr>
+        <th>日付</th>
+        <th>勘定科目</th>
+        <th>借方</th>
+        <th>勘定科目</th>
+        <th>貸方</th>
+        <th>仕訳帳へ</th>
+      </tr>
+      <% if @credit_amount.present? || @debit_amount.present? %>
+        <tr class="bg-success">
+          <td></td>
+          <% unless @amount_carried_forward.last.nil? %>
+            <td>前月より繰越</td>
+          <% else %>
+            <td>現金残高</td>
+          <% end %>
+          <!--借方繰越残高-->
+          <% if @amount_carried_forward.last.present? %>
+            <% if @amount_carried_forward.last.balance > 0 %>
+              <td><%= @amount_carried_forward.last.balance.abs %></td>
+            <% else %>
+              <td></td>
+            <% end %>
+          <% elsif @cash_initial_deposit > 0 %>
+            <td><%= @cash_initial_deposit.abs %></td>
+          <% else %>
+            <td></td>
+          <% end %>
+          <!-------->
+          <td></td>
+          <!--貸方繰越残高-->
+          <% if @amount_carried_forward.last.present? %>
+            <% if @amount_carried_forward.last.balance < 0 %>
+              <td><%= @amount_carried_forward.last.balance.abs %></td>
+            <% else %>
+              <td></td>
+            <% end %>
+          <% elsif @cash_initial_deposit < 0 %>
+            <td><%= @cash_initial_deposit.abs %></td>
+          <% else %>
+            <td></td>
+          <% end %>
+          <!-------->
+          <td></td>
+        </tr>
+      <% end %>
+    </thead>
+    <tbody>
+      <% @general_ledger_accounts.each do |account| %>
+        <% if @this_month.include?(Date.parse(account[:accounting_date].to_s)) %>
+          <% if account.account_title == "現金" || account.account_title_2 == "現金" || account.account_title_3 == "現金" || account.account_title_4 == "現金" || account.account_title_5 == "現金" || account.subsidiary_journal_species == 1 %>
+            <tr>
+              <td><%= l(account.accounting_date, format: :short) %></td>
+              
+                <% if account.subsidiary_journal_species == 1 %>
+                  <% if account.income.present? %>
+                  
+                    <% if account.account_title_2.present? || account.account_title_3.present? || account.account_title_4.present? || account.account_title_5.present? %>
+                      <td>諸口</td>
+                    <% else %>
+                      <td><%= account.account_title %></td>
+                    <% end %>
+                  <% else %>
+                    <td></td>
+                  <% end %>
+                <% elsif account.subsidiary_journal_species == 3 %>
+                  <% if account.return_check_box == "1" %>
+                    <td>仕入</td>
+                  <% else %>
+                    <td></td>
+                  <% end %>
+                <% elsif account.subsidiary_journal_species == 4 %>
+                  <% if account.return_check_box == "0" %>
+                    <td>売上</td>
+                  <% else %>
+                    <td></td>
+                  <% end %>
+                <% end %>
+              
+              <% if account.subsidiary_journal_species == 1 %>
+                <% if account.income.present? %>
+                  <td><%= account.income %></td>
+                <% else %>
+                  <td></td>
+                <% end %>
+              <% elsif account.subsidiary_journal_species == 3 %>
+                <% if account.return_check_box == "1" %>
+                  <% if account.account_title == "現金" %>
+                    <% if account.individual_amount.present? %>
+                      <td><%= account.individual_amount %></td>
+                    <% else %>
+                      <td><%= account.breakdown %></td>
+                    <% end %>
+                  <% elsif account.account_title_2 == "現金" %>
+                    <td><%= account.individual_amount_2 %></td>
+                  <% elsif account.account_title_3 == "現金" %>
+                    <td><%= account.individual_amount_3 %></td>
+                  <% elsif account.account_title_4 == "現金" %>
+                    <td><%= account.individual_amount_4 %></td>
+                  <% elsif account.account_title_5 == "現金" %>
+                    <td><%= account.individual_amount_5 %></td>
+                  <% end %>
+                <% else %>
+                  <td></td>
+                <% end %>
+              
+              <% elsif account.subsidiary_journal_species == 4 %>
+                <% if account.return_check_box == "0" %>
+                  <% if account.account_title == "現金" %>
+                    <% if account.individual_amount.present? %>
+                      <td><%= account.individual_amount %></td>
+                    <% else %>
+                      <td><%= account.breakdown %></td>
+                    <% end %>
+                  <% elsif account.account_title_2 == "現金" %>
+                    <td><%= account.individual_amount_2 %></td>
+                  <% elsif account.account_title_3 == "現金" %>
+                    <td><%= account.individual_amount_3 %></td>
+                  <% elsif account.account_title_4 == "現金" %>
+                    <td><%= account.individual_amount_4 %></td>
+                  <% elsif account.account_title_5 == "現金" %>
+                    <td><%= account.individual_amount_5 %></td>
+                  <% end %>
+                <% else %>
+                  <td></td>
+                <% end %>
+              <% else %>
+                <td></td>
+              <% end %>
+              
+              <% if account.subsidiary_journal_species == 1 %>
+                <% if account.expense.present? %>
+                  <% if account.account_title_2.present? || account.account_title_3.present? || account.account_title_4.present? || account.account_title_5.present? %>
+                    <td>諸口</td>
+                  <% else %>
+                    <td><%= account.account_title %></td>
+                  <% end %>
+                <% else %>
+                  <td></td>
+                <% end %>
+              <% elsif account.subsidiary_journal_species == 3 %>
+                <% if account.return_check_box == "0" %>
+                  <td>仕入</td>
+                <% else %>
+                  <td></td>
+                <% end %>
+              <% elsif account.subsidiary_journal_species == 4 %>
+                <% if account.return_check_box == "1" %>
+                  <td>売上</td>
+                <% else %>
+                  <td></td>
+                <% end %>
+              <% end %>
+              
+              <% if account.subsidiary_journal_species == 1 %>
+                <% if account.expense.present? %>
+                  <td><%= account.expense %></td>
+                <% else %>
+                  <td></td>
+                <% end %>
+              <% elsif account.subsidiary_journal_species == 3 %>
+                <% if account.return_check_box == "0" %>
+                  <% if account.account_title == "現金" %>
+                    <% if account.individual_amount.present? %>
+                      <td><%= account.individual_amount %></td>
+                    <% else %>
+                      <td><%= account.breakdown %></td>
+                    <% end %>
+                  <% elsif account.account_title_2 == "現金" %>
+                    <td><%= account.individual_amount_2 %></td>
+                  <% elsif account.account_title_3 == "現金" %>
+                    <td><%= account.individual_amount_3 %></td>
+                  <% elsif account.account_title_4 == "現金" %>
+                    <td><%= account.individual_amount_4 %></td>
+                  <% elsif account.account_title_5 == "現金" %>
+                    <td><%= account.individual_amount_5 %></td>
+                  <% end %>
+                <% else %>
+                  <td></td>
+                <% end %>
+              <% elsif account.subsidiary_journal_species == 4 %>
+                <% if account.return_check_box == "1" %>
+                  <% if account.account_title == "現金" %>
+                    <% if account.individual_amount.present? %>
+                      <td><%= account.individual_amount %></td>
+                    <% else %>
+                      <td><%= account.breakdown %></td>
+                    <% end %>
+                  <% elsif account.account_title_2 == "現金" %>
+                    <td><%= account.individual_amount_2 %></td>
+                  <% elsif account.account_title_3 == "現金" %>
+                    <td><%= account.individual_amount_3 %></td>
+                  <% elsif account.account_title_4 == "現金" %>
+                    <td><%= account.individual_amount_4 %></td>
+                  <% elsif account.account_title_5 == "現金" %>
+                    <td><%= account.individual_amount_5 %></td>
+                  <% end %>
+                <% else %>
+                  <td></td>
+                <% end %>
+              <% else %>
+                <td></td>
+              <% end %>
+              
+              <td>
+                <%= link_to journal_species(account.subsidiary_journal_species), show_link(account, account.subsidiary_journal_species), remote: true, class: journal_btn(account.subsidiary_journal_species) %>
+                <%= link_to "編集", edit_link(account, account.subsidiary_journal_species), remote: true, class: "btn btn-default" %>
+              </td>
+            </tr>
+          <% end %>
+        <% end %>
+      <% end %>
+    </tbody>
+    <% if @credit_amount.present? || @debit_amount.present? %>
+      <tfoot>
+        <tr class="bg-danger">
+          <td><%= l(@last_day, format: :short) %></td>
+          <td>次月繰越</td>
+          <!--借方繰越残高-->
+          <% if @this_month_last_balance.last.present? %>
+            <% if @this_month_last_balance.last.balance < 0 %>
+              <td><%= @this_month_last_balance.last.balance.abs %></td>
+            <% else %>
+              <td></td>
+            <% end %>
+          <% else %>
+            <td></td>
+          <% end %>
+          <!-------->
+          <td></td>
+          <!--貸方繰越残高-->
+          <% if @this_month_last_balance.last.present? %>
+            <% if @this_month_last_balance.last.balance > 0 %>
+              <td><%= @this_month_last_balance.last.balance.abs %></td>
+            <% else %>
+              <td></td>
+            <% end %>
+          <% else %>
+            <td></td>
+          <% end %>
+          <!-------->
+          <td></td>
+        </tr>
+        <tr class="bg-success">
+          <td></td>
+          <td>借方合計</td>
+          <% if @debit_amount.nil? %>
+            <% if @amount_carried_forward.last.present? %>
+              <% if @amount_carried_forward.last.balance > 0 %>
+                <% if @this_month_last_balance.last.balance < 0 %>
+                  <td><%= @this_month_last_balance.last.balance.abs + @amount_carried_forward.last.balance.abs %></td>
+                <% else %>
+                  <td><%= @amount_carried_forward.last.balance.abs %></td>
+                <% end %>
+              <% else %>
+                <td><%= @this_month_last_balance.last.balance.abs %></td>
+              <% end %>
+            <% else %>
+              <% if @this_month_last_balance.last.balance < 0 %>
+                <% if @cash_initial_deposit > 0 %>
+                  <td><%= @cash_initial_deposit.abs + @this_month_last_balance.last.balance.abs %></td>
+                <% else %>
+                  <td><%= @this_month_last_balance.last.balance.abs %></td>
+                <% end %>
+              <% else %>
+                <% if @cash_initial_deposit < 0 %>
+                  <td><%= @this_month_last_balance.last.balance.abs %></td>
+                <% else %>
+                  <td><%= @cash_initial_deposit.abs + @this_month_last_balance.last.balance.abs %></td>
+                <% end %>
+              <% end %>
+            <% end %>
+          <% else %>
+            <td><%= @debit_amount.abs %></td>
+          <% end %>
+          <td>貸方合計</td>
+          <% if @credit_amount.nil? %>
+            <% if @amount_carried_forward.last.present? %>
+              <% if @amount_carried_forward.last.balance < 0 %>
+                <% if @this_month_last_balance.last.balance > 0 %>
+                  <td><%= @this_month_last_balance.last.balance.abs + @amount_carried_forward.last.balance.abs %></td>
+                <% else %>
+                  <td><%= @amount_carried_forward.last.balance.abs %></td>
+                <% end %>
+              <% else %>
+                <td><%= @this_month_last_balance.last.balance.abs %></td>
+              <% end %>
+            <% else %>
+              <% if @this_month_last_balance.last.balance > 0 %>
+                <% if @cash_initial_deposit < 0 %>
+                  <td><%= @cash_initial_deposit.abs + @this_month_last_balance.last.balance.abs %></td>
+                <% else %>
+                  <td><%= @this_month_last_balance.last.balance.abs %></td>
+                <% end %>
+              <% else %>
+                <% if @cash_initial_deposit < 0 %>
+                  <td><%= @this_month_last_balance.last.balance.abs %></td>
+                <% else %>
+                  <td><%= @cash_initial_deposit.abs + @this_month_last_balance.last.balance.abs %></td>
+                <% end %>
+              <% end %>
+            <% end %>
+          <% else %>
+            <td><%= @credit_amount.abs %></td>
+          <% end %>
+          <td></td>
+        </tr>
+      </tfoot>
+    <% end %>
+  </table>
+</div>
+
+<div id="cash_edit" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
+<div id="current_edit" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
+<div id="purchasing_edit" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
+<div id="edit" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
+<div id="cash_show" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
+<div id="current_show" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
+<div id="purchasing_show" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
+<div id="show" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
