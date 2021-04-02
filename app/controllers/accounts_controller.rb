@@ -26,7 +26,6 @@ class AccountsController < ApplicationController
                                        :journal_books, :general_ledger, :cash_general_ledger, :current_general_ledger, :payable_general_ledger, :receivable_general_ledger, :purchasing_general_ledger,
                                        :profit_and_loss_statement, :balance_sheet]
                                        
-                                       
   before_action :cash_initial_deposit, only: [:create, :index, :update, :destroy, :cash_general_ledger,
                                               :purchasing_create, :purchasing_index, :purchasing_edit, :purchasing_update, :purchasing_destroy,
                                               :cash_create, :cash_index, :cash_update, :cash_destroy,
@@ -45,35 +44,8 @@ class AccountsController < ApplicationController
   before_action :liabilities_account_title, only: [:transfer_slip_new, :transfer_slip_create]
   before_action :cost_account_title, only: [:transfer_slip_new, :transfer_slip_create]
   before_action :revenue_account_title, only: [:transfer_slip_new, :transfer_slip_create]
+  before_action :tax_rate, only: [:transfer_slip_new, :transfer_slip_create]
   
-  # --------------------------帳簿作成------------------------------
-  def transfer_slip_new
-    @account = Account.new
-  end
-
-  def transfer_slip_create
-    @account = Account.new(transfer_slip_account_params)
-    if account_invalid?
-      sum_breakdown = (account_params[:quantity].to_f * account_params[:unit_price].to_f)
-      @account.breakdown = sum_breakdown
-      if @account.save
-        account_amount_algorithm
-        purchasing_amount_algorithm
-        cash_algorithm
-        current_algorithm
-        account_amount_sum
-        purchasing_amount_sum
-        flash[:success] = "#{l(@account.accounting_date, format: :long)}の売上帳を新規作成しました。"
-        redirect_to transfer_slip_account_url
-      else
-        render :transfer_slip_new
-      end
-    else
-      flash[:danger] = "複合仕訳欄入力エラー。"
-      render :transfer_slip_new
-    end
-  end
-  # --------------------------------------------------------------
   # --------------------------売上帳------------------------------
   def new
     @account = Account.new
@@ -385,6 +357,25 @@ class AccountsController < ApplicationController
     end
   end
   # ----------------------------------------------------------------
+  
+  # --------------------------振替伝票作成------------------------------
+  def transfer_slip_new
+    @transfer_account = Account.new
+    @transfer_account.compound_journals.build
+  end
+
+  def transfer_slip_create
+    @transfer_account = Account.new(transfer_slip_account_params)
+    if @transfer_account.save
+      @transfer_account = Account.new(transfer_slip_account_params)
+      flash[:success] = "#{l(@transfer_account.accounting_date, format: :long)}新規作成しました。"
+      redirect_to transfer_slip_new_accounts_url
+    else
+      @transfer_account = Account.new(transfer_slip_account_params)
+      render :transfer_slip_new
+    end
+  end
+  # --------------------------------------------------------------
   
   # --------------------------仕訳帳--------------------------------
   def journal_books
@@ -801,28 +792,29 @@ class AccountsController < ApplicationController
                                 ]
     end
     # -----------------------------------------
+    
+    # 税率用(のselect_box選択用)--view()
+    def tax_rate
+      @tax_rate = %w[対象外
+                     8%
+                     10%
+                    ]
+    end
+    # -----------------------------------------
     # ----------------------------------------------------------------
     
     # ------------------------strong_parameter-----------------------
     def transfer_slip_account_params
       params.require(:account).permit(:accounting_date,
-                                      :customer,
+                                      compound_journals_attributes: [
+                                      :id,
                                       :account_title,
-                                      :individual_amount,
-                                      :account_title_2,
-                                      :individual_amount_2,
-                                      :account_title_3,
-                                      :individual_amount_3,
-                                      :account_title_4,
-                                      :individual_amount_4,
-                                      :account_title_5,
-                                      :individual_amount_5,
-                                      :product_name,
-                                      :quantity,
-                                      :unit_price,
-                                      :subsidiary_journal_species,
-                                      :return_check_box
-                                      )
+                                      :amount,
+                                      :tax_rate,
+                                      :description,
+                                      :sub_account_title,
+                                      :_destroy
+                                      ])
     end
     
     def account_params

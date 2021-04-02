@@ -1,53 +1,66 @@
 <%= provide(:title, '振替伝票入力') %>
 <%= provide(:class_text, 'account--form') %>
-
 <h2>振替伝票入力</h2>
-
 <div>
-  <%= form_with(model: @account, local: true, method: :post) do |f| %>
+  <%= form_with(model: @transfer_account, local: true) do |f| %>
   <%= render 'shared/error_messages', object: f.object %>
     <table class="table table-bordered table-condensed table-hover" id="table-account">
-      <thead>
+      <tbody>
         <tr>
           <th colspan="2"><%= f.label :accounting_date, class: "label-#{yield(:class_text)}" %></th>
           <td colspan="2"><%= f.date_field :accounting_date, required: true, class: "form-control" %></td>
         </tr>
-      </thead>
-      <tbody>
         <tr>
           <th colspan="3">借方</th>
           <th colspan="3">貸方</th>
-          <th><%= f.label :description, class: "label-#{yield(:class_text)}" %></th>
+          <th></th>
+          <th></th>
         </tr>
         <tr>
-          <th>
-            勘定科目
-          </th>
+          <th>勘定科目</th>
           <th>税区分</th>
           <th class="bg-info">金額</th>
           <th>勘定科目</th>
           <th>税区分</th>
           <th class="bg-info">金額</th>
-          <td></td>
+          <th><%= f.label :description, class: "label-#{yield(:class_text)}" %></th>
+          <th></th>
         </tr>
+          <%= f.fields_for :compound_journals do |c_j| %>
+            <%= render 'compound_journal_fields', f: c_j %>
+          <% end %>
+      </tbody>
+    </table>
+    
+    <table class="table table-bordered table-condensed table-hover" id="table-account" style="table-layout:fixed;">
+      <tbody>
         <tr>
-          <div id="transfer-slip-form">
-            <td><%= f.select :account_title, @assets_account_title, {include_blank: true}, required: true, class: "form-control", id: "assets-account-title" %></td>
-            <td><%= f.select :account_title, @assets_account_title, {include_blank: true}, required: true, class: "form-control", id: "assets-account-title" %></td>
-            <td class="bg-info"><%= f.text_field :individual_amount, required: true, placeholder: "入力必須", class: "form-control" %></td>
-            <td><%= f.select :account_title, @assets_account_title, {include_blank: true}, required: true, class: "form-control", id: "assets-account-title" %></td>
-            <td><%= f.select :account_title, @assets_account_title, {include_blank: true}, required: true, class: "form-control", id: "assets-account-title" %></td>
-            <td class="bg-info"><%= f.text_field :individual_amount, required: true, placeholder: "入力必須", class: "form-control" %></td>
-            <td><%= f.text_field :description, class: "form-control" %></td>
-          </div>
-        </tr>
-        <tr>
-          <th colspan="3"></th>
-          <th colspan="3"></th>
-          <td><%= button_to "行追加", "#", class: "btn btn-#{yield(:class_text)}", id: "transfer-slip-add-row" %></td>
+          <th colspan="3" style="width:200px;">借方合計金額</th>
+          <th class="bg-info"><p class="left-message"></p></th>
+          <th colspan="3" style="width:200px;">貸方合計金額</th>
+          <th class="bg-info"><p class="right-message"></p></th>
+          <th><div class="links">
+              <%= link_to_add_association "行追加", f, :compound_journals,
+                  class: 'btn btn-success',
+                  data: {
+                  association_insertion_node: '#table-account',
+                  association_insertion_method: 'append' }
+              %>
+          </div></th>
         </tr>
       </tbody>
     </table>
-    <div><%= f.submit "登録", class: "btn btn-block btn-primary btn-#{yield(:class_text)}" %></div>
+    
+    <table class="table table-condensed caution-balance" id="table-account">
+      <tbody>
+        <tr class="bg-danger">
+          <th><p id="balance"></p></th>
+        </tr>
+      </tbody>
+    </table>
+    
+    <div><%= f.submit "登録", class: "btn btn-block btn-primary submit-btn btn-#{yield(:class_text)}" %></div>
   <% end %>
 </div>
+
+<script src="transfer_slip_new.js"></script>

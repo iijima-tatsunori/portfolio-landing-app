@@ -1,0 +1,11 @@
+<tr class="nested-fields">
+  <%= f.hidden_field :id %>
+  <td class="nested-fields"><%= f.select :account_title, @assets_account_title, {include_blank: true}, required: true, class: "form-control" %></td>
+  <td><%= f.select :tax_rate, @tax_rate, {}, class: "form-control" %></td>
+  <td class="bg-info"><%= f.number_field :amount, min: 0, required: true, placeholder: "入力必須", value: params[:title], class: "left-nested-amount-form form-control" %></td>
+  <td><%= f.select :account_title, @assets_account_title, {include_blank: true}, required: true, class: "form-control" %></td>
+  <td><%= f.select :tax_rate, @tax_rate, {}, class: "form-control" %></td>
+  <td class="bg-info"><%= f.number_field :amount, min: 0, required: true, placeholder: "入力必須", value: params[:title], class: "right-nested-amount-form form-control" %></td>
+  <td><%= f.text_field :description, class: "form-control" %></td>
+  <td><%= link_to_remove_association '削除', f, class: 'btn btn-danger nestedRemoveClass' %></td>
+</tr>

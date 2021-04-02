@@ -1,4 +1,6 @@
 class Account < ApplicationRecord
+  has_many :compound_journals, dependent: :destroy
+  accepts_nested_attributes_for :compound_journals, allow_destroy: true
   
   validate :future_day
   validate :individual_amount_present
@@ -46,8 +48,7 @@ class Account < ApplicationRecord
   validates :accounting_date,            presence: true,
                                          length: { maximum: 30 }
                     
-  validates :account_title,              presence: true,
-                                         length: { maximum: 30 }
+  validates :account_title,              length: { maximum: 30 }
   
   validates :account_title_2,            length: { maximum: 30 }
   
@@ -77,8 +78,7 @@ class Account < ApplicationRecord
                     
   validates :tax_rate,                   length: { maximum: 30 }
                     
-  validates :subsidiary_journal_species, presence: true,
-                                         length: { maximum: 2}
+  validates :subsidiary_journal_species, length: { maximum: 2}
                     
   validates :check_number,               length: { maximum: 30 }
                     

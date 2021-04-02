@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20210308082150) do
+ActiveRecord::Schema.define(version: 20210321093755) do
 
   create_table "accounts", force: :cascade do |t|
     t.date "accounting_date"
@@ -64,6 +64,18 @@ ActiveRecord::Schema.define(version: 20210308082150) do
     t.integer "general_profit_and_loss_balance"
     t.integer "general_capital_stock_balance"
     t.integer "balance_items"
+  end
+
+  create_table "compound_journals", force: :cascade do |t|
+    t.string "account_title"
+    t.integer "amount"
+    t.integer "account_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "tax_rate"
+    t.string "description"
+    t.string "sub_account_title"
+    t.index ["account_id"], name: "index_compound_journals_on_account_id"
   end
 
   create_table "grounds", force: :cascade do |t|

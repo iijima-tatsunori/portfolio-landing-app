@@ -75,3 +75,7 @@ ja:
           credit_amount: 貸方金額
           journal_balance: 残高
           return_check_box: 返品
+          
+        compound_journal:
+          account_title: 勘定科目
+          amount: 金額
