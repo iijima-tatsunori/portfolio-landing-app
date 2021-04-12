@@ -409,7 +409,7 @@ module AccountsHelper
     when 4 then
       edit_account_path(account)
     else
-      root_path
+      ""
     end
   end
   # -----------------------------------------
@@ -425,8 +425,6 @@ module AccountsHelper
       purchasing_show_account_path(account)
     when 4 then
       account_path(account)
-    else
-      root_path
     end
   end
   # -----------------------------------------

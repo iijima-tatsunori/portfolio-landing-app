@@ -37,7 +37,6 @@
 
 <div>
   <table class="table table-bordered table-condensed table-hover" id="table-account">
-    
     <thead>
       <tr>
         <th>日付</th>
@@ -49,9 +48,9 @@
         <th>詳細／編集</th>
       </tr>
     </thead>
-    
     <tbody>
       <% @journal_accounts.each do |account| %>
+      
         <% if @this_month.include?(Date.parse(account[:accounting_date].to_s)) %>
         <% if account.subsidiary_journal_species == 1 %>
           <tr class="success">
@@ -61,14 +60,12 @@
           <tr class="warning">
         <% elsif account.subsidiary_journal_species == 4 %>
           <tr class="danger">
+        <% else %>
+          <tr>
         <% end %>
-        
-          <!--借方勘定科目-->
           <% if account.subsidiary_journal_species == 1 %>
             <td><%= l(account.accounting_date, format: :short) %></td>
             <td><%= account.description %></td>
-            <!---------------->
-            
             <!--現金出納帳 借方勘定科目-->
             <% if account.expense.present? %>
               <td>
@@ -224,12 +221,10 @@
           <% end %>
           <!---------------->
             
-          <!-- 預金出納帳 日付/摘要 -->
+          <!-- 預金出納帳 -->
           <% if account.subsidiary_journal_species == 2 %>
             <td><%= l(account.accounting_date, format: :short) %></td>
             <td><%= account.description %></td>
-            <!---------------->
-            
             <!-- 預金出納帳 借方勘定科目 -->
             <% if account.drawer.present? %>
             <td>
@@ -706,17 +701,30 @@
             <% end %>
             <!---------------->
           <% end %>
-          
+          <% unless account.subsidiary_journal_species == nil %>
             <td>
               <%= link_to journal_species(account.subsidiary_journal_species), show_link(account, account.subsidiary_journal_species), remote: true, class: journal_btn(account.subsidiary_journal_species) %>
               <%= link_to "編集", edit_link(account, account.subsidiary_journal_species), remote: true, class: "btn btn-default" %>
             </td>
-            
+          <% end %>
+          <% account.compound_journals.each do |compound| %>
+            <% if account.subsidiary_journal_species == nil %>
+              <td><%= l(account.accounting_date, format: :short) %></td>
+              <td><%= compound.description %></td>
+              <td><%= compound.account_title %></td>
+              <td><%= compound.amount %></td>
+              <td><%= compound.right_account_title %></td>
+              <td><%= compound.right_amount %></td>
+              
+            <% end %>
+            <td>
+              <%= link_to "編集", transfer_slip_edit_account_path(account), remote: true, class: "btn btn-default" %>
+            </td>
           </tr>
+          <% end %>
         <% end %>
       <% end %>
     </tbody>
-    
   </table>
 </div>
 

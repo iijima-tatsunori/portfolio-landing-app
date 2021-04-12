@@ -34,6 +34,11 @@ Rails.application.routes.draw do
   resources :accounts do
     
     member do
+      # 帳簿（振替伝票）
+      get 'transfer_slip_edit'
+      patch 'transfer_slip_update'
+      delete 'transfer_slip_destroy'
+      
       # 帳簿（仕入帳）
       get 'purchasing_show'
       get 'purchasing_edit'
@@ -54,17 +59,21 @@ Rails.application.routes.draw do
     end
     
     collection do
+      # 帳簿（振替伝票）
       get 'transfer_slip_new'
       post 'transfer_slip_create'
       
+      # 帳簿（仕入帳）
       get 'purchasing_new'
       post 'purchasing_create'
       get 'purchasing_index'
       
+      # 帳簿（現金出納帳）
       get 'cash_new'
       post 'cash_create'
       get 'cash_index'
       
+      # 帳簿（当座預金出納帳）
       get 'current_new'
       post 'current_create'
       get 'current_index'
@@ -85,6 +94,9 @@ Rails.application.routes.draw do
       
     end
     
+     # 複合仕訳（削除）
+    resources :compound_journals, only: :destroy do
+    end
   end
   
   

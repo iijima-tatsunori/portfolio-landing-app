@@ -154,7 +154,16 @@ p {
 
 
 /* 帳簿フォーム */
-
+.compound-journal-form {
+  margin-top: 5px;
+}
+.caution-balance {
+  vertical-align: middle;
+  text-align: center;
+  font-weight: bold;
+  padding: 10px;
+  display: none;
+}
 
 .label-account--form {
   margin-top: 5px;
@@ -169,6 +178,17 @@ p {
 }
 
 #table-account {
+  th {
+    vertical-align: middle;
+    text-align: center;
+  }
+  td {
+    vertical-align: middle;
+    text-align: center;
+  }
+}
+
+#table-account2 {
   th {
     vertical-align: middle;
     text-align: center;

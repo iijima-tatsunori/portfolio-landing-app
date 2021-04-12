@@ -8,6 +8,7 @@ gem 'roo'
 gem 'rounding'
 gem 'nested_form_fields'
 gem "cocoon"
+gem 'select2-rails'
 gem 'will_paginate'
 gem 'bootstrap-will_paginate'
 gem 'rails-i18n'
