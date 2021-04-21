@@ -499,8 +499,20 @@ class ApplicationController < ActionController::Base
     
     # 補助勘定科目用(のselect_box選択用)--view()
     def sub_account_title
-      @sub_account_title = %w[所得税
-                              住民税
+      @sub_account_title = %w[住民税
+                              源泉所得税
+                              介護保険料（事業主負担分）
+                              介護保険料（預り分）
+                              雇用保険料（事業主負担分）
+                              雇用保険料（預り分）
+                              健康保険料（事業主負担分）
+                              健康保険料（預り分）
+                              厚生年金保険料（事業主負担分）
+                              厚生年金保険料（預り分）
+                              基本給
+                              残業代
+                              通勤手当
+                              報酬源泉（毎月）
                               ]
     end
     # -----------------------------------------

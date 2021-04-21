@@ -120,6 +120,7 @@ $(document).on('turbolinks:load', function() {
     // イベント
       leftSum();
       rightSum();
+      amountBalance();
 
       // 初期設定フォームの削除ボタンを隠す。
       $(".nestedRemoveClass").hide();

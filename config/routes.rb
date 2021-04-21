@@ -80,23 +80,23 @@ Rails.application.routes.draw do
       
       # 仕訳帳
       get 'journal_books'
-      # 総勘定元帳
-      get 'general_ledger'
-      get 'purchasing_general_ledger'
-      get 'cash_general_ledger'
-      get 'current_general_ledger'
-      get 'payable_general_ledger'
-      get 'receivable_general_ledger'
       # 貸借対照表
       get 'balance_sheet'
       # 損益計算書
       get 'profit_and_loss_statement'
-      
+      # 総勘定元帳
+      get 'all_general_ledger'
+      get 'master_general_ledger'
+      get 'general_ledger'
+      get 'purchasing_general_ledger'
+      get 'cash_general_ledger'
+      get 'current_general_ledger'
     end
     
+    
      # 複合仕訳（削除）
-    resources :compound_journals, only: :destroy do
-    end
+    # resources :compound_journals, only: :destroy do
+    # end
   end
   
   

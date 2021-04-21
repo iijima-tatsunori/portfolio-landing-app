@@ -707,18 +707,15 @@
               <%= link_to "編集", edit_link(account, account.subsidiary_journal_species), remote: true, class: "btn btn-default" %>
             </td>
           <% end %>
-          <% account.compound_journals.each do |compound| %>
             <% if account.subsidiary_journal_species == nil %>
               <td><%= l(account.accounting_date, format: :short) %></td>
-              <td><%= compound.description %></td>
-              <td><%= compound.account_title %></td>
-              <td><%= compound.amount %></td>
-              <td><%= compound.right_account_title %></td>
-              <td><%= compound.right_amount %></td>
-              
-            <% end %>
+              <td><% account.compound_journals.each do |compound| %><%= compound.description %></br><% end %></td>
+              <td><% account.compound_journals.each do |compound| %><%= compound.account_title %></br><% end %></td>
+              <td><% account.compound_journals.each do |compound| %><%= compound.amount %></br><% end %></td>
+              <td><% account.compound_journals.each do |compound| %><%= compound.right_account_title %></br><% end %></td>
+              <td><% account.compound_journals.each do |compound| %><%= compound.right_amount %></br><% end %></td>
             <td>
-              <%= link_to "編集", transfer_slip_edit_account_path(account), remote: true, class: "btn btn-default" %>
+              <%= link_to "編集", transfer_slip_edit_account_path(account), class: "btn btn-default" %>
             </td>
           </tr>
           <% end %>
