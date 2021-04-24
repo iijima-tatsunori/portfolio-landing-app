@@ -60,13 +60,8 @@
         association_insertion_method: 'append' }
     %>
   </div>
-  
-  
   <div><%= f.submit "登録", class: "btn btn-block btn-primary submit-btn btn-#{yield(:class_text)}" %></div>
-  <div><%= link_to "削除", transfer_slip_destroy_account_path(@account), method: :delete,
-                        data: { confirm: "#{l(@account.accounting_date, format: :long)}のデータを削除してよろしいですか？" },
-                        class: "btn btn-danger" %>
-  </div>
+  
 <% end %>
           
 <script src="transfer_slip_new.js"></script>

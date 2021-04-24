@@ -1,6 +1,5 @@
 module AccountsHelper
   
-  # 総勘定元帳用()---view()
   def tax_rates(tax)
     case tax
     when 0 then
@@ -14,9 +13,7 @@ module AccountsHelper
     end
   end
   
-  # -----------------------------------------
-  
-  # 総勘定元帳一覧用()---view()
+  # 総勘定元帳一覧用(勘定科目)---view()
   def compound_journals_arys
     arys = Array.new
     compound_journals = CompoundJournal.all
@@ -44,6 +41,41 @@ module AccountsHelper
     zero = 0
     ram = 0
     account_titles = CompoundJournal.where(right_account_title: ary)
+    account_titles.each do |bb|
+      ram = zero += bb.right_amount.to_i
+    end
+    ram.to_i
+  end
+  # -----------------------------------------
+  
+  # 総勘定元帳一覧用(補助科目)---view()
+  def sub_compound_journals_arys
+    arys = Array.new
+    compound_journals = CompoundJournal.all
+      compound_journals.each do |compound_journal|
+        arys.push(compound_journal.sub_account_title, compound_journal.right_sub_account_title)
+      end
+    arys
+  end
+  
+  def sub_compound_journals_ary
+    sub_compound_journals_arys.compact.delete_if(&:empty?).uniq
+  end
+  
+  def sub_left_amount(ary)
+    zero = 0
+    lam = 0
+    account_titles = CompoundJournal.where(sub_account_title: ary)
+    account_titles.each do |bb|
+      lam = zero += bb.amount.to_i
+    end
+    lam.to_i
+  end
+  
+  def sub_right_amount(ary)
+    zero = 0
+    ram = 0
+    account_titles = CompoundJournal.where(right_sub_account_title: ary)
     account_titles.each do |bb|
       ram = zero += bb.right_amount.to_i
     end
@@ -172,6 +204,7 @@ module AccountsHelper
     current
   end
   # -----------------------------------------
+  
   # 売上帳合計(amount)用計算処理---コントローラー(create, update, destroy)
   def account_amount_algorithm
     @accounts = Account.where(subsidiary_journal_species: 4).merge(Account.order("accounts.accounting_date ASC")).merge(Account.order("accounts.customer DESC")).merge(Account.order("accounts.return_check_box ASC"))
@@ -551,7 +584,6 @@ module AccountsHelper
     end
   end
   # -----------------------------------------
-  
   
   # (売上)総勘定元帳用()--controller(create, update, destroy)
   def account_amount_sum

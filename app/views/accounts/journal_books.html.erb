@@ -716,6 +716,9 @@
               <td><% account.compound_journals.each do |compound| %><%= compound.right_amount %></br><% end %></td>
             <td>
               <%= link_to "編集", transfer_slip_edit_account_path(account), class: "btn btn-default" %>
+              <%= link_to "削除", transfer_slip_destroy_account_path(account), method: :delete,
+                    data: { confirm: "#{l(account.accounting_date, format: :long)}のデータを削除してよろしいですか？" },
+                    class: "btn btn-danger" %>
             </td>
           </tr>
           <% end %>

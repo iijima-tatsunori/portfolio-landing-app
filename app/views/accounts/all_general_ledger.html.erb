@@ -3,8 +3,34 @@
 <h2><%= l(@first_day, format: :month) %>総勘定元帳一覧</h2>
 
 <div>
+  <!--補助科目-->
   <table class="table table-bordered table-condensed table-hover" id="table-account">
-    
+    <thead>
+      <tr>
+        <th>補助科目名</th>
+        <th></th>
+        <th></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      </th>
+      </tr>
+      <% sub_compound_journals_ary.each do |ary| %>
+      <tr>
+        <td>
+          <%= link_to sub_master_general_ledger_accounts_path(param_account_title: ary) do %>
+            <div><%= ary %></div>
+          <% end %>
+        </td>
+        <td><%= sub_left_amount(ary) %></td>
+        <td><%= sub_right_amount(ary) %></td>
+        <td><%= sub_left_amount(ary).to_i - sub_right_amount(ary).to_i %></td>
+      </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <table class="table table-bordered table-condensed table-hover" id="table-account">
     <thead>
       <tr>
         <th>勘定科目名</th>
@@ -27,6 +53,5 @@
       </tr>
       <% end %>
     </tbody>
-    
   </table>
 </div>

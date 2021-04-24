@@ -38,45 +38,12 @@ Rails.application.routes.draw do
       get 'transfer_slip_edit'
       patch 'transfer_slip_update'
       delete 'transfer_slip_destroy'
-      
-      # 帳簿（仕入帳）
-      get 'purchasing_show'
-      get 'purchasing_edit'
-      patch 'purchasing_update'
-      delete 'purchasing_destroy'
-      
-      # 帳簿（現金出納帳）
-      get 'cash_show'
-      get 'cash_edit'
-      patch 'cash_update'
-      delete 'cash_destroy'
-      
-      # 帳簿（当座預金出納帳）
-      get 'current_show'
-      get 'current_edit'
-      patch 'current_update'
-      delete 'current_destroy'
     end
     
     collection do
       # 帳簿（振替伝票）
       get 'transfer_slip_new'
       post 'transfer_slip_create'
-      
-      # 帳簿（仕入帳）
-      get 'purchasing_new'
-      post 'purchasing_create'
-      get 'purchasing_index'
-      
-      # 帳簿（現金出納帳）
-      get 'cash_new'
-      post 'cash_create'
-      get 'cash_index'
-      
-      # 帳簿（当座預金出納帳）
-      get 'current_new'
-      post 'current_create'
-      get 'current_index'
       
       # 仕訳帳
       get 'journal_books'
@@ -87,10 +54,7 @@ Rails.application.routes.draw do
       # 総勘定元帳
       get 'all_general_ledger'
       get 'master_general_ledger'
-      get 'general_ledger'
-      get 'purchasing_general_ledger'
-      get 'cash_general_ledger'
-      get 'current_general_ledger'
+      get 'sub_master_general_ledger'
     end
     
     

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20210404114944) do
+ActiveRecord::Schema.define(version: 20210421135941) do
 
   create_table "accounts", force: :cascade do |t|
     t.date "accounting_date"
@@ -79,6 +79,7 @@ ActiveRecord::Schema.define(version: 20210404114944) do
     t.integer "right_tax_rate"
     t.string "right_sub_account_title"
     t.integer "right_amount"
+    t.date "compound_accounting_date"
     t.index ["account_id"], name: "index_compound_journals_on_account_id"
   end
 
