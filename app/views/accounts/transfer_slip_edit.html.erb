@@ -33,16 +33,16 @@
       <%= f.fields_for :compound_journals do |c_j| %>
         <tr>
           <td>
-            <div><%= c_j.select :account_title, @transfer_slip_account_title, {include_blank: true}, class: "form-control js-searchable" %></div>
-            <div class="compound-journal-form"><%= c_j.select :sub_account_title, @sub_account_title, {include_blank: true}, class: "form-control js-searchable" %></div>
+            <div><%= c_j.select :account_title, @transfer_slip_account_titles, {include_blank: true}, class: "form-control js-searchable" %></div>
+            <div class="compound-journal-form"><%= c_j.select :sub_account_title, @sub_account_titles, {include_blank: true}, class: "form-control js-searchable" %></div>
           </td>
-          <td><%= c_j.select :tax_rate, @tax_rate, {}, class: "form-control" %></td>
+          <td><%= c_j.select :tax_rate, @tax_rate_arys, {}, class: "form-control" %></td>
           <td class="bg-info"><%= c_j.number_field :amount, min: 0, class: "left-nested-amount-form form-control" %></td>
           <td>
-            <div><%= c_j.select :right_account_title, @transfer_slip_account_title, {include_blank: true}, class: "form-control js-searchable" %></div>
-            <div class="compound-journal-form"><%= c_j.select :right_sub_account_title, @sub_account_title, {include_blank: true}, class: "form-control js-searchable" %></div>
+            <div><%= c_j.select :right_account_title, @transfer_slip_account_titles, {include_blank: true}, class: "form-control js-searchable" %></div>
+            <div class="compound-journal-form"><%= c_j.select :right_sub_account_title, @sub_account_titles, {include_blank: true}, class: "form-control js-searchable" %></div>
           </td>
-          <td><%= c_j.select :right_tax_rate, @tax_rate, {}, class: "form-control" %></td>
+          <td><%= c_j.select :right_tax_rate, @tax_rate_arys, {}, class: "form-control" %></td>
           <td class="bg-info"><%= c_j.number_field :right_amount, min: 0, class: "right-nested-amount-form form-control" %></td>
           <td><%= c_j.text_field :description, class: "form-control" %></td>
         </tr>

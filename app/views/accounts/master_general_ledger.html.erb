@@ -1,37 +1,37 @@
 <%= provide(:title, "総勘定元帳(#{@param_account_title})") %>
 
-<h2>総勘定元帳【<%= @param_account_title %>】</h2>
+<h2><%= l(@first_day, format: :month) %>総勘定元帳【<%= @param_account_title %>】</h2>
 
 <div class="btn-users-show">
   <% unless @first_day <= @general_ledger_accounts.first.accounting_date %>
-    <%= link_to "⇦ 月", master_general_ledger_accounts_path(accounting_date: @first_day.prev_month), class: "btn btn-info" %>
+    <%= link_to "⇦ 月", master_general_ledger_accounts_path(accounting_date: @first_day.prev_month, param_account_title: @param_account_title), class: "btn btn-info" %>
   <% else %>
-    <%= link_to "⇦ 月", master_general_ledger_accounts_path(accounting_date: @first_day.prev_month), class: "btn btn-info disabled" %>
+    <%= link_to "⇦ 月", master_general_ledger_accounts_path(accounting_date: @first_day.prev_month, param_account_title: @param_account_title), class: "btn btn-info disabled" %>
   <% end %>
   <% unless @first_day >= @today.beginning_of_month %>
-    <%= link_to "月 ⇨", master_general_ledger_accounts_path(accounting_date: @first_day.next_month), class: "btn btn-info" %>
+    <%= link_to "月 ⇨", master_general_ledger_accounts_path(accounting_date: @first_day.next_month, param_account_title: @param_account_title), class: "btn btn-info" %>
   <% else %>
-    <%= link_to "月 ⇨", master_general_ledger_accounts_path(accounting_date: @first_day.next_month), class: "btn btn-info disabled" %>
+    <%= link_to "月 ⇨", master_general_ledger_accounts_path(accounting_date: @first_day.next_month, param_account_title: @param_account_title), class: "btn btn-info disabled" %>
   <% end %>
   <% unless @first_day.prev_year <= @general_ledger_accounts.first.accounting_date %>
-    <%= link_to "⇦ 年", master_general_ledger_accounts_path(accounting_date: @first_day.prev_year), class: "btn btn-success" %>
+    <%= link_to "⇦ 年", master_general_ledger_accounts_path(accounting_date: @first_day.prev_year, param_account_title: @param_account_title), class: "btn btn-success" %>
   <% else %>
-    <%= link_to "⇦ 年", master_general_ledger_accounts_path(accounting_date: @first_day.prev_year), class: "btn btn-success disabled" %>
+    <%= link_to "⇦ 年", master_general_ledger_accounts_path(accounting_date: @first_day.prev_year, param_account_title: @param_account_title), class: "btn btn-success disabled" %>
   <% end %>
   <% unless @first_day.next_year >= @today %>
-    <%= link_to "年 ⇨", master_general_ledger_accounts_path(accounting_date: @first_day.next_year), class: "btn btn-success" %>
+    <%= link_to "年 ⇨", master_general_ledger_accounts_path(accounting_date: @first_day.next_year, param_account_title: @param_account_title), class: "btn btn-success" %>
   <% else %>
-    <%= link_to "年 ⇨", master_general_ledger_accounts_path(accounting_date: @first_day.next_year), class: "btn btn-success disabled" %>
+    <%= link_to "年 ⇨", master_general_ledger_accounts_path(accounting_date: @first_day.next_year, param_account_title: @param_account_title), class: "btn btn-success disabled" %>
   <% end %>
   <% unless @first_day <= @general_ledger_accounts.first.accounting_date %>
-    <%= link_to "⇦ 先頭", master_general_ledger_accounts_path(accounting_date: @general_ledger_accounts.first.accounting_date.beginning_of_month), class: "btn btn-danger" %>
+    <%= link_to "⇦ 先頭", master_general_ledger_accounts_path(accounting_date: @general_ledger_accounts.first.accounting_date.beginning_of_month, param_account_title: @param_account_title), class: "btn btn-danger" %>
   <% else %>
-    <%= link_to "⇦ 先頭", master_general_ledger_accounts_path(accounting_date: @general_ledger_accounts.first.accounting_date.beginning_of_month), class: "btn btn-danger disabled" %>
+    <%= link_to "⇦ 先頭", master_general_ledger_accounts_path(accounting_date: @general_ledger_accounts.first.accounting_date.beginning_of_month, param_account_title: @param_account_title), class: "btn btn-danger disabled" %>
   <% end %>
   <% unless @first_day >= @general_ledger_accounts.last.accounting_date.beginning_of_month %>
-    <%= link_to "末尾 ⇨", master_general_ledger_accounts_path(accounting_date: @general_ledger_accounts.last.accounting_date.beginning_of_month), class: "btn btn-danger" %>
+    <%= link_to "末尾 ⇨", master_general_ledger_accounts_path(accounting_date: @general_ledger_accounts.last.accounting_date.beginning_of_month, param_account_title: @param_account_title), class: "btn btn-danger" %>
   <% else %>
-    <%= link_to "末尾 ⇨", master_general_ledger_accounts_path(accounting_date: @general_ledger_accounts.last.accounting_date.beginning_of_month), class: "btn btn-danger disabled" %>
+    <%= link_to "末尾 ⇨", master_general_ledger_accounts_path(accounting_date: @general_ledger_accounts.last.accounting_date.beginning_of_month, param_account_title: @param_account_title), class: "btn btn-danger disabled" %>
   <% end %>
 </div>
 <div>
@@ -48,47 +48,16 @@
         <th>残高</th>
         <th>仕訳帳</th>
       </tr>
-      <% if @credit_amount.present? || @debit_amount.present? %>
-        <tr class="bg-success">
-          <td></td>
-          <% unless @amount_carried_forward.last.nil? %>
-            <td>前月より繰越</td>
-          <% else %>
-            <td>預金残高</td>
-          <% end %>
-          <!--借方繰越残高-->
-          <% if @amount_carried_forward.last.present? %>
-            <% if @amount_carried_forward.last.current_balance > 0 %>
-              <td><%= @amount_carried_forward.last.current_balance.abs %></td>
-            <% else %>
-              <td></td>
-            <% end %>
-          <% elsif @current_initial_deposit > 0 %>
-            <td><%= @current_initial_deposit.abs %></td>
-          <% else %>
-            <td></td>
-          <% end %>
-          <!-------->
-          <td></td>
-          <!--貸方繰越残高-->
-          <% if @amount_carried_forward.last.present? %>
-            <% if @amount_carried_forward.last.current_balance < 0 %>
-              <td><%= @amount_carried_forward.last.current_balance.abs %></td>
-            <% else %>
-              <td></td>
-            <% end %>
-          <% elsif @current_initial_deposit < 0 %>
-            <td><%= @current_initial_deposit.abs %></td>
-          <% else %>
-            <td></td>
-          <% end %>
-          <!-------->
-          <td></td>
-        </tr>
-      <% end %>
+      <tr class="bg-success">
+        <td colspan="6"></td>
+        <td>前月より繰越</td>
+        <td><%= carried_forward_balance %></td>
+        <td></td>
+      </tr>
     </thead>
     <tbody>
-      <% balance = 0 %>
+      
+      <% @general_ledger_balance = @carried_forward_balance %>
       <% @general_ledger_accounts.each do |account| %>
       <% if @this_month.include?(Date.parse(account[:accounting_date].to_s)) %>
         <tr>
@@ -110,7 +79,7 @@
               <% if compound_journal.account_title == @param_account_title %>
                 <%= tax_rates(compound_journal.tax_rate) %></br>
               <% elsif compound_journal.right_account_title == @param_account_title %>
-                <%= tax_rates(compound_journal.tax_rate) %></br>
+                <%= tax_rates(compound_journal.right_tax_rate) %></br>
               <% else %>
               <% end %>
             <% end %>
@@ -157,11 +126,9 @@
           <td>
             <% account.compound_journals.each do |compound_journal| %>
               <% if compound_journal.account_title == @param_account_title %>
-                <% balance += compound_journal.amount.to_i %>
-                <%= balance %></br>
+                <%= general_ledger_balance(compound_journal) %></br>
               <% elsif compound_journal.right_account_title == @param_account_title %>
-                <% balance -= compound_journal.right_amount.to_i %>
-                <%= balance %></br>
+                <%= right_general_ledger_balance(compound_journal) %></br>
               <% end %>
             <% end %>
           </td>
@@ -174,101 +141,13 @@
       <% end %>
       <% end %>
     </tbody>
-    <% if @credit_amount.present? || @debit_amount.present? %>
-      <tfoot>
-        <tr class="bg-danger">
-          <td><%= l(@last_day, format: :short) %></td>
-          <td>次月繰越</td>
-          <!--借方繰越残高-->
-          <% if @this_month_last_balance.last.present? %>
-            <% if @this_month_last_balance.last.current_balance < 0 %>
-              <td><%= @this_month_last_balance.last.current_balance.abs %></td>
-            <% else %>
-              <td></td>
-            <% end %>
-          <% else %>
-            <td></td>
-          <% end %>
-          <!-------->
-          <td></td>
-          <!--貸方繰越残高-->
-          <% if @this_month_last_balance.last.present? %>
-            <% if @this_month_last_balance.last.current_balance > 0 %>
-              <td><%= @this_month_last_balance.last.current_balance.abs %></td>
-            <% else %>
-              <td></td>
-            <% end %>
-          <% else %>
-            <td></td>
-          <% end %>
-          <!-------->
-          <td></td>
-        </tr>
-        <tr class="bg-success">
-          <td></td>
-          <td>借方合計</td>
-          <% if @debit_amount.nil? %>
-            <% if @amount_carried_forward.last.present? %>
-              <% if @amount_carried_forward.last.current_balance > 0 %>
-                <% if @this_month_last_balance.last.current_balance < 0 %>
-                  <td><%= @this_month_last_balance.last.current_balance.abs + @amount_carried_forward.last.current_balance.abs %></td>
-                <% else %>
-                  <td><%= @amount_carried_forward.last.current_balance.abs %></td>
-                <% end %>
-              <% else %>
-                <td><%= @this_month_last_balance.last.current_balance.abs %></td>
-              <% end %>
-            <% else %>
-              <% if @this_month_last_balance.last.current_balance > 0 %>
-                <% if @current_initial_deposit < 0 %>
-                  <td><%= @current_initial_deposit.abs + @this_month_last_balance.last.current_balance.abs %></td>
-                <% else %>
-                  <td><%= @this_month_last_balance.last.current_balance.abs %></td>
-                <% end %>
-              <% else %>
-                <% if @current_initial_deposit > 0 %>
-                  <td><%= @this_month_last_balance.last.current_balance.abs %></td>
-                <% else %>
-                  <td><%= @current_initial_deposit.abs + @this_month_last_balance.last.current_balance.abs %></td>
-                <% end %>
-              <% end %>
-            <% end %>
-          <% else %>
-            <td><%= @debit_amount.abs %></td>
-          <% end %>
-          <td>貸方合計</td>
-          <% if @credit_amount.nil? %>
-            <% if @amount_carried_forward.last.present? %>
-              <% if @amount_carried_forward.last.current_balance < 0 %>
-                <% if @this_month_last_balance.last.current_balance > 0 %>
-                  <td><%= @this_month_last_balance.last.current_balance.abs + @amount_carried_forward.last.current_balance.abs %></td>
-                <% else %>
-                  <td><%= @amount_carried_forward.last.current_balance.abs %></td>
-                <% end %>
-              <% else %>
-                <td><%= @this_month_last_balance.last.current_balance.abs %></td>
-              <% end %>
-            <% else %>
-              <% if @this_month_last_balance.last.current_balance < 0 %>
-                <% if @current_initial_deposit < 0 %>
-                  <td><%= @current_initial_deposit.abs + @this_month_last_balance.last.current_balance.abs %></td>
-                <% else %>
-                  <td><%= @this_month_last_balance.last.current_balance.abs %></td>
-                <% end %>
-              <% else %>
-                <% if @current_initial_deposit > 0 %>
-                  <td><%= @this_month_last_balance.last.current_balance.abs %></td>
-                <% else %>
-                  <td><%= @current_initial_deposit.abs + @this_month_last_balance.last.current_balance.abs %></td>
-                <% end %>
-              <% end %>
-            <% end %>
-          <% else %>
-            <td><%= @credit_amount.abs %></td>
-          <% end %>
-          <td></td>
-        </tr>
-      </tfoot>
-    <% end %>
+    <tfoot>
+    <tr class="bg-danger">
+      <td colspan="6"></td>
+      <td>次月繰越</td>
+      <td><%= this_month_last_balance %></td>
+      <td></td>
+    </tr>
+    </tfoot>
   </table>
 </div>

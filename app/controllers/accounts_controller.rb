@@ -1,44 +1,27 @@
 class AccountsController < ApplicationController
-  before_action :set_account, only: [:show, :edit, :update, :destroy,
-                                     :purchasing_show, :purchasing_edit, :purchasing_update, :purchasing_destroy,
-                                     :cash_show, :cash_edit, :cash_update, :cash_destroy,
-                                     :current_show, :current_edit, :current_update, :current_destroy,
-                                     :transfer_slip_edit, :transfer_slip_update, :transfer_slip_destroy]
+  require 'csv'
+  before_action :set_account, only: [:transfer_slip_edit, :transfer_slip_update, :transfer_slip_destroy]
   
-  before_action :logged_in_user, only: [:new, :create, :show, :index, :edit, :update, :destroy,
-                                        :purchasing_new, :purchasing_create, :purchasing_show, :purchasing_index, :purchasing_edit, :purchasing_update, :purchasing_destroy,
-                                        :cash_new, :cash_create, :cash_show, :cash_index, :cash_edit, :cash_update, :cash_destroy,
-                                        :current_new, :current_create, :current_show, :current_index, :current_edit, :current_update, :current_destroy,
-                                        :all_general_ledger, :master_general_ledger, :sub_master_general_ledger,
-                                        :general_ledger, :purchasing_general_ledger, :cash_general_ledger, :current_general_ledger,
-                                        :journal_books, :profit_and_loss_statement, :balance_sheet,
+  before_action :set_accounts, only: [:journal_books, :balance_sheet, :profit_and_loss_statement]
+  
+  before_action :logged_in_user, only: [:all_general_ledger, :master_general_ledger, :sub_master_general_ledger,
+                                        :journal_books, :balance_sheet, :profit_and_loss_statement,
                                         :transfer_slip_new, :transfer_slip_create, :transfer_slip_edit, :transfer_slip_update, :transfer_slip_destroy]
                                         
-  before_action :admin_and_accounting_user, only: [:new, :create, :show, :index, :edit, :update, :destroy,
-                                                   :purchasing_new, :purchasing_create, :purchasing_show, :purchasing_index, :purchasing_edit, :purchasing_update, :purchasing_destroy,
-                                                   :cash_new, :cash_create, :cash_show, :cash_index, :cash_edit, :cash_update, :cash_destroy,
-                                                   :current_new, :current_create, :current_show, :current_index, :current_edit, :current_update, :current_destroy,
-                                                   :all_general_ledger, :master_general_ledger, :sub_master_general_ledger,
-                                                   :general_ledger, :purchasing_general_ledger, :cash_general_ledger, :current_general_ledger,
-                                                   :journal_books, :profit_and_loss_statement, :balance_sheet,
+  before_action :admin_and_accounting_user, only: [:all_general_ledger, :master_general_ledger, :sub_master_general_ledger,
+                                                   :journal_books, :balance_sheet, :profit_and_loss_statement,
                                                    :transfer_slip_new, :transfer_slip_create, :transfer_slip_edit, :transfer_slip_update, :transfer_slip_destroy]
   
-  before_action :set_one_month, only: [:new, :create, :show, :index, :edit, :update, :destroy,
-                                       :purchasing_new, :purchasing_create, :purchasing_show, :purchasing_index, :purchasing_edit, :purchasing_update, :purchasing_destroy,
-                                       :cash_new, :cash_create, :cash_show, :cash_index, :cash_edit, :cash_update, :cash_destroy,
-                                       :current_new, :current_create, :current_show, :current_index, :current_edit, :current_update, :current_destroy,
-                                       :all_general_ledger, :master_general_ledger, :sub_master_general_ledger,
-                                       :general_ledger, :purchasing_general_ledger, :cash_general_ledger, :current_general_ledger,
-                                       :journal_books, :profit_and_loss_statement, :balance_sheet,
+  before_action :set_one_month, only: [:all_general_ledger, :master_general_ledger, :sub_master_general_ledger,
+                                       :journal_books, :balance_sheet, :profit_and_loss_statement,
                                        :transfer_slip_new, :transfer_slip_create, :transfer_slip_edit, :transfer_slip_update, :transfer_slip_destroy]
                                        
-  before_action :transfer_slip_account_title, only: [:transfer_slip_new, :transfer_slip_create, :transfer_slip_edit]
-  before_action :assets_account_title, only: [:transfer_slip_new, :transfer_slip_create, :transfer_slip_edit, :transfer_slip_update, :transfer_slip_destroy]
-  before_action :liabilities_account_title, only: [:transfer_slip_new, :transfer_slip_create, :transfer_slip_edit, :transfer_slip_update, :transfer_slip_destroy]
-  before_action :cost_account_title, only: [:transfer_slip_new, :transfer_slip_create, :transfer_slip_edit, :transfer_slip_update, :transfer_slip_destroy]
-  before_action :revenue_account_title, only: [:transfer_slip_new, :transfer_slip_create, :transfer_slip_edit, :transfer_slip_update, :transfer_slip_destroy]
-  before_action :tax_rate, only: [:transfer_slip_new, :transfer_slip_create, :transfer_slip_edit, :transfer_slip_update, :transfer_slip_destroy]
-  before_action :sub_account_title, only: [:transfer_slip_new, :transfer_slip_create, :transfer_slip_edit, :transfer_slip_update, :transfer_slip_destroy]
+  before_action :transfer_slip_account_titles, only: [:transfer_slip_new, :transfer_slip_create, :transfer_slip_edit]
+  before_action :tax_rate_arys, only: [:transfer_slip_new, :transfer_slip_create, :transfer_slip_edit, :transfer_slip_update, :transfer_slip_destroy]
+  before_action :sub_account_titles, only: [:transfer_slip_new, :transfer_slip_create, :transfer_slip_edit, :transfer_slip_update, :transfer_slip_destroy]
+  
+  before_action :left_account_titles, only: :all_general_ledger
+  before_action :right_account_titles, only: :all_general_ledger
   
   # --------------------------振替伝票作成-------------------------
   def transfer_slip_new
@@ -78,67 +61,51 @@ class AccountsController < ApplicationController
   end
   # -------------------------------------------------------------
   
+  # --------------------------仕訳帳--------------------------------
+  def journal_books
+  end
+  
+  def csv_journal_books
+    @ary_date = params[:first].to_date..params[:last].to_date
+    @csv_accounts = Account.includes(:compound_journals).where(accounting_date: @ary_date).merge(Account.order("accounts.accounting_date ASC"))
+    respond_to do |format|
+      format.html
+      format.csv do |csv|
+        send_accounts_csv(@csv_accounts)
+      end
+    end
+  end
+  # ----------------------------------------------------------------
+
   # --------------------------総勘定元帳----------------------------
   def all_general_ledger
   end
   
   def master_general_ledger
+    @carried_forward_balance = 0
+    @this_month_last_balance = 0
     @param_account_title = params[:param_account_title]
     @general_ledger_accounts = Account.joins(:compound_journals).where(compound_journals: {account_title: @param_account_title}).or(Account.joins(:compound_journals).where(compound_journals: {right_account_title: @param_account_title})).distinct.merge(Account.order("accounts.accounting_date ASC"))
-    @amount_carried_forward = @general_ledger_accounts.select do |c_a|
-      c_a.accounting_date < @first_day
-    end
-    @this_month_last_balance = @general_ledger_accounts.select do |c_a|
-      c_a.accounting_date <= @last_day
-    end
   end
   
   def sub_master_general_ledger
+    @sub_carried_forward_balance = 0
+    @sub_this_month_last_balance = 0
     @param_account_title = params[:param_account_title]
     @general_ledger_accounts = Account.joins(:compound_journals).where(compound_journals: {sub_account_title: @param_account_title}).or(Account.joins(:compound_journals).where(compound_journals: {right_sub_account_title: @param_account_title})).distinct.merge(Account.order("accounts.accounting_date ASC"))
-    @amount_carried_forward = @general_ledger_accounts.select do |c_a|
-      c_a.accounting_date < @first_day
-    end
-    @this_month_last_balance = @general_ledger_accounts.select do |c_a|
-      c_a.accounting_date <= @last_day
-    end
   end
   # ----------------------------------------------------------------
   
-  # --------------------------仕訳帳--------------------------------
-  def journal_books
-    @journal_accounts = Account.includes(:compound_journals).merge(Account.order("accounts.accounting_date ASC")).merge(Account.order("accounts.subsidiary_journal_species ASC"))
+  def csv
   end
-  # ----------------------------------------------------------------
-
- # --------------------------損益計算書--------------------------------
-  def profit_and_loss_statement
-    @accounts = Account.where(subsidiary_journal_species: 4).merge(Account.order("accounts.accounting_date ASC")).merge(Account.order("accounts.subsidiary_journal_species ASC"))
-    @this_year_first_balance = @accounts.select do |c_a|
-      c_a.accounting_date >= @this_year.first
-    end
-    @this_year_last_balance = @accounts.select do |c_a|
-      c_a.accounting_date <= @this_year.last
-    end
-    
-    @purchasing_accounts = Account.where(subsidiary_journal_species: 3).merge(Account.order("accounts.accounting_date ASC")).merge(Account.order("accounts.subsidiary_journal_species ASC"))
-    @this_year_first_purchasing_balance = @purchasing_accounts.select do |c_a|
-      c_a.accounting_date >= @this_year.first
-    end
-    @this_year_last_purchasing_balance = @purchasing_accounts.select do |c_a|
-      c_a.accounting_date <= @this_year.last
-    end
-    
-    @profit_and_loss_statement_accounts = Account.where(accounting_date: @first_day.all_year).merge(Account.order("accounts.accounting_date ASC")).merge(Account.order("accounts.subsidiary_journal_species ASC"))
-    
-  end
-  # ----------------------------------------------------------------
-
- # --------------------------貸借対照表--------------------------------
+  
+  # --------------------------貸借対照表--------------------------------
   def balance_sheet
-    @balance_sheet_accounts = Account.all.merge(Account.order("accounts.accounting_date ASC")).merge(Account.order("accounts.subsidiary_journal_species ASC"))
-    @cash_accounts = Account.where("account_title = '現金'").or(Account.where("account_title_2 = '現金'")).or(Account.where("account_title_3 = '現金'")).or(Account.where("account_title_4 = '現金'").where("account_title_5 = '現金'")).or(Account.where(subsidiary_journal_species: 1)).merge(Account.order("accounts.accounting_date ASC")).merge(Account.order("accounts.subsidiary_journal_species ASC"))
-    @current_accounts = Account.where("account_title = '預金'").or(Account.where("account_title_2 = '預金'")).or(Account.where("account_title_3 = '預金'")).or(Account.where("account_title_4 = '預金'").where("account_title_5 = '預金'")).or(Account.where(subsidiary_journal_species: 2)).merge(Account.order("accounts.accounting_date ASC")).merge(Account.order("accounts.subsidiary_journal_species ASC"))
+  end
+  # ----------------------------------------------------------------
+  
+  # --------------------------損益計算書--------------------------------
+  def profit_and_loss_statement
   end
   # ----------------------------------------------------------------
 
@@ -162,4 +129,26 @@ class AccountsController < ApplicationController
     end
     # --------------------------------------------------------------
 
+    # ------------------------仕訳帳CSV出力-----------------------
+    def send_accounts_csv(accounts)
+      csv_data = CSV.generate do |csv|
+        column_names = %w(日付 摘要 勘定科目 借方金額 勘定科目 貸方金額)
+        csv << column_names
+        accounts.each do |account|
+          account.compound_journals.each do |compound_journal|
+            column_values = [
+              account.accounting_date,
+              compound_journal.description,
+              compound_journal.account_title,
+              compound_journal.amount,
+              compound_journal.right_account_title,
+              compound_journal.right_amount
+            ]
+          
+          csv << column_values
+        end
+        end
+      end
+      send_data(csv_data, filename: "#{l(Date.current, format: :long)}CSV出力、仕訳帳一覧.csv")
+    end
 end

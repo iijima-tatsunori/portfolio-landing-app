@@ -1,0 +1,9 @@
+<div class="btn-spacing row">
+  <div class="col-sm-3 col-lg-3">出力するデータの開始日<input type="date" id="first" class="form-control"></div>
+  <div class="col-sm-3 col-lg-3">出力するデータの終了日<input type="date" id="last" class="form-control"></div>
+</div>
+<div class="btn-spacing">
+  <%= button_tag type: 'button', onclick: "link_to('#{csv_journal_books_accounts_path(format: :csv)}')" do %>
+   <%= '帳簿データをCSV形式で出力する' %>
+  <% end %>
+</div>

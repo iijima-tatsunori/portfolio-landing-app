@@ -47,24 +47,21 @@ Rails.application.routes.draw do
       
       # 仕訳帳
       get 'journal_books'
-      # 貸借対照表
-      get 'balance_sheet'
-      # 損益計算書
-      get 'profit_and_loss_statement'
+      get 'csv_journal_books'
       # 総勘定元帳
       get 'all_general_ledger'
       get 'master_general_ledger'
       get 'sub_master_general_ledger'
+      # csv出力
+      get 'csv'
+      
+      # 貸借対照表
+      get 'balance_sheet'
+      # 損益計算書
+      get 'profit_and_loss_statement'
+      
     end
     
-    
-     # 複合仕訳（削除）
-    # resources :compound_journals, only: :destroy do
-    # end
   end
-  
-  
-  
-  
   
 end

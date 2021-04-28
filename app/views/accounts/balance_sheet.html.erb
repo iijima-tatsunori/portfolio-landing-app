@@ -23,11 +23,11 @@
       </tr>
       <tr>
         <td>現金</td>
-        <td><%= @cash_accounts.last.balance %></td>
+        <td><%=  %></td>
       </tr>
       <tr>
         <td>普通預金</td>
-        <td><%= @current_accounts.last.current_balance %></td>
+        <td><%=  %></td>
       </tr>
       <tr>
         <td>普通預金２</td>
@@ -47,7 +47,7 @@
       </tr>
       <tr class="bg-success">
         <td>現金・預金計</td>
-        <td><%= @cash_accounts.last.balance + @current_accounts.last.current_balance %></td>
+        <td><%=  %></td>
       </tr>
       <tr>
         <td>【 売上債権 】</td>
@@ -107,7 +107,7 @@
       </tr>
       <tr class="bg-info">
         <td>流動資産　合計</td>
-        <td><%= @cash_accounts.last.balance + @current_accounts.last.current_balance %></td>
+        <td><%=  %></td>
       </tr>
       <tr>
         <td>【 固定資産 】</td>
@@ -171,7 +171,7 @@
       </tr>
       <tr class="bg-danger">
         <td>資産　合計</td>
-        <td><%= @cash_accounts.last.balance + @current_accounts.last.current_balance %></td>
+        <td><%=  %></td>
       </tr>
     </tbody>
     <tfoot>

@@ -2,12 +2,6 @@ class Landing < ApplicationRecord
   belongs_to :ground
   
   
-  
-  
-  
-  
-  
-  
   scope :search, -> (search_params) do
     return if search_params.blank?
 
@@ -18,15 +12,6 @@ class Landing < ApplicationRecord
   scope :landing_date_is, -> (landing_date) { where(landing_date: landing_date) if landing_date.present? }
   scope :landing_fishing_ground_name_is, -> (landing_fishing_ground_name) { where(landing_fishing_ground_name: landing_fishing_ground_name) if landing_fishing_ground_name.present? }
   scope :ground_id_is, -> (ground_id) { where(ground_id: ground_id) if ground_id.present? }
-  
-  
-  
-  
-  
-  
-  
-  
-  
   
   
   

@@ -2,7 +2,7 @@
 <%= provide(:class_text, 'account--form') %>
 <h2>振替伝票入力</h2>
 <div>
-  <%= form_with(model: @account, url: transfer_slip_create_accounts_path, load: true, method: :post) do |f| %>
+  <%= form_with(model: @account, url: transfer_slip_create_accounts_path, local: true, method: :post) do |f| %>
   <%= render 'shared/error_messages', object: f.object %>
     <table class="table table-bordered table-condensed table-hover" id="table-account">
       <tbody>
