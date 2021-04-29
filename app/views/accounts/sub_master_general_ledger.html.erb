@@ -50,7 +50,7 @@
       <tr class="bg-success">
         <td colspan="4"></td>
         <td>前月より繰越</td>
-        <td><%= sub_carried_forward_balance %></td>
+        <td><%= "#{sub_carried_forward_balance.to_s(:delimited)}円" %></td>
         <td></td>
       </tr>
     </thead>
@@ -86,7 +86,7 @@
           <td>
             <% account.compound_journals.each do |compound_journal| %>
               <% if compound_journal.account_title == @param_account_title %>
-                <%= compound_journal.amount %></br>
+                <%= "#{(compound_journal.amount.to_i).to_s(:delimited)}円" %></br>
               <% end %>
             <% end %>
           </td>
@@ -94,7 +94,7 @@
           <td>
             <% account.compound_journals.each do |compound_journal| %>
               <% if compound_journal.right_sub_account_title == @param_account_title %>
-                <%= compound_journal.right_amount %></br>
+                <%= "#{(compound_journal.right_amount.to_i).to_s(:delimited)}円" %></br>
               <% end %>
             <% end %>
           </td>
@@ -102,9 +102,9 @@
           <td>
             <% account.compound_journals.each do |compound_journal| %>
               <% if compound_journal.sub_account_title == @param_account_title %>
-                <%= sub_general_ledger_balance(compound_journal) %></br>
+                <%= "#{sub_general_ledger_balance(compound_journal).to_s(:delimited)}円" %></br>
               <% elsif compound_journal.right_sub_account_title == @param_account_title %>
-                <%= sub_right_general_ledger_balance(compound_journal) %></br>
+                <%= "#{sub_right_general_ledger_balance(compound_journal).to_s(:delimited)}円" %></br>
               <% end %>
             <% end %>
           </td>
@@ -121,7 +121,7 @@
       <tr class="bg-danger">
         <td colspan="4"></td>
         <td>次月繰越</td>
-        <td><%= sub_this_month_last_balance %></td>
+        <td><%= "#{sub_this_month_last_balance.to_s(:delimited)}円" %></td>
         <td></td>
       </tr>
       </tfoot>

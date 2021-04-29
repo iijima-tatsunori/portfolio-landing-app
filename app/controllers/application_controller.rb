@@ -135,13 +135,14 @@ class ApplicationController < ActionController::Base
                                         利益準備金
                                         別途積立金
                                         繰越利益剰余金
-                                        売上値引高
+                                        売上割引
                                         外注加工費
                                         期首商品棚卸高
                                         期首製品棚卸高
-                                        仕入高
+                                        仕入
                                         利子割引料
                                         雑損失
+                                        火災損失
                                         前期利益修正損
                                         固定資産売却損
                                         法人税･住民税及び事業税
@@ -178,15 +179,20 @@ class ApplicationController < ActionController::Base
                                         賃借料
                                         支払手数料
                                         支払利息
+                                        社債利息
+                                        有価証券評価損
                                         貸倒金
                                         減価償却費
                                         研究開発費
                                         寄附金
                                         雑費
-                                        売上高
-                                        仕入値引高
+                                        売上
+                                        仕入値引
                                         期末商品棚卸高
                                         受取利息
+                                        有価証券利息
+                                        有価証券売却益
+                                        受取配当金
                                         雑収入
                                         営業外利益
                                         前期利益修正益
@@ -235,13 +241,14 @@ class ApplicationController < ActionController::Base
                                 開業費
                                 元入金
                                 事業主貸
-                                売上値引高
+                                売上割引
                                 外注加工費
                                 期首商品棚卸高
                                 期首製品棚卸高
-                                仕入高
+                                仕入
                                 利子割引料
                                 雑損失
+                                火災損失
                                 前期利益修正損
                                 固定資産売却損
                                 法人税･住民税及び事業税
@@ -278,6 +285,8 @@ class ApplicationController < ActionController::Base
                                 賃借料
                                 支払手数料
                                 支払利息
+                                社債利息
+                                有価証券評価損
                                 貸倒金
                                 減価償却費
                                 研究開発費
@@ -306,17 +315,18 @@ class ApplicationController < ActionController::Base
                                 未払事業税等
                                 未払消費税等
                                 長期借入金
-                                貸倒金
-                                --純資産--
                                 資本金
                                 資本準備金
                                 利益準備金
                                 別途積立金
                                 繰越利益剰余金
-                                売上高
-                                仕入値引高
+                                売上
+                                仕入値引
                                 期末商品棚卸高
                                 受取利息
+                                有価証券利息
+                                有価証券売却益
+                                受取配当金
                                 雑収入
                                 営業外利益
                                 前期利益修正益
@@ -329,9 +339,9 @@ class ApplicationController < ActionController::Base
     # 税率用()--view()
     def tax_rate_arys
       @tax_rate_arys = %w[対象外
-                     8%
-                     10%
-                    ]
+                           8%
+                           10%
+                          ]
     end
     # -----------------------------------------
     
@@ -354,6 +364,100 @@ class ApplicationController < ActionController::Base
                               ]
     end
     # -----------------------------------------
+    
+    # 貸借対照表
+    # 現金/預金
+    def cash_deposits
+      @cash_deposits = %w[現金
+                          普通預金
+                          普通預金2
+                          当座預金
+                          郵便貯金
+                          定期預金
+                          ]
+    end
+    # 売上債権
+    def trade_receivables
+      @trade_receivables = %w[受取手形
+                              売掛金
+                              ]
+    end
+    # 棚卸資産
+    def inventories
+      @inventories = %w[商品
+                        製品
+                        原材料
+                        仕掛品
+                        ]
+    end
+    # 他流動資産
+    def other_current_assets
+      @other_current_assets = %w[仮払金
+                                前払金
+                                前払費用
+                                立替金
+                                仮払金
+                                未収入金
+                                短期貸付金
+                                有価証券
+                                ]
+    end
+    
+    # 有形固定資産
+    def tangible_fixed_assets
+      @tangible_fixed_assets = %w[建物
+                                  機械装置
+                                  車両運搬具
+                                  工具器具備品
+                                  一括償却資産
+                                  減価償却累計額
+                                  土地
+                                  ]
+    end
+    
+    # 繰延資産 
+    def deferred_assets
+      @deferred_assets = %w[創立費
+                            開業費
+                            ]
+    end
+    
+    # 仕入債務
+    def accounts_payable_trades
+      @accounts_payable_trades = %w[買掛金
+                                    支払手形
+                                    ]
+    end
+    
+    # 他流動負債
+    def other_current_liabilities
+      @other_current_liabilities = %w[事業主借
+                                      短期借入金
+                                      未払金
+                                      未払費用
+                                      前受金
+                                      預り金
+                                      源泉税等預り金
+                                      仮受金
+                                      賞与引当金
+                                      役員賞与引当金
+                                      未払法人税等
+                                      未払事業税等
+                                      ]
+    end
+    
+    # 固定負債
+    def fixed_liabilities
+      @fixed_liabilities = %w[長期借入金]
+    end
+    
+    # 資本金
+    def capital_stocks
+      @capital_stocks = %w[資本金]
+    end
+    
+    # -----------------------------------------
+    
     
     # 資産勘定科目用()--view()　借方
     # def assets_account_title

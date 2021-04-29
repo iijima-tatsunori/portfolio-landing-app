@@ -23,6 +23,19 @@ class AccountsController < ApplicationController
   before_action :left_account_titles, only: :all_general_ledger
   before_action :right_account_titles, only: :all_general_ledger
   
+  before_action :cash_deposits, only: :balance_sheet
+  before_action :trade_receivables, only: :balance_sheet
+  before_action :inventories, only: :balance_sheet
+  before_action :other_current_assets, only: :balance_sheet
+  before_action :tangible_fixed_assets, only: :balance_sheet
+  before_action :deferred_assets, only: :balance_sheet
+  before_action :accounts_payable_trades, only: :balance_sheet
+  before_action :other_current_liabilities, only: :balance_sheet
+  before_action :fixed_liabilities, only: :balance_sheet
+  before_action :capital_stocks, only: :balance_sheet
+  
+  
+  
   # --------------------------振替伝票作成-------------------------
   def transfer_slip_new
     @account = Account.new
@@ -79,6 +92,7 @@ class AccountsController < ApplicationController
 
   # --------------------------総勘定元帳----------------------------
   def all_general_ledger
+    
   end
   
   def master_general_ledger

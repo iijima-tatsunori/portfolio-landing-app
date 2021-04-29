@@ -464,7 +464,7 @@ compound_journal_attribute21 = {
   accounting_date: '2021-01-21',
   compound_journals_attributes: [
     {
-      account_title: "仕入高",
+      account_title: "仕入",
       amount: "100000",
       right_account_title: "支払手形",
       right_amount: "100000",
@@ -482,7 +482,7 @@ compound_journal_attribute22 = {
   accounting_date: '2020-12-21',
   compound_journals_attributes: [
     {
-      account_title: "仕入高",
+      account_title: "仕入",
       amount: "100000",
       right_account_title: "買掛金",
       right_amount: "100000",
@@ -679,7 +679,7 @@ compound_journal_attribute31 = {
     {
       account_title: "現金",
       amount: "10800",
-      right_account_title: "売上高",
+      right_account_title: "売上",
       right_amount: "10000",
       tax_rate: "",
       description: "商品を10,800円（税込）で販売し、その代金は現金でもらった。",
@@ -724,7 +724,7 @@ compound_journal_attribute33 = {
   accounting_date: '2020-02-21',
   compound_journals_attributes: [
     {
-      account_title: "仕入高",
+      account_title: "仕入",
       amount: "200000",
       right_account_title: "買掛金",
       right_amount: "216000",
@@ -1182,3 +1182,122 @@ compound_journal_attribute51 = {
   ]
 }
 Account.create!(compound_journal_attribute51)
+
+compound_journal_attribute52 = {
+  accounting_date: '2020-07-01',
+  compound_journals_attributes: [
+    {
+      account_title: "現金",
+      amount: "10800",
+      right_account_title: "売上",
+      right_amount: "10000",
+      tax_rate: "",
+      description: "商品を10,800円（税込）で販売し、その代金は現金でもらった。",
+      sub_account_title: "",
+      right_tax_rate: "",
+      right_sub_account_title: ""
+    },
+    {
+      account_title: "",
+      amount: "",
+      right_account_title: "仮受消費税",
+      right_amount: "800",
+      tax_rate: "8",
+      description: "",
+      sub_account_title: "",
+      right_tax_rate: "",
+      right_sub_account_title: ""
+    }
+  ]
+}
+Account.create!(compound_journal_attribute52)
+
+compound_journal_attribute53 = {
+  accounting_date: '2020-09-01',
+  compound_journals_attributes: [
+    {
+      account_title: "売上",
+      amount: "300",
+      right_account_title: "現金",
+      right_amount: "300",
+      tax_rate: "",
+      description: "売り上げた商品について300円の割引をした。",
+      sub_account_title: "",
+      right_tax_rate: "",
+      right_sub_account_title: ""
+    }
+  ]
+}
+Account.create!(compound_journal_attribute53)
+
+compound_journal_attribute54 = {
+  accounting_date: '2020-10-01',
+  compound_journals_attributes: [
+    {
+      account_title: "売上",
+      amount: "600",
+      right_account_title: "現金",
+      right_amount: "600",
+      tax_rate: "",
+      description: "600円の割戻しを行った。",
+      sub_account_title: "",
+      right_tax_rate: "",
+      right_sub_account_title: ""
+    }
+  ]
+}
+Account.create!(compound_journal_attribute54)
+
+compound_journal_attribute55 = {
+  accounting_date: '2020-11-01',
+  compound_journals_attributes: [
+    {
+      account_title: "売上",
+      amount: "1000",
+      right_account_title: "現金",
+      right_amount: "1000",
+      tax_rate: "",
+      description: "売り上げた商品のうち1000円の返品を受けた。",
+      sub_account_title: "",
+      right_tax_rate: "",
+      right_sub_account_title: ""
+    }
+  ]
+}
+Account.create!(compound_journal_attribute55)
+
+compound_journal_attribute56 = {
+  accounting_date: '2020-01-01',
+  compound_journals_attributes: [
+    {
+      account_title: "売上",
+      amount: "1000",
+      right_account_title: "売掛金",
+      right_amount: "1000",
+      tax_rate: "",
+      description: "売り上げた商品について1000円の値引をした。",
+      sub_account_title: "",
+      right_tax_rate: "",
+      right_sub_account_title: ""
+    }
+  ]
+}
+Account.create!(compound_journal_attribute56)
+
+compound_journal_attribute57 = {
+  accounting_date: '2020-12-01',
+  compound_journals_attributes: [
+    {
+      account_title: "売上割引",
+      amount: "700",
+      right_account_title: "売掛金",
+      right_amount: "700",
+      tax_rate: "",
+      description: "B社が期限より早い支払いをしたため、700円の売上割引を行なった。",
+      sub_account_title: "",
+      right_tax_rate: "",
+      right_sub_account_title: ""
+    }
+  ]
+}
+Account.create!(compound_journal_attribute57)

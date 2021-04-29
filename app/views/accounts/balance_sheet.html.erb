@@ -1,274 +1,229 @@
 <%= provide(:title, '貸借対照表') %>
 
 <h2>貸借対照表</h2>
-<div>
-  <table class="table table-bordered table-condensed table-hover" id="table-account">
-    <thead>
-      <tr>
-      </tr>
-    </thead>
-    
-    <tbody>
-      <tr>
-        <td>【 資産 】</td>
-        <td></td>
-      </tr>
-      <tr>
-        <td>【 流動資産 】</td>
-        <td></td>
-      </tr>
-      <tr>
-        <td>【 現金/預金 】</td>
-        <td></td>
-      </tr>
-      <tr>
-        <td>現金</td>
-        <td><%=  %></td>
-      </tr>
-      <tr>
-        <td>普通預金</td>
-        <td><%=  %></td>
-      </tr>
-      <tr>
-        <td>普通預金２</td>
-        <td>-</td>
-      </tr>
-      <tr>
-        <td>当座預金</td>
-        <td>-</td>
-      </tr>
-      <tr>
-        <td>郵便貯金</td>
-        <td>-</td>
-      </tr>
-      <tr>
-        <td>定期預金</td>
-        <td>-</td>
-      </tr>
-      <tr class="bg-success">
-        <td>現金・預金計</td>
-        <td><%=  %></td>
-      </tr>
-      <tr>
-        <td>【 売上債権 】</td>
-        <td></td>
-      </tr>
-      <tr>
-        <td>受取手形</td>
-        <td>-</td>
-      </tr>
-      <tr>
-        <td>売掛金</td>
-        <td>-</td>
-      </tr>
-      <tr class="bg-success">
-        <td>売上債権　計</td>
-        <td>-</td>
-      </tr>
-      <tr>
-        <td>【 棚卸資産 】</td>
-        <td></td>
-      </tr>
-      <tr>
-        <td>商品</td>
-        <td>-</td>
-      </tr>
-      <tr>
-        <td>製品</td>
-        <td>-</td>
-      </tr>
-      <tr>
-        <td>原材料</td>
-        <td>-</td>
-      </tr>
-      <tr>
-        <td>仕掛品</td>
-        <td>-</td>
-      </tr>
-      <tr class="bg-success">
-        <td>棚卸資産　計</td>
-        <td>-</td>
-      </tr>
-      <tr>
-        <td>【 他流動資産 】</td>
-        <td>-</td>
-      </tr>
-      <tr>
-        <td>仮払金</td>
-        <td>-</td>
-      </tr>
-      <tr>
-        <td>未収入金</td>
-        <td>-</td>
-      </tr>
-      <tr class="bg-success">
-        <td>他流動資産　合計</td>
-        <td>-</td>
-      </tr>
-      <tr class="bg-info">
-        <td>流動資産　合計</td>
-        <td><%=  %></td>
-      </tr>
-      <tr>
-        <td>【 固定資産 】</td>
-        <td></td>
-      </tr>
-      <tr>
-        <td>【 有形固定資産 】</td>
-        <td></td>
-      </tr>
-      <tr>
-        <td>建物</td>
-        <td>-</td>
-      </tr>
-      <tr>
-        <td>機械装置</td>
-        <td>-</td>
-      </tr>
-      <tr>
-        <td>車両運搬具</td>
-        <td>-</td>
-      </tr>
-      <tr>
-        <td>工具器具備品</td>
-        <td>-</td>
-      </tr>
-      <tr>
-        <td>一括償却資産</td>
-        <td>-</td>
-      </tr>
-      <tr>
-        <td>減価償却累計額</td>
-        <td>-</td>
-      </tr>
-      <tr>
-        <td>土地</td>
-        <td>-</td>
-      </tr>
-      <tr class="bg-success">
-        <td>有形固定資産　計</td>
-        <td>-</td>
-      </tr>
-      <tr class="bg-info">
-        <td>固定資産　合計</td>
-        <td>-</td>
-      </tr>
-      <tr>
-        <td>【 繰延資産 】</td>
-        <td></td>
-      </tr>
-      <tr>
-        <td>創立費</td>
-        <td>-</td>
-      </tr>
-      <tr>
-        <td>開業費</td>
-        <td>-</td>
-      </tr>
-      <tr class="bg-success">
-        <td>繰延資産　計</td>
-        <td>-</td>
-      </tr>
-      <tr class="bg-danger">
-        <td>資産　合計</td>
-        <td><%=  %></td>
-      </tr>
-    </tbody>
-    <tfoot>
-      <tr>
-      </tr>
-    </tfoot>
-  </table>
-</div>
+<div class="row">
+  <div class="col-sm-6 col-lg-6">
+    <table class="table table-bordered table-condensed table-hover">
+      <thead>
+        <tr>
+        </tr>
+      </thead>
+      
+      <tbody>
+        <tr>
+          <td>【 資産 】</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>　【 流動資産 】</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>　　【 現金/預金 】</td>
+          <td></td>
+        </tr>
+        <% @cash_deposits.each do |cash_deposit| %>
+          <tr>
+            <td>　　　　<%= cash_deposit %></td>
+            <td><%= "#{balance_sheet_left_calc(cash_deposit).to_s(:delimited)}円"%></td>
+          </tr>
+        <% end %>
+        <tr class="bg-success">
+          <th>　　　　現金・預金　計</th>
+          <td><%=  %></td>
+        </tr>
+        <tr>
+          <td>　　【 売上債権 】</td>
+          <td></td>
+        </tr>
+        <% @trade_receivables.each do |trade_receivable| %>
+          <tr>
+            <td>　　　　<%= trade_receivable %></td>
+            <td><%= "#{balance_sheet_left_calc(trade_receivable).to_s(:delimited)}円" %></td>
+          </tr>
+        <% end %>
+        <tr class="bg-success">
+          <th>　　　　売上債権　計</th>
+          <td></td>
+        </tr>
+        <tr>
+          <td>　　【 棚卸資産 】</td>
+          <td></td>
+        </tr>
+        <% @inventories.each do |inventory| %>
+          <tr>
+            <td>　　　　<%= inventory %></td>
+            <td><%= "#{balance_sheet_left_calc(inventory).to_s(:delimited)}円" %></td>
+          </tr>
+        <% end %>
+        <tr class="bg-success">
+          <th>　　　　棚卸資産　計</th>
+          <td></td>
+        </tr>
+        <tr>
+          <td>　　【 他流動資産 】</td>
+          <td></td>
+        </tr>
+        <% @other_current_assets.each do |other_current_asset| %>
+          <tr>
+            <td>　　　　<%= other_current_asset %></td>
+            <td><%= "#{balance_sheet_left_calc(other_current_asset).to_s(:delimited)}円" %></td>
+          </tr>
+        <% end %>
+        <tr class="bg-success">
+          <th>　　　　他流動資産　計</th>
+          <td></td>
+        </tr>
+        <tr class="bg-info">
+          <th>　　流動資産　合計</th>
+          <td><%=  %></td>
+        </tr>
+        <tr>
+          <td>【 固定資産 】</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>【 有形固定資産 】</td>
+          <td></td>
+        </tr>
+        <% @tangible_fixed_assets.each do |tangible_fixed_asset| %>
+          <tr>
+            <td>　<%= tangible_fixed_asset %></td>
+            <td><%= "#{balance_sheet_left_calc(tangible_fixed_asset).to_s(:delimited)}円" %></td>
+          </tr>
+        <% end %>
+        <tr class="bg-success">
+          <th>　有形固定資産　計</th>
+          <td>-</td>
+        </tr>
+        <tr class="bg-info">
+          <th>　固定資産　合計</th>
+          <td>-</td>
+        </tr>
+        <tr>
+          <td>【 繰延資産 】</td>
+          <td></td>
+        </tr>
+        <% @deferred_assets.each do |deferred_asset| %>
+          <tr>
+            <td>　<%= deferred_asset %></td>
+            <td><%= "#{balance_sheet_left_calc(deferred_asset).to_s(:delimited)}円" %></td>
+          </tr>
+        <% end %>
+        <tr class="bg-success">
+          <th>　繰延資産　計</th>
+          <td>-</td>
+        </tr>
+        <tr class="bg-danger">
+          <th>資産　合計</th>
+          <td><%=  %></td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
 
-<div>
-  <table class="table table-bordered table-condensed table-hover" id="table-account">
-    <thead>
-      <tr>
-      </tr>
-    </thead>
-    
-    <tbody>
-      <tr>
-        <td>【 負債 】</td>
-        <td></td>
-      </tr>
-      <tr>
-        <td>【 流動負債 】</td>
-        <td></td>
-      </tr>
-      <tr>
-        <td>【 仕入債務 】</td>
-        <td></td>
-      </tr>
-      <tr>
-        <td>買掛金</td>
-        <td>-</td>
-      </tr>
-      <tr>
-        <td>支払手形</td>
-        <td>-</td>
-      </tr>
-      <tr class="bg-success">
-        <td>仕入債務　計</td>
-        <td>-</td>
-      </tr>
-      <tr>
-        <td>【 他流動負債 】</td>
-        <td></td>
-      </tr>
-      <tr>
-        <td>短期借入金</td>
-        <td>-</td>
-      </tr>
-      <tr class="bg-success">
-        <td>他流動負債　計</td>
-        <td>-</td>
-      </tr>
-      <tr class="bg-info">
-        <td>流動負債　合計</td>
-        <td>-</td>
-      </tr>
-      <tr>
-        <td>【 固定負債 】</td>
-        <td></td>
-      </tr>
-      <tr>
-        <td>長期借入金</td>
-        <td>-</td>
-      </tr>
-      <tr class="bg-success">
-        <td>固定負債　計</td>
-        <td>-</td>
-      </tr>
-      <tr class="bg-danger">
-        <td>負債　合計</td>
-        <td>-</td>
-      </tr>
-      <tr>
-        <td>【 純資産 】</td>
-        <td></td>
-      </tr>
-      <tr>
-        <td>【 資本金 】</td>
-        <td></td>
-      </tr>
-      <tr>
-        <td>資本金</td>
-        <td>-</td>
-      </tr>
-      <tr class="bg-success">
-        <td>資本金　合計</td>
-        <td>-</td>
-      </tr>
-      <tr class="bg-danger">
-        <td> 純資産　合計</td>
-        <td>-</td>
-      </tr>
-    </tbody>
-    <tfoot>
-      <tr>
-      </tr>
-    </tfoot>
-  </table>
+  <div class="col-sm-6 col-lg-6">
+    <table class="table table-bordered table-condensed table-hover">
+      <thead>
+        <tr>
+        </tr>
+      </thead>
+      
+      <tbody>
+        <tr>
+          <td>【 負債 】</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>　【 流動負債 】</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>　　【 仕入債務 】</td>
+          <td></td>
+        </tr>
+        <% @accounts_payable_trades.each do |accounts_payable_trade| %>
+          <tr>
+            <td>　　　　<%= accounts_payable_trade %></td>
+            <td><%= "#{balance_sheet_right_calc(accounts_payable_trade).to_s(:delimited)}円" %></td>
+          </tr>
+        <% end %>
+        <tr class="bg-success">
+          <th>　　　　仕入債務　計</th>
+          <td></td>
+        </tr>
+        <tr>
+          <td>　【 他流動負債 】</td>
+          <td></td>
+        </tr>
+        <% @other_current_liabilities.each do |other_current_liability| %>
+          <tr>
+            <td>　　　<%= other_current_liability %></td>
+            <td><%= "#{balance_sheet_right_calc(other_current_liability).to_s(:delimited)}円" %></td>
+          </tr>
+        <% end %>
+        <tr>
+          <td>　　　未払消費税等</td>
+          <td><%= "#{accrued_consumption_tax.to_s(:delimited)}円" %></td>
+        </tr>
+        <tr class="bg-success">
+          <th>　　他流動負債　計</th>
+          <td></td>
+        </tr>
+        <tr class="bg-info">
+          <th>　流動負債　合計</th>
+          <td></td>
+        </tr>
+        <tr>
+          <td>　【 固定負債 】</td>
+          <td></td>
+        </tr>
+        <% @fixed_liabilities.each do |fixed_liability| %>
+          <tr>
+            <td>　　　<%= fixed_liability %></td>
+            <td><%= "#{balance_sheet_right_calc(fixed_liability).to_s(:delimited)}円" %></td>
+          </tr>
+        <% end %>
+        
+        <tr class="bg-success">
+          <th>　　固定負債　計</th>
+          <td></td>
+        </tr>
+        <tr class="bg-danger">
+          <th>負債　合計</th>
+          <td></td>
+        </tr>
+        <tr>
+          <td>【 純資産 】</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>　【 資本金 】</td>
+          <td></td>
+        </tr>
+        <% @capital_stocks.each do |capital_stock| %>
+          <tr>
+            <td>　　<%= capital_stock %></td>
+            <td><%= "#{balance_sheet_right_calc(capital_stock).to_s(:delimited)}円" %></td>
+          </tr>
+        <% end %>
+        <tr class="bg-success">
+          <th>　　資本金　合計</th>
+          <td></td>
+        </tr>
+        <tr class="bg-danger">
+          <th> 純資産　合計</th>
+          <td></td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
 </div>

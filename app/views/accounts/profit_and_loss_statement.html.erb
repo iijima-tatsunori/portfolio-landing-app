@@ -32,61 +32,125 @@
     </thead>
     
     <tbody>
-      <tr>
+      <tr class="bg-info">
         <td>売上高</td>
-        <td><%= amount_of_sales %></td>
+        <td><%= "#{amount_of_sales.to_s(:delimited)}円" %></td>
+      </tr>
+      <tr class="bg-danger">
+        <td>売上原価</td>
+        <td><%= "#{cost_of_sales.to_s(:delimited)}円" %></td>
       </tr>
       <tr>
-        <td>売上原価</td>
-        <td>-</td>
+        <td>期首商品棚卸高</td>
+        <td><%= "#{beginning_of_term.to_s(:delimited)}円" %></td>
+      </tr>
+      <tr>
+        <td>当期商品仕入高</td>
+        <td><%= "#{purchase.to_s(:delimited)}円" %></td>
+      </tr>
+      <tr>
+        <td>期末商品棚卸高</td>
+        <td><%= "#{end_of_term.to_s(:delimited)}円" %></td>
       </tr>
       <tr class="bg-success">
         <td>売上総利益</td>
-        <td><%= %></td>
+        <td><%= "#{gross_profit.to_s(:delimited)}円" %></td>
+      </tr>
+      <tr class="bg-danger">
+        <td>販売費及一般管理費</td>
+        <td><%= "#{administrative_expenses.to_s(:delimited)}円" %></td>
       </tr>
       <tr>
-        <td>販売費及一般管理費</td>
-        <td><%= %></td>
+        <td>給料</td>
+        <td><%= "#{salary.to_s(:delimited)}円" %></td>
+      </tr>
+      <tr>
+        <td>支払家賃</td>
+        <td><%= "#{rent_paid.to_s(:delimited)}円" %></td>
+      </tr>
+      <tr>
+        <td>減価償却費</td>
+        <td><%= "#{depreciation_and_amortization.to_s(:delimited)}円" %></td>
+      </tr>
+      <tr>
+        <td>貸倒引当金繰入</td>
+        <td><%= "#{allowance_for_doubtful_accounts.to_s(:delimited)}円" %></td>
       </tr>
       <tr class="bg-success">
         <td>営業利益</td>
-        <td><%= %></td>
+        <td><%= "#{operating_income.to_s(:delimited)}円" %></td>
       </tr>
       <tr class="bg-info">
-        <td>営業利益率</td>
-        <td></td>
+        <td>営業外収益</td>
+        <td><%= "#{non_operating_income.to_s(:delimited)}円" %></td>
       </tr>
       <tr>
-        <td>営業外利益</td>
-        <td>-</td>
+        <td>受取利息</td>
+        <td><%= "#{interest_income.to_s(:delimited)}円" %></td>
       </tr>
       <tr>
+        <td>有価証券利息</td>
+        <td><%= "#{interest_on_marketable_securities.to_s(:delimited)}円" %></td>
+      </tr>
+      <tr>
+        <td>有価証券売却益</td>
+        <td><%= "#{gain_on_sales_of_marketable_securities.to_s(:delimited)}円" %></td>
+      </tr>
+      <tr>
+        <td>受取配当金</td>
+        <td><%= "#{dividend_income.to_s(:delimited)}円" %></td>
+      </tr>
+      <tr class="bg-danger">
         <td>営業外費用</td>
-        <td>-</td>
+        <td><%= "#{non_operating_expenses.to_s(:delimited)}円" %></td>
+      </tr>
+      <tr>
+        <td>支払利息</td>
+        <td><%= "#{interest_expense.to_s(:delimited)}円" %></td>
+      </tr>
+      <tr>
+        <td>社債利息</td>
+        <td><%= "#{interest_on_bonds.to_s(:delimited)}円" %></td>
+      </tr>
+      <tr>
+        <td>有価証券評価損</td>
+        <td><%= "#{loss_on_valuation_of_marketable_securities.to_s(:delimited)}円" %></td>
+      </tr>
+      <tr>
+        <td>雑損失</td>
+        <td><%= "#{miscellaneous_losses.to_s(:delimited)}円" %></td>
       </tr>
       <tr class="bg-success">
         <td>経常利益</td>
-        <td><%= %></td>
+        <td><%= "#{ordinary_income.to_s(:delimited)}円" %></td>
       </tr>
-      <tr>
+      <tr class="bg-info">
         <td>特別利益</td>
-        <td>-</td>
+        <td><%= "#{gain_on_sales_of_fixed_assets.to_s(:delimited)}円" %></td>
       </tr>
       <tr>
+        <td>固定資産売却益</td>
+        <td><%= "#{gain_on_sales_of_fixed_assets.to_s(:delimited)}円" %></td>
+      </tr>
+      <tr class="bg-danger">
         <td>特別損失</td>
-        <td>-</td>
+        <td><%= "#{fire_loss.to_s(:delimited)}円" %></td>
+      </tr>
+      <tr>
+        <td>火災損失</td>
+        <td><%= "#{fire_loss.to_s(:delimited)}円" %></td>
       </tr>
       <tr class="bg-success">
         <td>税引前当期純利益</td>
-        <td><%= %></td>
+        <td><%= "#{current_net_benefit_before_tax_citation.to_s(:delimited)}円" %></td>
       </tr>
       <tr>
-        <td>法人税、住民税及事業税</td>
-        <td>-</td>
+        <td>法人税･住民税及び事業税</td>
+        <td><%= "#{corporate_inhabitant_and_enterprise_taxes.to_s(:delimited)}円" %></td>
       </tr>
       <tr class="bg-success">
         <td>当期純利益</td>
-        <td><%= %></td>
+        <td><%= "#{current_net_benefit_tax_citation.to_s(:delimited)}円" %></td>
       </tr>
     </tbody>
     <tfoot>

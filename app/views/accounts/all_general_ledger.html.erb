@@ -23,9 +23,9 @@
             <div><%= ary %></div>
           <% end %>
         </td>
-        <td><%= sub_left_amount(ary) %></td>
-        <td><%= sub_right_amount(ary) %></td>
-        <td><%= sub_left_amount(ary).to_i - sub_right_amount(ary).to_i %></td>
+        <td><%= "#{sub_left_amount(ary).to_s(:delimited)}円" %></td>
+        <td><%= "#{sub_right_amount(ary).to_s(:delimited)}円" %></td>
+        <td><%= "#{all_general_ledger_balance(sub_left_amount(ary).to_i, sub_right_amount(ary).to_i, ary).to_s(:delimited)}円" %></td>
       </tr>
       <% end %>
     </tbody>
@@ -47,9 +47,9 @@
             <div><%= ary %></div>
           <% end %>
         </td>
-        <td><%= left_amount(ary) %></td>
-        <td><%= right_amount(ary) %></td>
-        <td><%= all_general_ledger_balance(left_amount(ary).to_i, right_amount(ary).to_i, ary) %></td>
+        <td><%= "#{left_amount(ary).to_s(:delimited)}円" %></td>
+        <td><%= "#{right_amount(ary).to_s(:delimited)}円" %></td>
+        <td><%= "#{all_general_ledger_balance(left_amount(ary).to_i, right_amount(ary).to_i, ary).to_s(:delimited)}円" %></td>
       </tr>
       <% end %>
     </tbody>
