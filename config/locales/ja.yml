@@ -65,6 +65,15 @@ ja:
     - :month
     - :day
   datetime:
+    formats:
+      default: "%Y/%m/%d%H:%M"
+      long: "%Y年%m月%d日(%a)"
+      middle: "%Y年%m月"
+      short: "%-m/%-d"
+      short2: "%-m/%-d(%a)"
+      year: "%Y年"
+      month: "%Y年%m月"
+      time: "%H:%M"
     distance_in_words:
       about_x_hours:
         one: 約1時間

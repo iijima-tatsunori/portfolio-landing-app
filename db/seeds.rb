@@ -74,7 +74,7 @@ compound_journal_attribute1 = {
 Account.create!(compound_journal_attribute1)
 
 compound_journal_attribute2 = {
-  accounting_date: '2019-12-02',
+  accounting_date: '2021-01-02',
   compound_journals_attributes: [
     {
       account_title: "当座預金",
@@ -92,7 +92,7 @@ compound_journal_attribute2 = {
 Account.create!(compound_journal_attribute2)
 
 compound_journal_attribute3 = {
-  accounting_date: '2020-01-02',
+  accounting_date: '2021-01-02',
   compound_journals_attributes: [
     {
       account_title: "定期預金",
@@ -110,7 +110,7 @@ compound_journal_attribute3 = {
 Account.create!(compound_journal_attribute3)
 
 compound_journal_attribute4 = {
-  accounting_date: '2020-02-02',
+  accounting_date: '2021-02-02',
   compound_journals_attributes: [
     {
       account_title: "普通預金",
@@ -128,7 +128,7 @@ compound_journal_attribute4 = {
 Account.create!(compound_journal_attribute4)
 
 compound_journal_attribute5 = {
-  accounting_date: '2020-04-02',
+  accounting_date: '2021-04-02',
   compound_journals_attributes: [
     {
       account_title: "受取手形",
@@ -146,7 +146,7 @@ compound_journal_attribute5 = {
 Account.create!(compound_journal_attribute5)
 
 compound_journal_attribute6 = {
-  accounting_date: '2020-05-24',
+  accounting_date: '2021-05-02',
   compound_journals_attributes: [
     {
       account_title: "定期預金",
@@ -175,7 +175,7 @@ compound_journal_attribute6 = {
 Account.create!(compound_journal_attribute6)
 
 compound_journal_attribute7 = {
-  accounting_date: '2020-06-02',
+  accounting_date: '2021-03-02',
   compound_journals_attributes: [
     {
       account_title: "有価証券",
@@ -193,7 +193,7 @@ compound_journal_attribute7 = {
 Account.create!(compound_journal_attribute7)
 
 compound_journal_attribute8 = {
-  accounting_date: '2020-07-06',
+  accounting_date: '2021-03-06',
   compound_journals_attributes: [
     {
       account_title: "商品",
@@ -211,7 +211,7 @@ compound_journal_attribute8 = {
 Account.create!(compound_journal_attribute8)
 
 compound_journal_attribute9 = {
-  accounting_date: '2020-08-02',
+  accounting_date: '2021-02-02',
   compound_journals_attributes: [
     {
       account_title: "前払金",
@@ -229,7 +229,7 @@ compound_journal_attribute9 = {
 Account.create!(compound_journal_attribute9)
 
 compound_journal_attribute10 = {
-  accounting_date: '2020-09-02',
+  accounting_date: '2021-01-02',
   compound_journals_attributes: [
     {
       account_title: "短期貸付金",
@@ -247,7 +247,7 @@ compound_journal_attribute10 = {
 Account.create!(compound_journal_attribute10)
 
 compound_journal_attribute11 = {
-  accounting_date: '2020-10-02',
+  accounting_date: '2021-04-02',
   compound_journals_attributes: [
     {
       account_title: "未収金",
@@ -276,7 +276,7 @@ compound_journal_attribute11 = {
 Account.create!(compound_journal_attribute11)
 
 compound_journal_attribute12 = {
-  accounting_date: '2020-11-11',
+  accounting_date: '2021-03-11',
   compound_journals_attributes: [
     {
       account_title: "仮払金",
@@ -294,7 +294,7 @@ compound_journal_attribute12 = {
 Account.create!(compound_journal_attribute12)
 
 compound_journal_attribute13 = {
-  accounting_date: '2020-12-11',
+  accounting_date: '2021-03-11',
   compound_journals_attributes: [
     {
       account_title: "立替金",
@@ -312,7 +312,7 @@ compound_journal_attribute13 = {
 Account.create!(compound_journal_attribute13)
 
 compound_journal_attribute14 = {
-  accounting_date: '2021-01-11',
+  accounting_date: '2021-03-21',
   compound_journals_attributes: [
     {
       account_title: "建物",
@@ -479,7 +479,7 @@ compound_journal_attribute21 = {
 Account.create!(compound_journal_attribute21)
 
 compound_journal_attribute22 = {
-  accounting_date: '2020-12-21',
+  accounting_date: '2021-03-21',
   compound_journals_attributes: [
     {
       account_title: "仕入",
@@ -497,7 +497,7 @@ compound_journal_attribute22 = {
 Account.create!(compound_journal_attribute22)
 
 compound_journal_attribute23 = {
-  accounting_date: '2020-11-21',
+  accounting_date: '2021-01-21',
   compound_journals_attributes: [
     {
       account_title: "短期借入金",
@@ -526,7 +526,7 @@ compound_journal_attribute23 = {
 Account.create!(compound_journal_attribute23)
 
 compound_journal_attribute24 = {
-  accounting_date: '2020-11-21',
+  accounting_date: '2021-02-21',
   compound_journals_attributes: [
     {
       account_title: "消耗品費",
@@ -544,7 +544,7 @@ compound_journal_attribute24 = {
 Account.create!(compound_journal_attribute24)
 
 compound_journal_attribute25 = {
-  accounting_date: '2020-10-21',
+  accounting_date: '2021-04-21',
   compound_journals_attributes: [
     {
       account_title: "現金",
@@ -562,7 +562,7 @@ compound_journal_attribute25 = {
 Account.create!(compound_journal_attribute25)
 
 compound_journal_attribute26 = {
-  accounting_date: '2020-09-21',
+  accounting_date: '2021-03-21',
   compound_journals_attributes: [
     {
       account_title: "普通預金",
@@ -580,7 +580,7 @@ compound_journal_attribute26 = {
 Account.create!(compound_journal_attribute26)
 
 compound_journal_attribute27 = {
-  accounting_date: '2020-08-21',
+  accounting_date: '2021-04-21',
   compound_journals_attributes: [
     {
       account_title: "賞与手当",
@@ -609,15 +609,15 @@ compound_journal_attribute27 = {
 Account.create!(compound_journal_attribute27)
 
 compound_journal_attribute28 = {
-  accounting_date: '2020-07-21',
+  accounting_date: '2021-01-01',
   compound_journals_attributes: [
     {
-      account_title: "現金",
+      account_title: "普通預金",
       amount: "2000000",
-      right_account_title: "元入金",
+      right_account_title: "短期借入金",
       right_amount: "2000000",
       tax_rate: "",
-      description: "元入金　2,000,000円を現金で用意して事業をはじめた。",
+      description: "短期借入金2,000,000円の融資を銀行Aから普通預金に入金された。",
       sub_account_title: "",
       right_tax_rate: "",
       right_sub_account_title: ""
@@ -627,7 +627,7 @@ compound_journal_attribute28 = {
 Account.create!(compound_journal_attribute28)
 
 compound_journal_attribute29 = {
-  accounting_date: '2020-06-21',
+  accounting_date: '2021-02-21',
   compound_journals_attributes: [
     {
       account_title: "現金",
@@ -645,7 +645,7 @@ compound_journal_attribute29 = {
 Account.create!(compound_journal_attribute29)
 
 compound_journal_attribute30 = {
-  accounting_date: '2020-05-21',
+  accounting_date: '2021-02-21',
   compound_journals_attributes: [
     {
       account_title: "事業主貸",
@@ -674,7 +674,7 @@ Account.create!(compound_journal_attribute30)
 
 
 compound_journal_attribute31 = {
-  accounting_date: '2020-04-21',
+  accounting_date: '2021-04-21',
   compound_journals_attributes: [
     {
       account_title: "現金",
@@ -703,7 +703,7 @@ compound_journal_attribute31 = {
 Account.create!(compound_journal_attribute31)
 
 compound_journal_attribute32 = {
-  accounting_date: '2020-03-21',
+  accounting_date: '2021-03-21',
   compound_journals_attributes: [
     {
       account_title: "現金",
@@ -721,7 +721,7 @@ compound_journal_attribute32 = {
 Account.create!(compound_journal_attribute32)
 
 compound_journal_attribute33 = {
-  accounting_date: '2020-02-21',
+  accounting_date: '2021-02-21',
   compound_journals_attributes: [
     {
       account_title: "仕入",
@@ -750,7 +750,7 @@ compound_journal_attribute33 = {
 Account.create!(compound_journal_attribute33)
 
 compound_journal_attribute34 = {
-  accounting_date: '2020-01-21',
+  accounting_date: '2021-01-21',
   compound_journals_attributes: [
     {
       account_title: "租税公課",
@@ -768,7 +768,7 @@ compound_journal_attribute34 = {
 Account.create!(compound_journal_attribute34)
 
 compound_journal_attribute35 = {
-  accounting_date: '2020-02-21',
+  accounting_date: '2021-02-21',
   compound_journals_attributes: [
     {
       account_title: "水道光熱費",
@@ -797,7 +797,7 @@ compound_journal_attribute35 = {
 Account.create!(compound_journal_attribute35)
 
 compound_journal_attribute36 = {
-  accounting_date: '2020-03-21',
+  accounting_date: '2021-03-21',
   compound_journals_attributes: [
     {
       account_title: "旅費交通費",
@@ -815,7 +815,7 @@ compound_journal_attribute36 = {
 Account.create!(compound_journal_attribute36)
 
 compound_journal_attribute37 = {
-  accounting_date: '2020-04-22',
+  accounting_date: '2021-04-22',
   compound_journals_attributes: [
     {
       account_title: "通信費",
@@ -844,7 +844,7 @@ compound_journal_attribute37 = {
 Account.create!(compound_journal_attribute37)
 
 compound_journal_attribute38 = {
-  accounting_date: '2020-05-21',
+  accounting_date: '2021-05-04',
   compound_journals_attributes: [
     {
       account_title: "事業主貸",
@@ -862,7 +862,7 @@ compound_journal_attribute38 = {
 Account.create!(compound_journal_attribute38)
 
 compound_journal_attribute39 = {
-  accounting_date: '2020-06-21',
+  accounting_date: '2021-05-04',
   compound_journals_attributes: [
     {
       account_title: "広告宣伝費",
@@ -891,7 +891,7 @@ compound_journal_attribute39 = {
 Account.create!(compound_journal_attribute39)
 
 compound_journal_attribute40 = {
-  accounting_date: '2020-07-21',
+  accounting_date: '2021-03-22',
   compound_journals_attributes: [
     {
       account_title: "支払保険料",
@@ -909,7 +909,7 @@ compound_journal_attribute40 = {
 Account.create!(compound_journal_attribute40)
 
 compound_journal_attribute41 = {
-  accounting_date: '2020-08-10',
+  accounting_date: '2021-03-22',
   compound_journals_attributes: [
     {
       account_title: "接待交際費",
@@ -927,7 +927,7 @@ compound_journal_attribute41 = {
 Account.create!(compound_journal_attribute41)
 
 compound_journal_attribute42 = {
-  accounting_date: '2020-09-21',
+  accounting_date: '2021-03-22',
   compound_journals_attributes: [
     {
       account_title: "修繕費",
@@ -956,7 +956,7 @@ compound_journal_attribute42 = {
 Account.create!(compound_journal_attribute42)
 
 compound_journal_attribute43 = {
-  accounting_date: '2020-10-21',
+  accounting_date: '2021-03-22',
   compound_journals_attributes: [
     {
       account_title: "消耗品費",
@@ -985,7 +985,7 @@ compound_journal_attribute43 = {
 Account.create!(compound_journal_attribute43)
 
 compound_journal_attribute44 = {
-  accounting_date: '2020-11-21',
+  accounting_date: '2021-03-22',
   compound_journals_attributes: [
     {
       account_title: "福利厚生費",
@@ -1003,7 +1003,7 @@ compound_journal_attribute44 = {
 Account.create!(compound_journal_attribute44)
 
 compound_journal_attribute45 = {
-  accounting_date: '2020-12-21',
+  accounting_date: '2021-03-22',
   compound_journals_attributes: [
     {
       account_title: "給料手当",
@@ -1032,7 +1032,7 @@ compound_journal_attribute45 = {
 Account.create!(compound_journal_attribute45)
 
 compound_journal_attribute46 = {
-  accounting_date: '2020-11-21',
+  accounting_date: '2021-03-22',
   compound_journals_attributes: [
     {
       account_title: "短期借入金",
@@ -1061,7 +1061,7 @@ compound_journal_attribute46 = {
 Account.create!(compound_journal_attribute46)
 
 compound_journal_attribute47 = {
-  accounting_date: '2020-06-21',
+  accounting_date: '2021-03-22',
   compound_journals_attributes: [
     {
       account_title: "地代家賃",
@@ -1079,7 +1079,7 @@ compound_journal_attribute47 = {
 Account.create!(compound_journal_attribute47)
 
 compound_journal_attribute48 = {
-  accounting_date: '2020-07-21',
+  accounting_date: '2021-03-22',
   compound_journals_attributes: [
     {
       account_title: "普通預金",
@@ -1119,7 +1119,7 @@ compound_journal_attribute48 = {
 Account.create!(compound_journal_attribute48)
 
 compound_journal_attribute49 = {
-  accounting_date: '2020-08-21',
+  accounting_date: '2021-03-22',
   compound_journals_attributes: [
     {
       account_title: "貸倒金",
@@ -1137,7 +1137,7 @@ compound_journal_attribute49 = {
 Account.create!(compound_journal_attribute49)
 
 compound_journal_attribute50 = {
-  accounting_date: '2020-09-11',
+  accounting_date: '2021-03-22',
   compound_journals_attributes: [
     {
       account_title: "雑費",
@@ -1166,7 +1166,7 @@ compound_journal_attribute50 = {
 Account.create!(compound_journal_attribute50)
 
 compound_journal_attribute51 = {
-  accounting_date: '2020-12-21',
+  accounting_date: '2021-02-22',
   compound_journals_attributes: [
     {
       account_title: "専従者給与",
@@ -1184,7 +1184,7 @@ compound_journal_attribute51 = {
 Account.create!(compound_journal_attribute51)
 
 compound_journal_attribute52 = {
-  accounting_date: '2020-07-01',
+  accounting_date: '2021-02-22',
   compound_journals_attributes: [
     {
       account_title: "現金",
@@ -1213,7 +1213,7 @@ compound_journal_attribute52 = {
 Account.create!(compound_journal_attribute52)
 
 compound_journal_attribute53 = {
-  accounting_date: '2020-09-01',
+  accounting_date: '2021-02-22',
   compound_journals_attributes: [
     {
       account_title: "売上",
@@ -1231,7 +1231,7 @@ compound_journal_attribute53 = {
 Account.create!(compound_journal_attribute53)
 
 compound_journal_attribute54 = {
-  accounting_date: '2020-10-01',
+  accounting_date: '2021-02-22',
   compound_journals_attributes: [
     {
       account_title: "売上",
@@ -1249,7 +1249,7 @@ compound_journal_attribute54 = {
 Account.create!(compound_journal_attribute54)
 
 compound_journal_attribute55 = {
-  accounting_date: '2020-11-01',
+  accounting_date: '2021-02-22',
   compound_journals_attributes: [
     {
       account_title: "売上",
@@ -1267,7 +1267,7 @@ compound_journal_attribute55 = {
 Account.create!(compound_journal_attribute55)
 
 compound_journal_attribute56 = {
-  accounting_date: '2020-01-01',
+  accounting_date: '2021-02-22',
   compound_journals_attributes: [
     {
       account_title: "売上",
@@ -1285,7 +1285,7 @@ compound_journal_attribute56 = {
 Account.create!(compound_journal_attribute56)
 
 compound_journal_attribute57 = {
-  accounting_date: '2020-12-01',
+  accounting_date: '2021-02-22',
   compound_journals_attributes: [
     {
       account_title: "売上割引",
@@ -1301,3 +1301,90 @@ compound_journal_attribute57 = {
   ]
 }
 Account.create!(compound_journal_attribute57)
+
+compound_journal_attribute58 = {
+  accounting_date: '2021-01-01',
+  compound_journals_attributes: [
+    {
+      account_title: "現金",
+      amount: "10800000",
+      right_account_title: "売上",
+      right_amount: "10000000",
+      tax_rate: "",
+      description: "商品を10,800000円（税込）で販売し、その代金は現金でもらった。",
+      sub_account_title: "",
+      right_tax_rate: "",
+      right_sub_account_title: ""
+    },
+    {
+      account_title: "",
+      amount: "",
+      right_account_title: "仮受消費税",
+      right_amount: "800000",
+      tax_rate: "8",
+      description: "",
+      sub_account_title: "",
+      right_tax_rate: "",
+      right_sub_account_title: ""
+    }
+  ]
+}
+Account.create!(compound_journal_attribute58)
+
+compound_journal_attribute59 = {
+  accounting_date: '2021-02-01',
+  compound_journals_attributes: [
+    {
+      account_title: "現金",
+      amount: "10800000",
+      right_account_title: "売上",
+      right_amount: "10000000",
+      tax_rate: "",
+      description: "商品を10,800000円（税込）で販売し、その代金は現金でもらった。",
+      sub_account_title: "",
+      right_tax_rate: "",
+      right_sub_account_title: ""
+    },
+    {
+      account_title: "",
+      amount: "",
+      right_account_title: "仮受消費税",
+      right_amount: "800000",
+      tax_rate: "8",
+      description: "",
+      sub_account_title: "",
+      right_tax_rate: "",
+      right_sub_account_title: ""
+    }
+  ]
+}
+Account.create!(compound_journal_attribute59)
+
+compound_journal_attribute60 = {
+  accounting_date: '2021-03-01',
+  compound_journals_attributes: [
+    {
+      account_title: "現金",
+      amount: "10800000",
+      right_account_title: "売上",
+      right_amount: "10000000",
+      tax_rate: "",
+      description: "商品を10,800000円（税込）で販売し、その代金は現金でもらった。",
+      sub_account_title: "",
+      right_tax_rate: "",
+      right_sub_account_title: ""
+    },
+    {
+      account_title: "",
+      amount: "",
+      right_account_title: "仮受消費税",
+      right_amount: "800000",
+      tax_rate: "8",
+      description: "",
+      sub_account_title: "",
+      right_tax_rate: "",
+      right_sub_account_title: ""
+    }
+  ]
+}
+Account.create!(compound_journal_attribute60)

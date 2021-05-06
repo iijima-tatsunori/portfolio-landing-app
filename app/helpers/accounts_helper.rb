@@ -318,6 +318,232 @@ module AccountsHelper
   def accrued_consumption_tax
     right_consumption_tax + left_consumption_tax
   end
+  
+  # (現金/預金合計)
+  def cash_deposits_sum
+    @cash_deposits.each do |account_title|
+      accounts = Account.joins(:compound_journals).where(compound_journals: {account_title: account_title}).or(Account.joins(:compound_journals).where(compound_journals: {right_account_title: account_title})).merge(Account.order("accounts.accounting_date ASC"))
+      accounts.each do |account|
+        account.compound_journals.each do |compound_journal|
+          if compound_journal.account_title == account_title
+            @cash_deposits_sum += compound_journal.amount
+          elsif compound_journal.right_account_title == account_title
+            @cash_deposits_sum -= compound_journal.right_amount
+          end
+        end
+      end
+    end
+    @cash_deposits_sum
+  end
+  # (棚卸資産合計)
+  def trade_receivables_sum
+    @trade_receivables.each do |account_title|
+      accounts = Account.joins(:compound_journals).where(compound_journals: {account_title: account_title}).or(Account.joins(:compound_journals).where(compound_journals: {right_account_title: account_title})).merge(Account.order("accounts.accounting_date ASC"))
+      accounts.each do |account|
+        account.compound_journals.each do |compound_journal|
+          if compound_journal.account_title == account_title
+            @trade_receivables_sum += compound_journal.amount
+          elsif compound_journal.right_account_title == account_title
+            @trade_receivables_sum -= compound_journal.right_amount
+          end
+        end
+      end
+    end
+    @trade_receivables_sum
+  end
+  # (売上債権合計)
+  def inventories_sum
+    @inventories.each do |account_title|
+      accounts = Account.joins(:compound_journals).where(compound_journals: {account_title: account_title}).or(Account.joins(:compound_journals).where(compound_journals: {right_account_title: account_title})).merge(Account.order("accounts.accounting_date ASC"))
+      accounts.each do |account|
+        account.compound_journals.each do |compound_journal|
+          if compound_journal.account_title == account_title
+            @inventories_sum += compound_journal.amount
+          elsif compound_journal.right_account_title == account_title
+            @inventories_sum -= compound_journal.right_amount
+          end
+        end
+      end
+    end
+    @inventories_sum
+  end
+  # (他流動資産合計)
+  def other_current_assets_sum
+    @other_current_assets.each do |account_title|
+      accounts = Account.joins(:compound_journals).where(compound_journals: {account_title: account_title}).or(Account.joins(:compound_journals).where(compound_journals: {right_account_title: account_title})).merge(Account.order("accounts.accounting_date ASC"))
+      accounts.each do |account|
+        account.compound_journals.each do |compound_journal|
+          if compound_journal.account_title == account_title
+            @other_current_assets_sum += compound_journal.amount
+          elsif compound_journal.right_account_title == account_title
+            @other_current_assets_sum -= compound_journal.right_amount
+          end
+        end
+      end
+    end
+    @other_current_assets_sum
+  end
+  
+  # (流動資産合計)
+  def current_assets_sum
+    @other_current_assets_sum + @inventories_sum + @trade_receivables_sum + @cash_deposits_sum
+  end
+  
+  # (有形固定資産合計)
+  def tangible_fixed_assets_sum
+    @tangible_fixed_assets.each do |account_title|
+      accounts = Account.joins(:compound_journals).where(compound_journals: {account_title: account_title}).or(Account.joins(:compound_journals).where(compound_journals: {right_account_title: account_title})).merge(Account.order("accounts.accounting_date ASC"))
+      accounts.each do |account|
+        account.compound_journals.each do |compound_journal|
+          if compound_journal.account_title == account_title
+            @tangible_fixed_assets_sum += compound_journal.amount
+          elsif compound_journal.right_account_title == account_title
+            @tangible_fixed_assets_sum -= compound_journal.right_amount
+          end
+        end
+      end
+    end
+    @tangible_fixed_assets_sum
+  end
+  # (無形固定資産合計)
+  def intangible_fixed_assets_sum
+    @intangible_fixed_assets.each do |account_title|
+      accounts = Account.joins(:compound_journals).where(compound_journals: {account_title: account_title}).or(Account.joins(:compound_journals).where(compound_journals: {right_account_title: account_title})).merge(Account.order("accounts.accounting_date ASC"))
+      accounts.each do |account|
+        account.compound_journals.each do |compound_journal|
+          if compound_journal.account_title == account_title
+            @intangible_fixed_assets_sum += compound_journal.amount
+          elsif compound_journal.right_account_title == account_title
+            @intangible_fixed_assets_sum -= compound_journal.right_amount
+          end
+        end
+      end
+    end
+    @intangible_fixed_assets_sum
+  end
+  
+  # (固定資産合計)
+  def fixed_assets_sum
+    @tangible_fixed_assets_sum + @intangible_fixed_assets_sum
+  end
+  
+  # (繰延資産合計)
+  def deferred_assets_sum
+    @deferred_assets.each do |account_title|
+      accounts = Account.joins(:compound_journals).where(compound_journals: {account_title: account_title}).or(Account.joins(:compound_journals).where(compound_journals: {right_account_title: account_title})).merge(Account.order("accounts.accounting_date ASC"))
+      accounts.each do |account|
+        account.compound_journals.each do |compound_journal|
+          if compound_journal.account_title == account_title
+            @deferred_assets_sum += compound_journal.amount
+          elsif compound_journal.right_account_title == account_title
+            @deferred_assets_sum -= compound_journal.right_amount
+          end
+        end
+      end
+    end
+    @deferred_assets_sum
+  end
+  
+  # (資産合計)
+  def assets_sum
+    fixed_assets_sum + current_assets_sum
+  end
+  
+  # (仕入債務合計)
+  def accounts_payable_trades_sum
+    @accounts_payable_trades.each do |account_title|
+      accounts = Account.joins(:compound_journals).where(compound_journals: {account_title: account_title}).or(Account.joins(:compound_journals).where(compound_journals: {right_account_title: account_title})).merge(Account.order("accounts.accounting_date ASC"))
+      accounts.each do |account|
+        account.compound_journals.each do |compound_journal|
+          if compound_journal.account_title == account_title
+            @accounts_payable_trades_sum -= compound_journal.amount
+          elsif compound_journal.right_account_title == account_title
+            @accounts_payable_trades_sum += compound_journal.right_amount
+          end
+        end
+      end
+    end
+    @accounts_payable_trades_sum
+  end
+  
+  # (他流動負債合計)
+  def other_current_liabilities_sum
+    @other_current_liabilities.each do |account_title|
+      accounts = Account.joins(:compound_journals).where(compound_journals: {account_title: account_title}).or(Account.joins(:compound_journals).where(compound_journals: {right_account_title: account_title})).merge(Account.order("accounts.accounting_date ASC"))
+      accounts.each do |account|
+        account.compound_journals.each do |compound_journal|
+          if compound_journal.account_title == account_title
+            @other_current_liabilities_sum -= compound_journal.amount
+          elsif compound_journal.right_account_title == account_title
+            @other_current_liabilities_sum += compound_journal.right_amount
+          end
+        end
+      end
+    end
+    @other_current_liabilities_sum
+  end
+  
+  # (流動負債合計)
+  def current_liabilities_sum
+    @accounts_payable_trades_sum + @other_current_liabilities_sum
+  end
+  
+  # (固定負債合計)
+  def fixed_liabilities_sum
+    @fixed_liabilities.each do |account_title|
+      accounts = Account.joins(:compound_journals).where(compound_journals: {account_title: account_title}).or(Account.joins(:compound_journals).where(compound_journals: {right_account_title: account_title})).merge(Account.order("accounts.accounting_date ASC"))
+      accounts.each do |account|
+        account.compound_journals.each do |compound_journal|
+          if compound_journal.account_title == account_title
+            @fixed_liabilities_sum -= compound_journal.amount
+          elsif compound_journal.right_account_title == account_title
+            @fixed_liabilities_sum += compound_journal.right_amount
+          end
+        end
+      end
+    end
+    @fixed_liabilities_sum
+  end
+  
+  # (負債合計)
+  def liabilities_sum
+    current_liabilities_sum + @fixed_liabilities_sum
+  end
+  
+  
+  # (資本金合計)
+  def capital_stocks_sum
+    @capital_stocks.each do |account_title|
+      accounts = Account.joins(:compound_journals).where(compound_journals: {account_title: account_title}).or(Account.joins(:compound_journals).where(compound_journals: {right_account_title: account_title})).merge(Account.order("accounts.accounting_date ASC"))
+      accounts.each do |account|
+        account.compound_journals.each do |compound_journal|
+          if compound_journal.account_title == account_title
+            @capital_stocks_sum -= compound_journal.amount
+          elsif compound_journal.right_account_title == account_title
+            @capital_stocks_sum += compound_journal.right_amount
+          end
+        end
+      end
+    end
+    @capital_stocks_sum
+  end
+  
+  # (利益余剰金合計)
+  def retained_earnings_sum
+    @retained_earnings_sum = 0
+    @retained_earnings_sum = current_net_benefit_before_tax_citation + corporate_inhabitant_and_enterprise_taxes
+    @retained_earnings_sum
+  end
+  
+  # (純資産合計)
+  def net_assets_sum
+    @capital_stocks_sum + @retained_earnings_sum
+  end
+  
+  # (負債/純資産合計)
+  def liabilities_and_net_assets_sum
+    net_assets_sum.abs + liabilities_sum
+  end
   # -----------------------------------------
   
   

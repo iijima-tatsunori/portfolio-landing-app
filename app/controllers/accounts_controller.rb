@@ -28,12 +28,12 @@ class AccountsController < ApplicationController
   before_action :inventories, only: :balance_sheet
   before_action :other_current_assets, only: :balance_sheet
   before_action :tangible_fixed_assets, only: :balance_sheet
+  before_action :intangible_fixed_assets, only: :balance_sheet
   before_action :deferred_assets, only: :balance_sheet
   before_action :accounts_payable_trades, only: :balance_sheet
   before_action :other_current_liabilities, only: :balance_sheet
   before_action :fixed_liabilities, only: :balance_sheet
   before_action :capital_stocks, only: :balance_sheet
-  
   
   
   # --------------------------振替伝票作成-------------------------
@@ -115,6 +115,18 @@ class AccountsController < ApplicationController
   
   # --------------------------貸借対照表--------------------------------
   def balance_sheet
+    @cash_deposits_sum = 0
+    @trade_receivables_sum = 0
+    @inventories_sum = 0
+    @other_current_assets_sum = 0
+    @tangible_fixed_assets_sum = 0
+    @intangible_fixed_assets_sum = 0
+    @deferred_assets_sum = 0
+    
+    @accounts_payable_trades_sum = 0
+    @other_current_liabilities_sum = 0
+    @fixed_liabilities_sum = 0
+    @capital_stocks_sum = 0
   end
   # ----------------------------------------------------------------
   

@@ -52,6 +52,11 @@
         <td>期末商品棚卸高</td>
         <td><%= "#{end_of_term.to_s(:delimited)}円" %></td>
       </tr>
+      <tr>
+        <td>外注加工費</td>
+        <td><%= "#{outsourcing_cost.to_s(:delimited)}円" %></td>
+      </tr>
+      
       <tr class="bg-success">
         <td>売上総利益</td>
         <td><%= "#{gross_profit.to_s(:delimited)}円" %></td>

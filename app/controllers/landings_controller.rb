@@ -1,4 +1,5 @@
 class LandingsController < ApplicationController
+  
   before_action :set_landing, only: [:show, :edit, :update, :destroy]
   before_action :set_ground, only: [:new, :create, :show, :edit, :update]
   before_action :logged_in_user, only: [:new, :create, :show, :index, :edit, :update, :destroy]

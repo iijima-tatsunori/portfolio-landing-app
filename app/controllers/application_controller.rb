@@ -1,5 +1,6 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
+  include StaticPagesHelper
   include SessionsHelper
   include UsersHelper
   include GroundsHelper
@@ -9,7 +10,6 @@ class ApplicationController < ActionController::Base
   $days_of_the_week = %w{日 月 火 水 木 金 土}
   
   # beforフィルター
-
   # paramsハッシュからユーザーを取得します。
   def set_user
     @user = User.find(params[:id])
@@ -414,6 +414,12 @@ class ApplicationController < ActionController::Base
                                   土地
                                   ]
     end
+    # 無形固定資産
+    def intangible_fixed_assets
+      @intangible_fixed_assets = %w[電話加入権
+                                    ソフトウェア
+                                    ]
+    end
     
     # 繰延資産 
     def deferred_assets
@@ -453,8 +459,19 @@ class ApplicationController < ActionController::Base
     
     # 資本金
     def capital_stocks
-      @capital_stocks = %w[資本金]
+      @capital_stocks = %w[資本金
+                           資本剰余金
+                           資本準備金]
     end
+    
+    # 利益剰余金
+    def retained_earnings
+      @retained_earnings = %w[
+                           利益準備金
+                           繰越利益剰余金
+                           当期純損益金額]
+    end
+    
     
     # -----------------------------------------
     

@@ -1,10 +1,43 @@
 <% provide(:title, "トップ") %>
-<div class="center jumbotron">
-  <h1>水揚げ情報管理システム</h1>
-  <p>このアプリケーションでは、水揚げ情報を閲覧・登録・編集することができます。</p>
-  <% if logged_in? %>
-    <%= link_to "ユーザー登録", signup_path, class: "btn btn-lg btn-primary disabled" %>
-  <% else %>
+
+<% unless logged_in? %>
+  <div class="center jumbotron">
+    <h1>水揚げ情報、帳簿管理システム</h1>
+    <p>このアプリケーションでは、水揚げ情報と帳簿データを閲覧・登録・編集することができます。</p>
     <%= link_to "ユーザー登録", signup_path, class: "btn btn-lg btn-primary" %>
-  <% end %>
+  </div>
+<% end %>
+
+<div>
+  <table class="table table-bordered table-condensed table-hover" id="table-account">
+    <thead>
+      <tr>
+        <th >日付</th>
+        <% @timeDefines.zip(@days) do |timeDefine, day| %>
+          <td><%= "#{day} #{l(timeDefine.to_date, format: :short)}" %></td>
+        <% end %>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <th rowspan="2">天気</th>
+          <% @weatherCodes.each do |weatherCode| %>
+            <td><% weather_icon(weatherCode) %></td>
+          <% end %>
+        </tr>
+        <tr>
+          <td></td>
+        </tr>
+    </tbody>
+  </table>
 </div>
+
+<p><%= @publishingOffice %></p>
+<p><%= @timeSeries_name %></p>
+<p><%= @timeSeries_weathers[0] %></p>
+<p><%= @timeSeries_waves[0] %></p>
+<p><%= @timeSeries_winds[0] %></p>
+<p><%= @result %></p>
+<% @result2.each do |result| %>
+  <p><%= "#{result}%" %></p>
+<% end %>

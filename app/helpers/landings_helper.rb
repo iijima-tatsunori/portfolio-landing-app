@@ -17,7 +17,7 @@ module LandingsHelper
   end
   
   def weathers
-    ["晴れ;",
+    ["晴れ",
      "晴れ時々曇り",
      "晴れ時々雨",
      "曇り",
