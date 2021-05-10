@@ -2,9 +2,14 @@
 @import "bootstrap";
 
 /* universal */
+@media (max-width: 780px) {
+   /* 横幅が780px以下の場合に適用するスタイル */
+   body { padding-top: 300px; }
+}
 
-body {
-  padding-top: 60px;
+@media (min-width: 781px) {
+   /* 横幅が781px以上の場合に適用するスタイル */
+   body { padding-top: 100px; }
 }
 
 section {

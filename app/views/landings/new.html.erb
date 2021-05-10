@@ -5,11 +5,7 @@
   
   <div class="row">
     <div class="col-md-6 col-md-offset-3">
-      <h3 class="center">「<%= @ground.fishing_ground_name %>」の水揚げ情報作成</h3>
-  
-      <div>
-        <%= link_to "水揚げ情報一覧", landing_index_path, class: "btn btn-primary" %>
-      </div>
+      <h2 class="center">「<%= @ground.fishing_ground_name %>」の水揚げ情報作成</h2>
       
       <%= form_with(model: @landing, url: ground_landings_path, local: true, mehtod: :post) do |f| %>
         <%= render 'shared/error_messages', object: f.object %>

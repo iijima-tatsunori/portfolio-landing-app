@@ -24,7 +24,7 @@
         <% @cash_deposits.each do |cash_deposit| %>
           <tr>
             <td>　　　　<%= cash_deposit %></td>
-            <td class="text-right"><%= "#{balance_sheet_left_calc(cash_deposit).to_s(:delimited)}円"%></td>
+            <td class="text-right"><%= "#{left_calc(cash_deposit).to_s(:delimited)}円"%></td>
           </tr>
         <% end %>
         <tr class="bg-success">
@@ -38,7 +38,7 @@
         <% @trade_receivables.each do |trade_receivable| %>
           <tr>
             <td>　　　　<%= trade_receivable %></td>
-            <td class="text-right"><%= "#{balance_sheet_left_calc(trade_receivable).to_s(:delimited)}円" %></td>
+            <td class="text-right"><%= "#{left_calc(trade_receivable).to_s(:delimited)}円" %></td>
           </tr>
         <% end %>
         <tr class="bg-success">
@@ -52,7 +52,7 @@
         <% @inventories.each do |inventory| %>
           <tr>
             <td>　　　　<%= inventory %></td>
-            <td class="text-right"><%= "#{balance_sheet_left_calc(inventory).to_s(:delimited)}円" %></td>
+            <td class="text-right"><%= "#{left_calc(inventory).to_s(:delimited)}円" %></td>
           </tr>
         <% end %>
         <tr class="bg-success">
@@ -66,7 +66,7 @@
         <% @other_current_assets.each do |other_current_asset| %>
           <tr>
             <td>　　　　<%= other_current_asset %></td>
-            <td class="text-right"><%= "#{balance_sheet_left_calc(other_current_asset).to_s(:delimited)}円" %></td>
+            <td class="text-right"><%= "#{left_calc(other_current_asset).to_s(:delimited)}円" %></td>
           </tr>
         <% end %>
         <tr class="bg-success">
@@ -88,7 +88,7 @@
         <% @tangible_fixed_assets.each do |tangible_fixed_asset| %>
           <tr>
             <td>　　　<%= tangible_fixed_asset %></td>
-            <td class="text-right"><%= "#{balance_sheet_left_calc(tangible_fixed_asset).to_s(:delimited)}円" %></td>
+            <td class="text-right"><%= "#{left_calc(tangible_fixed_asset).to_s(:delimited)}円" %></td>
           </tr>
         <% end %>
         <tr class="bg-success">
@@ -102,7 +102,7 @@
         <% @intangible_fixed_assets.each do |intangible_fixed_asset| %>
           <tr>
             <td>　　　<%= intangible_fixed_asset %></td>
-            <td class="text-right"><%= "#{balance_sheet_left_calc(intangible_fixed_asset).to_s(:delimited)}円" %></td>
+            <td class="text-right"><%= "#{left_calc(intangible_fixed_asset).to_s(:delimited)}円" %></td>
           </tr>
         <% end %>
         <tr class="bg-success">
@@ -120,7 +120,7 @@
         <% @deferred_assets.each do |deferred_asset| %>
           <tr>
             <td>　　<%= deferred_asset %></td>
-            <td class="text-right"><%= "#{balance_sheet_left_calc(deferred_asset).to_s(:delimited)}円" %></td>
+            <td class="text-right"><%= "#{left_calc(deferred_asset).to_s(:delimited)}円" %></td>
           </tr>
         <% end %>
         <tr class="bg-success">
@@ -161,7 +161,7 @@
         <% @accounts_payable_trades.each do |accounts_payable_trade| %>
           <tr>
             <td>　　　　<%= accounts_payable_trade %></td>
-            <td class="text-right"><%= "#{balance_sheet_right_calc(accounts_payable_trade).to_s(:delimited)}円" %></td>
+            <td class="text-right"><%= "#{right_calc(accounts_payable_trade).to_s(:delimited)}円" %></td>
           </tr>
         <% end %>
         <tr class="bg-success">
@@ -169,17 +169,17 @@
           <td class="text-right"><%= "#{accounts_payable_trades_sum.to_s(:delimited)}円" %></td>
         </tr>
         <tr>
-          <td>　【 他流動負債 】</td>
+          <td>　　【 他流動負債 】</td>
           <td></td>
         </tr>
         <% @other_current_liabilities.each do |other_current_liability| %>
           <tr>
-            <td>　　　<%= other_current_liability %></td>
-            <td class="text-right"><%= "#{balance_sheet_right_calc(other_current_liability).to_s(:delimited)}円" %></td>
+            <td>　　　　<%= other_current_liability %></td>
+            <td class="text-right"><%= "#{right_calc(other_current_liability).to_s(:delimited)}円" %></td>
           </tr>
         <% end %>
         <tr>
-          <td>　　　未払消費税等</td>
+          <td>　　　　未払消費税等</td>
           <td class="text-right"><%= "#{accrued_consumption_tax.to_s(:delimited)}円" %></td>
         </tr>
         <tr class="bg-success">
@@ -197,7 +197,7 @@
         <% @fixed_liabilities.each do |fixed_liability| %>
           <tr>
             <td>　　　<%= fixed_liability %></td>
-            <td class="text-right"><%= "#{balance_sheet_right_calc(fixed_liability).to_s(:delimited)}円" %></td>
+            <td class="text-right"><%= "#{right_calc(fixed_liability).to_s(:delimited)}円" %></td>
           </tr>
         <% end %>
         
@@ -219,7 +219,7 @@
         <% @capital_stocks.each do |capital_stock| %>
           <tr>
             <td>　　<%= capital_stock %></td>
-            <td class="text-right"><%= "#{balance_sheet_right_calc(capital_stock).to_s(:delimited)}円" %></td>
+            <td class="text-right"><%= "#{right_calc(capital_stock).to_s(:delimited)}円" %></td>
           </tr>
         <% end %>
         <tr class="bg-success">
@@ -231,21 +231,19 @@
           <td>　【 利益剰余金 】</td>
           <td></td>
         </tr>
-        <tr>
-          <td>　　利益準備金</td>
-          <td class="text-right"></td>
-        </tr>
-        <tr>
-          <td>　　繰越利益剰余金</td>
-          <td class="text-right"></td>
-        </tr>
+        <% @retained_earnings.each do |retained_earning| %>
+          <tr>
+            <td>　　<%= retained_earning %></td>
+            <td class="text-right"><%= "#{right_calc(retained_earning).to_s(:delimited)}円" %></td>
+          </tr>
+        <% end %>
         <tr>
           <td>　　当期純損益金額</td>
-          <td class="text-right"><%= "#{retained_earnings_sum.to_s(:delimited)}円" %></td>
+          <td class="text-right"><%= "#{current_net_income.to_s(:delimited)}円" %></td>
         </tr>
         <tr class="bg-success">
           <th>　利益剰余金　計</th>
-          <td class="text-right"><%= "#{retained_earnings_sum.to_s(:delimited)}円" %></td>
+          <td class="text-right"><%= "#{retained_earnings_amount_sum.to_s(:delimited)}円" %></td>
         </tr>
         <tr>
           <td>　【 評価・換算差額等 】</td>
@@ -253,7 +251,7 @@
         </tr>
         <tr>
           <td>　　評価・換算差額等　</td>
-          <td class="text-right"><%= "0円" %></td>
+          <td class="text-right"></td>
         </tr>
         <tr>
           <td>　【 新株予約権 】</td>
@@ -261,7 +259,7 @@
         </tr>
         <tr>
           <td>　　新株予約権</td>
-          <td class="text-right"><%= "0円" %></td>
+          <td class="text-right"></td>
         </tr>
         <tr class="bg-danger">
           <th> 純資産　合計</th>

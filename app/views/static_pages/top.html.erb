@@ -1,43 +1,140 @@
 <% provide(:title, "トップ") %>
-
 <% unless logged_in? %>
-  <div class="center jumbotron">
-    <h1>水揚げ情報、帳簿管理システム</h1>
-    <p>このアプリケーションでは、水揚げ情報と帳簿データを閲覧・登録・編集することができます。</p>
-    <%= link_to "ユーザー登録", signup_path, class: "btn btn-lg btn-primary" %>
-  </div>
-<% end %>
 
-<div>
-  <table class="table table-bordered table-condensed table-hover" id="table-account">
-    <thead>
-      <tr>
-        <th >日付</th>
-        <% @timeDefines.zip(@days) do |timeDefine, day| %>
-          <td><%= "#{day} #{l(timeDefine.to_date, format: :short)}" %></td>
+  <div class="jumbotron">
+    <div class="row">
+      <div class="col-md-6 col-md-offset-3">
+        <h2 class="text-left">ログイン</h2>
+        <%= form_with(scope: :session, url: login_path, local: true) do |f| %>
+    
+          <%= f.label :email, "メールアドレス", class: "label-login" %>
+          <%= f.email_field :email, class: 'form-control' %>
+    
+          <%= f.label :password, "パスワード", class: "label-login" %>
+          <%= f.password_field :password, class: 'form-control' %>
+    
+          <%= f.label :remember_me, class: "checkbox inline checkbox-login", for: "remember-me" do %>
+            <%= f.check_box :remember_me, id: "remember-me" %>
+            <span>ログイン情報を記憶する</span>
+          <% end %>
+    
+          <%= f.submit "ログイン", class: "btn btn-primary btn-block btn-login" %>
         <% end %>
-      </tr>
-    </thead>
-    <tbody>
+        <h2>ユーザー登録がまだの場合は<%= link_to "こちら", signup_path %></h2>
+      </div>
+    </div>
+  </div>
+  
+<% else %>
+  
+  <div>
+    <table class="table table-bordered" id="table-account">
+      <tbody>
         <tr>
-          <th rowspan="2">天気</th>
-          <% @weatherCodes.each do |weatherCode| %>
-            <td><% weather_icon(weatherCode) %></td>
+          <th colspan="2">日付</th>
+          <% @timeDefines.zip(@days) do |timeDefine, day| %>
+            <% if timeDefine.to_datetime.wday == 6 %>
+              <th colspan="4"><font color="blue"><%= "#{day} #{l(timeDefine.to_date, format: :short2)}" %></font></th>
+            <% elsif timeDefine.to_datetime.wday == 0 %>
+              <th colspan="4"><font color="red"><%= "#{day} #{l(timeDefine.to_date, format: :short2)}" %></font></th>
+            <% else %>
+              <th colspan="4"><%= "#{day} #{l(timeDefine.to_date, format: :short2)}" %></th>
+            <% end %>
           <% end %>
         </tr>
         <tr>
-          <td></td>
+          <th rowspan="2" colspan="2">天気</th>
+          <% @weatherCodes.each do |weatherCode| %>
+            <% if weatherCode == "211" %>
+              <td colspan="4"><img src="https://www.jma.go.jp/bosai/forecast/img/610.svg" alt="　no image" /></td>
+            <% else %>
+              <td colspan="4"><img src="https://www.jma.go.jp/bosai/forecast/img/<%= weatherCode %>.svg" alt="　no image" /></td>
+            <% end %>
+          <% end %>
         </tr>
-    </tbody>
-  </table>
-</div>
-
-<p><%= @publishingOffice %></p>
-<p><%= @timeSeries_name %></p>
-<p><%= @timeSeries_weathers[0] %></p>
-<p><%= @timeSeries_waves[0] %></p>
-<p><%= @timeSeries_winds[0] %></p>
-<p><%= @result %></p>
-<% @result2.each do |result| %>
-  <p><%= "#{result}%" %></p>
+        <tr>
+          <% @weathers.each do |weather| %>
+            <td colspan="4"><%= weather %></td>
+          <% end %>
+        </tr>
+        <tr class="bg-success">
+          <th colspan="2">風</th>
+          <% @winds.each do |wind| %>
+            <td colspan="4"><%= wind %></td>
+          <% end %>
+        </tr>
+        <tr class="bg-info">
+          <th colspan="2">波</th>
+          <% @waves.each do |wave| %>
+            <td colspan="4"><%= wave %></td>
+          <% end %>
+        </tr>
+        <tr>
+          <th rowspan="2" colspan="2">降水確率（％）</th>
+            <% @times.each do |time| %>
+              <td><%= time %></td>
+            <% end %>
+            <% @times.each do |time| %>
+              <td><%= time %></td>
+            <% end %>
+            <td rowspan="2" colspan="2"></td>
+        </tr>
+        <tr>
+          <% if @judge_datetime.hour.to_s == "6" %>
+            <td>-</td>
+            <% @precipitation_pops.each do |pop| %>
+              <td><%= pop %></td>
+            <% end %>
+          <% elsif @judge_datetime.hour.to_s == "12" %>
+            <td>-</td>
+            <td>-</td>
+            <% @precipitation_pops.each do |pop| %>
+              <td><%= pop %></td>
+            <% end %>
+          <% elsif @judge_datetime.hour.to_s == "18" %>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+            <% @precipitation_pops.each do |pop| %>
+              <td><%= pop %></td>
+            <% end %>
+          <% else %>
+            <% @precipitation_pops.each do |pop| %>
+              <td><%= pop %></td>
+            <% end %>
+          <% end %>
+        </tr>
+        <tr>
+          <th rowspan="2">気温（℃）</th>
+          <td></td>
+            <td class="bg-info" colspan="2">朝の最低</td>
+            <td class="bg-danger" colspan="2">日中の最高</td>
+            <td class="bg-info" colspan="2">朝の最低</td>
+            <td class="bg-danger" colspan="2">日中の最高</td>
+          <td rowspan="2"></td>
+        </tr>
+        <tr>
+          <td><%= @temps_name %></td>
+          <% if @temps_timeDefine_size == 2 %>
+            <td colspan="2">-</td>
+            <td colspan="2">-</td>
+            <% @temps.each do |temp| %>
+              <td colspan="2"><%= temp %></td>
+            <% end %>
+          <% elsif @temps_timeDefine_size == 4 %>
+            <td colspan="2">-</td>
+            <% @temps.each do |temp| %>
+              <td colspan="2"><%= temp %></td>
+            <% end %>
+          <% else %>
+            <td colspan="2">-</td>
+            <% @temps.each do |temp| %>
+              <td colspan="2"><%= temp %></td>
+            <% end %>
+          <% end %>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  
 <% end %>

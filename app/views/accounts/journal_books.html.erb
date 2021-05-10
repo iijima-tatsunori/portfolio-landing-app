@@ -52,8 +52,14 @@
       <% @accounts.each do |account| %>
         <% if @this_month.include?(Date.parse(account[:accounting_date].to_s)) %>
           <tr>
-            <td><%= l(account.accounting_date, format: :short) %></td>
-            <td><% account.compound_journals.each do |compound| %><%= compound.description %></br><% end %></td>
+            <% if account.accounting_date.wday == 6 %>
+              <td><font color="blue"><%= l(account.accounting_date, format: :short2) %></font></td>
+            <% elsif account.accounting_date.wday == 0 %>
+              <td><font color="red"><%= l(account.accounting_date, format: :short2) %></font></td>
+            <% else %>
+              <td><%= l(account.accounting_date, format: :short2) %></td>
+            <% end %>
+            <td width="500"><% account.compound_journals.each do |compound| %><%= compound.description %></br><% end %></td>
             <td><% account.compound_journals.each do |compound| %><%= compound.account_title %></br><% end %></td>
             <td><% account.compound_journals.each do |compound| %><%= "#{(compound.amount.to_i).to_s(:delimited)}円" %></br><% end %></td>
             <td><% account.compound_journals.each do |compound| %><%= compound.right_account_title %></br><% end %></td>
@@ -70,9 +76,3 @@
     </tbody>
   </table>
 </div>
-
-<script>
-  function link_to(param) {
-    location.href = param + "?first=" + $('#first').val() + "&last=" + $('#last').val();
-  }
-</script>

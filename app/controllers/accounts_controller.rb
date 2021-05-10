@@ -23,6 +23,17 @@ class AccountsController < ApplicationController
   before_action :left_account_titles, only: :all_general_ledger
   before_action :right_account_titles, only: :all_general_ledger
   
+  before_action :amount_of_sales, only: [:profit_and_loss_statement, :balance_sheet]
+  before_action :cost_of_sales, only: [:profit_and_loss_statement, :balance_sheet]
+  before_action :administrative_expenses, only: [:profit_and_loss_statement, :balance_sheet]
+  before_action :non_operating_income, only: [:profit_and_loss_statement, :balance_sheet]
+  before_action :non_operating_expenses, only: [:profit_and_loss_statement, :balance_sheet]
+  before_action :extraordinary_gains, only: [:profit_and_loss_statement, :balance_sheet]
+  before_action :extraordinary_loss, only: [:profit_and_loss_statement, :balance_sheet]
+  before_action :corporate_inhabitant_and_enterprise_taxes, only: [:profit_and_loss_statement, :balance_sheet]
+  
+  
+  
   before_action :cash_deposits, only: :balance_sheet
   before_action :trade_receivables, only: :balance_sheet
   before_action :inventories, only: :balance_sheet
@@ -34,6 +45,8 @@ class AccountsController < ApplicationController
   before_action :other_current_liabilities, only: :balance_sheet
   before_action :fixed_liabilities, only: :balance_sheet
   before_action :capital_stocks, only: :balance_sheet
+  before_action :retained_earnings, only: :balance_sheet
+  
   
   
   # --------------------------振替伝票作成-------------------------
@@ -115,18 +128,6 @@ class AccountsController < ApplicationController
   
   # --------------------------貸借対照表--------------------------------
   def balance_sheet
-    @cash_deposits_sum = 0
-    @trade_receivables_sum = 0
-    @inventories_sum = 0
-    @other_current_assets_sum = 0
-    @tangible_fixed_assets_sum = 0
-    @intangible_fixed_assets_sum = 0
-    @deferred_assets_sum = 0
-    
-    @accounts_payable_trades_sum = 0
-    @other_current_liabilities_sum = 0
-    @fixed_liabilities_sum = 0
-    @capital_stocks_sum = 0
   end
   # ----------------------------------------------------------------
   

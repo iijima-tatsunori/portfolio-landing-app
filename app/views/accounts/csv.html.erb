@@ -7,3 +7,9 @@
    <%= '帳簿データをCSV形式で出力する' %>
   <% end %>
 </div>
+
+<script>
+  function link_to(param) {
+    location.href = param + "?first=" + $('#first').val() + "&last=" + $('#last').val();
+  }
+</script>

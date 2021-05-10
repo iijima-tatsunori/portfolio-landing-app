@@ -61,7 +61,13 @@
       <% @general_ledger_accounts.each do |account| %>
       <% if @this_month.include?(Date.parse(account[:accounting_date].to_s)) %>
         <tr>
-          <td><%= l(account.accounting_date, format: :short) %></td>
+          <% if account.accounting_date.wday == 6 %>
+              <td><font color="blue"><%= l(account.accounting_date, format: :short2) %></font></td>
+            <% elsif account.accounting_date.wday == 0 %>
+              <td><font color="red"><%= l(account.accounting_date, format: :short2) %></font></td>
+            <% else %>
+              <td><%= l(account.accounting_date, format: :short2) %></td>
+            <% end %>
           <!--<th>補助科目</th>-->
           <td>
             <% account.compound_journals.each do |compound_journal| %>
