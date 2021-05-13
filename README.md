@@ -131,14 +131,6 @@ Things you may want to cover:
                     "2021-05-08T18:00:00+09:00"]
                     
                     
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
 借方
   <!--現金 cash_deposits-->
   <!--普通預金 cash_deposits-->
