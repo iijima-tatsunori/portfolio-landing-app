@@ -8,11 +8,12 @@ class Landing < ApplicationRecord
     landing_date_is(search_params[:landing_date])
       .landing_fishing_ground_name_is(search_params[:landing_fishing_ground_name])
       .ground_id_is(search_params[:ground_id])
+      .fish_species_is(search_params[:fish_species])
   end
   scope :landing_date_is, -> (landing_date) { where(landing_date: landing_date) if landing_date.present? }
   scope :landing_fishing_ground_name_is, -> (landing_fishing_ground_name) { where(landing_fishing_ground_name: landing_fishing_ground_name) if landing_fishing_ground_name.present? }
   scope :ground_id_is, -> (ground_id) { where(ground_id: ground_id) if ground_id.present? }
-  
+  scope :fish_species_is, -> (fish_species) { where(fish_species: fish_species) if fish_species.present? }
   
   
   validates :landing_date,      presence: true

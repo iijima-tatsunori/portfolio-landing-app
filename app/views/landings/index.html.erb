@@ -10,7 +10,7 @@
       
       <div class="row">
         
-        <div class="col-sm-4">
+        <div class="col-sm-3">
           <%= form_with(scope: :search, url: landing_index_path, method: :get, local: true) do |f| %>
             <div>
               <%= f.label :landing_date, '水揚げ日', class: "label-#{yield(:class_text)}"  %>
@@ -24,13 +24,27 @@
           <% end %>
         </div>
         
-        <div class="col-sm-4">
+        <div class="col-sm-3">
           <%= form_with(scope: :search, url: landing_index_path, method: :get, local: true) do |f| %>
             <div>
               <%= f.label :landing_fishing_ground_name, '漁場名', class: "label-#{yield(:class_text)}"  %>
             </div>
             <div>
               <%= f.select :landing_fishing_ground_name, landing_fishing_ground_names, { include_blank: "---" }, class: 'form-control' %>
+            </div>
+            <div>
+              <%= f.submit '検索', class: "btn btn-block btn-primary btn-#{yield(:class_text)}" %>
+            </div>
+          <% end %>
+        </div>
+        
+        <div class="col-sm-3">
+          <%= form_with(scope: :search, url: landing_index_path, method: :get, local: true) do |f| %>
+            <div>
+              <%= f.label :fish_species, '魚の種類', class: "label-#{yield(:class_text)}"  %>
+            </div>
+            <div>
+              <%= f.select :fish_species, fish_species, { include_blank: "---" }, class: 'form-control' %>
             </div>
             <div>
               <%= f.submit '検索', class: "btn btn-block btn-primary btn-#{yield(:class_text)}" %>

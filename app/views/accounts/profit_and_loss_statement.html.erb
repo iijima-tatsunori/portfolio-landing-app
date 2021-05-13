@@ -38,12 +38,12 @@
       </tr>
       <tr class="bg-danger">
         <td>売上原価</td>
-        <td><%= "#{cost_of_sales_sum.to_s(:delimited)}円" %></td>
+        <td><%= "#{cost_of_sales_sum.abs.to_s(:delimited)}円" %></td>
       </tr>
       <% @cost_of_sales.each do |cost_of_sale| %>
         <tr>
           <td>　　　　<%= cost_of_sale %></td>
-          <td class="text-right"><%= "#{left_calc(cost_of_sale).to_s(:delimited)}円"%></td>
+          <td class="text-right"><%= "#{left_calc(cost_of_sale).abs.to_s(:delimited)}円"%></td>
         </tr>
       <% end %>
       <tr class="bg-success">
@@ -82,7 +82,7 @@
       <% @non_operating_expenses.each do |non_operating_expense| %>
         <tr>
           <td>　　　　<%= non_operating_expense %></td>
-          <td class="text-right"><%= "#{right_calc(non_operating_expense).to_s(:delimited)}円"%></td>
+          <td class="text-right"><%= "#{left_calc(non_operating_expense).to_s(:delimited)}円"%></td>
         </tr>
       <% end %>
       <tr class="bg-success">

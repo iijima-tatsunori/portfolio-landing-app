@@ -75,7 +75,7 @@ class LandingsController < ApplicationController
     
     
     def landing_search_params
-      params.fetch(:search, {}).permit(:landing_date, :landing_fishing_ground_name)
+      params.fetch(:search, {}).permit(:landing_date, :landing_fishing_ground_name, :fish_species)
     end
 
     def set_landing

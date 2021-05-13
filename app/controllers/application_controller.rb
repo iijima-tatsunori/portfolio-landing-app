@@ -123,7 +123,7 @@ class ApplicationController < ActionController::Base
                                         立替金
                                         仮払金
                                         仮払消費税
-                                        未収入金
+                                        未収金
                                         短期貸付金
                                         有価証券
                                         建物
@@ -200,9 +200,10 @@ class ApplicationController < ActionController::Base
                                         賃借料
                                         支払手数料
                                         支払利息
+                                        利子割引料
                                         社債利息
                                         有価証券評価損
-                                        貸倒金
+                                        貸倒損失
                                         減価償却費
                                         研究開発費
                                         寄附金
@@ -241,7 +242,7 @@ class ApplicationController < ActionController::Base
                                 立替金
                                 仮払金
                                 仮払消費税
-                                未収入金
+                                未収金
                                 短期貸付金
                                 有価証券
                                 建物
@@ -299,9 +300,10 @@ class ApplicationController < ActionController::Base
                                 賃借料
                                 支払手数料
                                 支払利息
+                                利子割引料
                                 社債利息
                                 有価証券評価損
-                                貸倒金
+                                貸倒損失
                                 減価償却費
                                 研究開発費
                                 寄附金
@@ -395,8 +397,7 @@ class ApplicationController < ActionController::Base
                                       支払家賃
                                       地代家賃
                                       減価償却費
-                                      貸倒引当金繰入
-                                      
+                                      貸倒損失
                                       ]
       end
       # 営業外収益
@@ -413,6 +414,7 @@ class ApplicationController < ActionController::Base
       def non_operating_expenses
         @non_operating_expenses = %w[売上割引
                                      支払利息
+                                     利子割引料
                                      社債利息
                                      有価証券評価損
                                      研究開発費
@@ -429,7 +431,8 @@ class ApplicationController < ActionController::Base
       end
       # 特別損失
       def extraordinary_loss
-        @extraordinary_loss = %w[火災損失
+        @extraordinary_loss = %w[固定資産売却損
+                                 火災損失
                                  前期利益修正損
                                  ]
       end
@@ -483,7 +486,7 @@ class ApplicationController < ActionController::Base
                                    前払金
                                    前払費用
                                    立替金
-                                   未収入金
+                                   未収金
                                    短期貸付金
                                    有価証券
                                    敷金

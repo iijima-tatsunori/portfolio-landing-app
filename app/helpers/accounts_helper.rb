@@ -683,9 +683,9 @@ module AccountsHelper
         if @this_year.include?(Date.parse(account[:accounting_date].to_s))
           account.compound_journals.each do |compound_journal|
             if compound_journal.account_title == account_title
-              @non_operating_expenses_sum -= compound_journal.amount
+              @non_operating_expenses_sum += compound_journal.amount
             elsif compound_journal.right_account_title == account_title
-              @non_operating_expenses_sum += compound_journal.right_amount
+              @non_operating_expenses_sum -= compound_journal.right_amount
             end
           end
         end
@@ -695,7 +695,7 @@ module AccountsHelper
   end
   # (経常利益)
   def ordinary_income
-    operating_income + non_operating_income_sum + non_operating_expenses_sum
+    operating_income + non_operating_income_sum - non_operating_expenses_sum
   end
   
   # (特別利益)
