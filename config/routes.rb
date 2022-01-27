@@ -6,10 +6,6 @@ Rails.application.routes.draw do
   # ユーザー登録ページ
   get '/signup', to: 'users#new'
   
-   # ポートフォリオ用ログイン
-  get '/portfolio_login', to: 'sessions#portfolio_new'
-  post '/portfolio_login', to: 'sessions#portfolio_create'
-  
   # ログイン機能
   get 'login', to: 'sessions#new'
   post 'login', to: 'sessions#create'
