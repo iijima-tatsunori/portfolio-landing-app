@@ -14,6 +14,16 @@ class SessionsController < ApplicationController
       render :new
     end
   end
+  
+  def portfolio_new
+  end
+
+  def portfolio_create
+    user = User.guest
+    log_in user
+    flash[:success] = 'ゲストユーザーとしてログインしました。'
+    redirect_to root_url
+  end
 
   def destroy
   # ログイン中の場合のみログアウト処理を実行します。

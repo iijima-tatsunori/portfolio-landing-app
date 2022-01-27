@@ -6,21 +6,30 @@
       <div class="col-md-6 col-md-offset-3">
         <h2 class="text-left">ログイン</h2>
         <%= form_with(scope: :session, url: login_path, local: true) do |f| %>
+          
+          <div>
+            <%= f.label :email, "メールアドレス", class: "label-login" %>
+            <%= f.email_field :email, class: 'form-control' %>
+          </div>
     
-          <%= f.label :email, "メールアドレス", class: "label-login" %>
-          <%= f.email_field :email, class: 'form-control' %>
+          <div class="mt-3">
+            <%= f.label :password, "パスワード", class: "label-login" %>
+            <%= f.password_field :password, class: 'form-control' %>
+          </div>
     
-          <%= f.label :password, "パスワード", class: "label-login" %>
-          <%= f.password_field :password, class: 'form-control' %>
+          <div class="mt-4">
+            <%= f.label :remember_me, class: "checkbox inline checkbox-login", for: "remember-me" do %>
+              <%= f.check_box :remember_me, id: "remember-me" %>
+              <span>ログイン情報を記憶する</span>
+            <% end %>
+          </div>
     
-          <%= f.label :remember_me, class: "checkbox inline checkbox-login", for: "remember-me" do %>
-            <%= f.check_box :remember_me, id: "remember-me" %>
-            <span>ログイン情報を記憶する</span>
-          <% end %>
-    
-          <%= f.submit "ログイン", class: "btn btn-primary btn-block btn-login" %>
+          <div class="mt-4">
+            <%= f.submit "ログイン", class: "btn btn-primary btn-block btn-login" %>
+          </div>
         <% end %>
         <h2>ユーザー登録がまだの場合は<%= link_to "こちら", signup_path %></h2>
+        <h2><%= link_to "ポートフォリオ用ログインボタン", portfolio_login_path, method: :post, class: "btn btn-info" %></h2>
       </div>
     </div>
   </div>
