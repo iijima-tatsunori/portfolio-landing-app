@@ -28,6 +28,14 @@
             <%= f.submit "ログイン", class: "btn btn-primary btn-block btn-login" %>
           </div>
         <% end %>
+        <%= form_with(scope: :session, url: login_path, local: true) do |f| %>
+          <div class="mt-4">
+            <%= f.hidden_field :email, :value => "admin@email.com" %>
+            <%= f.hidden_field :password, :value => "password" %>
+            <%= f.hidden_field :remember_me, :value => "0" %>
+            <%= f.submit "ゲストログイン", class: "btn btn-success btn-block btn-login" %>
+          </div>
+        <% end %>
         <h2>ユーザー登録がまだの場合は<%= link_to "こちら", signup_path %></h2>
       </div>
     </div>
