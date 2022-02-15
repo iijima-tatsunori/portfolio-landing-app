@@ -43,7 +43,7 @@
       <% @cost_of_sales.each do |cost_of_sale| %>
         <tr>
           <td>　　　　<%= cost_of_sale %></td>
-          <td class="text-right"><%= "#{left_calc(cost_of_sale).abs.to_s(:delimited)}円"%></td>
+          <td class="text-right"><%= "#{left_calc(cost_of_sale, @first_day).abs.to_s(:delimited)}円"%></td>
         </tr>
       <% end %>
       <tr class="bg-success">
@@ -57,7 +57,7 @@
       <% @administrative_expenses.each do |administrative_expense| %>
         <tr>
           <td>　　　　<%= administrative_expense %></td>
-          <td class="text-right"><%= "#{left_calc(administrative_expense).to_s(:delimited)}円"%></td>
+          <td class="text-right"><%= "#{left_calc(administrative_expense, @first_day).to_s(:delimited)}円"%></td>
         </tr>
       <% end %>
       
@@ -72,7 +72,7 @@
       <% @non_operating_income.each do |non_operating_income| %>
         <tr>
           <td>　　　　<%= non_operating_income %></td>
-          <td class="text-right"><%= "#{right_calc(non_operating_income).to_s(:delimited)}円"%></td>
+          <td class="text-right"><%= "#{right_calc(non_operating_income, @first_day).to_s(:delimited)}円"%></td>
         </tr>
       <% end %>
       <tr class="bg-danger">
@@ -82,7 +82,7 @@
       <% @non_operating_expenses.each do |non_operating_expense| %>
         <tr>
           <td>　　　　<%= non_operating_expense %></td>
-          <td class="text-right"><%= "#{left_calc(non_operating_expense).to_s(:delimited)}円"%></td>
+          <td class="text-right"><%= "#{left_calc(non_operating_expense, @first_day).to_s(:delimited)}円"%></td>
         </tr>
       <% end %>
       <tr class="bg-success">
@@ -96,7 +96,7 @@
       <% @extraordinary_gains.each do |extraordinary_gain| %>
         <tr>
           <td>　　　　<%= extraordinary_gain %></td>
-          <td class="text-right"><%= "#{right_calc(extraordinary_gain).to_s(:delimited)}円"%></td>
+          <td class="text-right"><%= "#{right_calc(extraordinary_gain, @first_day).to_s(:delimited)}円"%></td>
         </tr>
       <% end %>
       
@@ -108,7 +108,7 @@
       <% @extraordinary_loss.each do |extraordinary_loss| %>
         <tr>
           <td>　　　　<%= extraordinary_loss %></td>
-          <td class="text-right"><%= "#{right_calc(extraordinary_loss).to_s(:delimited)}円"%></td>
+          <td class="text-right"><%= "#{right_calc(extraordinary_loss, @first_day).to_s(:delimited)}円"%></td>
         </tr>
       <% end %>
       

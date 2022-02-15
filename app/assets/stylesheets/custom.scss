@@ -1,112 +1,282 @@
 @import "bootstrap-sprockets";
 @import "bootstrap";
 
-/* universal */
-@media (max-width: 780px) {
-   /* 横幅が780px以下の場合に適用するスタイル */
-   body { padding-top: 300px; }
+@media (min-width: 900px) {
+  #add-slip-row {
+    display: flex;
+  }
 }
 
-@media (min-width: 781px) {
-   /* 横幅が781px以上の場合に適用するスタイル */
-   body { padding-top: 100px; }
-}
 
-section {
-  overflow: auto;
-}
+// universal
+  .alert {
+    margin-top: 10px;
+  }
 
-textarea {
-  resize: vertical;
-}
+  section {
+    overflow: auto;
+  }
 
-.center {
-  text-align: center;
-}
+  textarea {
+    resize: vertical;
+  }
 
-.center h1 {
-  margin-bottom: 10px;
-}
+  .center {
+    text-align: center;
+  }
 
-.btn-spacing {
-  margin-bottom: 5px;
-}
+  .center h1 {
+    margin-bottom: 10px;
+  }
 
-/* typography */
+  .btn-spacing {
+    margin-bottom: 5px;
+  }
 
-h1, h2, h3, h4, h5, h6 {
-  line-height: 1;
-}
+  h1, h2, h3, h4, h5, h6 {
+    line-height: 1;
+  }
 
-h1 {
-  font-size: 3em;
-  letter-spacing: -2px;
-  margin-bottom: 30px;
-  text-align: center;
-}
+  h1 {
+    font-size: 3em;
+    letter-spacing: -2px;
+    margin-bottom: 30px;
+    text-align: center;
+  }
 
-h2 {
-  font-size: 1.2em;
-  margin-bottom: 30px;
-  text-align: center;
-  font-weight: normal;
-  color: #777;
-}
+  h2 {
+    font-size: 1.2em;
+    margin-bottom: 30px;
+    text-align: center;
+    font-weight: normal;
+    color: #777;
+  }
 
-p {
-  font-size: 1.1em;
-  line-height: 1.7em;
-}
+  p {
+    font-size: 1.1em;
+    line-height: 1.7em;
+  }
 
-.separator {
-  height: 50px;
-}
+  li {
+    list-style: none;
+    text-decoration: none;
+  }
+
+  .separator {
+    height: 50px;
+  }
+
+  .min-separator {
+    height: 15px;
+  }
+
+  .border-separator {
+    padding-bottom: 15px;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #ccc;
+  }
+
+  .text-align-right {
+    text-align: right;
+  }
+
+  .margin-right {
+    margin: 0 0 0 auto;
+  }
+
+  .float-right {
+    float: right;
+  }
+
+  .text-center {
+    text-align: center;
+  }
+
+  .font-bold {
+    font-weight: bold;
+  }
+
+  .padding-5-10-10 {
+    padding: 5px 10px 10px;
+  }
+
+  .margin-top-10 {
+    margin-top: 10px;
+  }
+
+  .display-flex {
+    display: flex;
+  }
+
+  .btn-space {
+    margin: 15px 10px;
+  }
+
+  .max-width-50 {
+    max-width: 50%;
+  }
+
+  .margin-x {
+    margin: 0 5px;
+  }
+
+  .required::after {
+    content: "必須";
+    color: #ffffff;
+    background: #cc0000;
+    font-size: 0.8em;
+    padding: 0.3em;
+    border-radius: 0.5em;
+    margin-left: 0.3em;
+  }
+
+// --------------
+
+// 振替伝票
+  .accounting-date {
+    padding-left: 10px;
+    max-width: 340px;
+  }
+
+  .short-form {
+    display: block;
+    width: 150px;
+    height: 34px;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.428571429;
+    color: #555555;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+  }
+
+  .half-form {
+    display: block;
+    width: 50%;
+    height: 34px;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.428571429;
+    color: #555555;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+  }
+
+  .sum {
+    display: flex;
+    justify-content: flex-start;
+    padding: 10px 5px;
+  }
+
+  .flex-grow {
+    flex-grow: 1;
+  }
+
+  .compound_journal-fields {
+    max-width: 340px;
+  }
+
+  .compound_journal-form {
+    display: flex;
+  }
+
+  .space-between {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .caution-balance-space {
+    margin-top: 10px;
+    height: 40px;
+  }
+
+  .fixed-content {
+    position: sticky;
+    bottom: 0;
+    width: 100%;
+    max-width: 340px;
+    background: rgba(240, 194, 109, 0.809);
+    margin-top: 20px;
+  }
+
+  .transfer-wrap {
+    display: flex;
+    justify-content: center;
+  }
+
+// --------
 
 /* header */
-
-#logo {
-  float: left;
-  margin-right: 10px;
-  font-size: 1.7em;
-  color: #fff;
-  text-transform: uppercase;
-  letter-spacing: -1px;
-  padding-top: 9px;
-  font-weight: bold;
+.header {
+  padding: 20px 10px;
+  background: rgb(156, 210, 214);
 }
 
-#logo:hover {
-  color: #fff;
+#header-logo {
+  padding: 10px 20px;
+  font-size: 1.7em;
+  color: #333;
+  text-transform: uppercase;
+  letter-spacing: -1px;
+  font-weight: bold;
+}
+#header-logo:hover {
+  color: #777;
   text-decoration: none;
 }
 
-/* ユーザー情報テーブル */
+.header-menu {
+  float: right;
+  display: flex;
+  justify-content: right;
+  align-items: center;
+  margin: 0;
+  padding: 10px;
+  @media (max-width: 900px) {
+    display: none;
+  }
+  li a {
+    color: #333;
+    padding: 0 15px;
+    text-decoration: none;
+  }
+}
 
+.header-menu li a:hover {
+  color: black;
+}
+
+// 振替伝票スマホ対応
+
+// ---------------
+
+/* ユーザー情報テーブル */
 .user-table {
   vertical-align: middle;
   text-align: center;
 }
 
 /* 入力フォーム */
-
 .label-signup {
   margin-top: 5px;
 }
-
 .btn-signup {
   margin-top: 10px;
 }
-
 .label-user--edit {
   margin-top: 5px;
 }
-
 .btn-user--edit {
   margin-top: 10px;
 }
 
 /* error_messages */
-
 #error_explanation {
   color: red;
   ul {
@@ -114,7 +284,6 @@ p {
     margin: 0 0 30px 0;
   }
 }
-
 .field_with_errors {
   @extend .has-error;
   .form-control {
@@ -123,15 +292,12 @@ p {
 }
 
 /* ログインフォーム */
-
 .label-login {
   margin-top: 5px;
 }
-
 .btn-login {
   margin-top: 10px;
 }
-
 .checkbox-login {
   width: auto;
   margin-left: 25px;
@@ -141,37 +307,26 @@ p {
 }
 
 /* 水揚げフォーム */
-
 .btn-ground--form {
   margin-top: 10px;
 }
-
-
-/* 水揚げフォーム */
-
 .label-landing--form {
   margin-top: 5px;
 }
-
 .btn-landing--form {
   margin: 20px 0 10px 0;
 }
-
 .datetime-form-control {
   padding: 7px;
 }
 
 
 /* 帳簿フォーム */
-.compound-journal-form {
-  margin-top: 5px;
-}
 .caution-balance {
   vertical-align: middle;
   text-align: center;
   font-weight: bold;
   padding: 10px;
-  display: none;
 }
 
 .label-account--form {
@@ -180,10 +335,6 @@ p {
 
 .account-button {
   margin-top: 10px;
-}
-
-.btn-account--form {
-  margin: 20px 0 10px 0;
 }
 
 #table-account {
@@ -197,25 +348,12 @@ p {
   }
 }
 
-#table-account2 {
-  th {
-    vertical-align: middle;
-    text-align: center;
-  }
-  td {
-    vertical-align: middle;
-    text-align: center;
-  }
-}
-
 .mt-2 {
   margin-top: 10px;
 }
-
 .mt-3 {
   margin-top: 15px;
 }
-
 .mt-4 {
   margin-top: 20px;
 }
@@ -224,7 +362,6 @@ p {
 .modal-dialog-center {
   padding-top: 10%;
 }
-
 
 /* debug */
 
@@ -237,3 +374,138 @@ p {
   -webkit-box-sizing: border-box;
   box-sizing:         border-box;
 }
+
+// ドロップダウンメニュー
+.dropdown-menu li {
+  padding: 5px 0;
+}
+.dropdown-menu li a:hover {
+  background: #fff;
+  color: #777;
+}
+
+#navArea {
+  display: none;
+  @media (max-width: 900px) {
+    display: flex;
+  }
+}
+/*============
+nav
+=============*/
+.nav {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: -300px;
+  width: 300px;
+  background: #fff;
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  transition: all .5s;
+  z-index: 53;
+  opacity: 0;
+}
+.open .nav {
+  left: 0;
+  opacity: 1;
+}
+.nav .inner {
+  padding: 25px;
+}
+.nav .inner ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
+.nav .inner ul li {
+  position: relative;
+  padding: 5px 0;
+  margin: 0;
+}
+.nav .inner ul li a {
+  display: block;
+  color: #333;
+  font-size: 1.2em;
+  padding: 1em;
+  text-decoration: none;
+  transition-duration: 0.2s;
+}
+.nav .inner ul li a:hover {
+  background: #e4e4e4;
+}
+@media screen and (max-width: 600px) {
+  .nav {
+    left: -300px;
+    width: 300px;
+  }
+}
+/*============
+.toggle_btn
+=============*/
+.toggle_btn {
+  display: block;
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  width: 30px;
+  height: 30px;
+  transition: all .5s;
+  cursor: pointer;
+  z-index: 55;
+}
+.toggle_btn span {
+  display: block;
+  position: absolute;
+  left: 0;
+  width: 30px;
+  height: 2px;
+  background-color: #333;
+  border-radius: 4px;
+  transition: all .5s;
+}
+.toggle_btn span:nth-child(1) {
+  top: 4px;
+}
+.toggle_btn span:nth-child(2) {
+  top: 14px;
+}
+.toggle_btn span:nth-child(3) {
+  bottom: 4px;
+}
+.open .toggle_btn span {
+  background-color: #fff;
+}
+.open .toggle_btn span:nth-child(1) {
+  -webkit-transform: translateY(10px) rotate(-315deg);
+  transform: translateY(10px) rotate(-315deg);
+}
+.open .toggle_btn span:nth-child(2) {
+  opacity: 0;
+}
+.open .toggle_btn span:nth-child(3) {
+  -webkit-transform: translateY(-10px) rotate(315deg);
+  transform: translateY(-10px) rotate(315deg);
+}
+/*============
+#mask
+=============*/
+#mask {
+  display: none;
+  transition: all .5s;
+}
+.open #mask {
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #000;
+  opacity: .8;
+  z-index: 52;
+  cursor: pointer;
+}
+// ------------------

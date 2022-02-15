@@ -7,15 +7,15 @@ class AccountsController < ApplicationController
   before_action :logged_in_user, only: [:all_general_ledger, :master_general_ledger, :sub_master_general_ledger,
                                         :journal_books, :balance_sheet, :profit_and_loss_statement,
                                         :transfer_slip_new, :transfer_slip_create, :transfer_slip_edit, :transfer_slip_update, :transfer_slip_destroy]
-                                        
+
   before_action :admin_and_accounting_user, only: [:all_general_ledger, :master_general_ledger, :sub_master_general_ledger,
                                                    :journal_books, :balance_sheet, :profit_and_loss_statement,
                                                    :transfer_slip_new, :transfer_slip_create, :transfer_slip_edit, :transfer_slip_update, :transfer_slip_destroy]
-  
+
   before_action :set_one_month, only: [:all_general_ledger, :master_general_ledger, :sub_master_general_ledger,
                                        :journal_books, :balance_sheet, :profit_and_loss_statement,
                                        :transfer_slip_new, :transfer_slip_create, :transfer_slip_edit, :transfer_slip_update, :transfer_slip_destroy]
-                                       
+
   before_action :transfer_slip_account_titles, only: [:transfer_slip_new, :transfer_slip_create, :transfer_slip_edit]
   before_action :tax_rate_arys, only: [:transfer_slip_new, :transfer_slip_create, :transfer_slip_edit, :transfer_slip_update, :transfer_slip_destroy]
   before_action :sub_account_titles, only: [:transfer_slip_new, :transfer_slip_create, :transfer_slip_edit, :transfer_slip_update, :transfer_slip_destroy]
@@ -47,7 +47,8 @@ class AccountsController < ApplicationController
   before_action :capital_stocks, only: :balance_sheet
   before_action :retained_earnings, only: :balance_sheet
   
-  
+  def csv
+  end
   
   # --------------------------振替伝票作成-------------------------
   def transfer_slip_new
@@ -68,6 +69,7 @@ class AccountsController < ApplicationController
   
   def transfer_slip_edit
     @compounds = @account.compound_journals.where(account_id: @account.id)
+    
   end
 
   def transfer_slip_update
@@ -105,16 +107,15 @@ class AccountsController < ApplicationController
 
   # --------------------------総勘定元帳----------------------------
   def all_general_ledger
-    
   end
-  
+
   def master_general_ledger
     @carried_forward_balance = 0
     @this_month_last_balance = 0
     @param_account_title = params[:param_account_title]
     @general_ledger_accounts = Account.joins(:compound_journals).where(compound_journals: {account_title: @param_account_title}).or(Account.joins(:compound_journals).where(compound_journals: {right_account_title: @param_account_title})).distinct.merge(Account.order("accounts.accounting_date ASC"))
   end
-  
+
   def sub_master_general_ledger
     @sub_carried_forward_balance = 0
     @sub_this_month_last_balance = 0
@@ -122,15 +123,12 @@ class AccountsController < ApplicationController
     @general_ledger_accounts = Account.joins(:compound_journals).where(compound_journals: {sub_account_title: @param_account_title}).or(Account.joins(:compound_journals).where(compound_journals: {right_sub_account_title: @param_account_title})).distinct.merge(Account.order("accounts.accounting_date ASC"))
   end
   # ----------------------------------------------------------------
-  
-  def csv
-  end
-  
+
   # --------------------------貸借対照表--------------------------------
   def balance_sheet
   end
   # ----------------------------------------------------------------
-  
+
   # --------------------------損益計算書--------------------------------
   def profit_and_loss_statement
   end

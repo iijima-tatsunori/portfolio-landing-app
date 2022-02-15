@@ -1,17 +1,48 @@
-<tr class="nested-fields">
-  <%= f.hidden_field :id %>
-  <td>
-    <div><%= f.select :account_title, @transfer_slip_account_titles, {include_blank: true}, class: "form-control js-searchable" %></div>
-    <div class="compound-journal-form"><%= f.select :sub_account_title, @sub_account_titles, {include_blank: true}, class: "form-control js-searchable" %></div>
-  </td>
-  <td><%= f.select :tax_rate, @tax_rate_arys, {}, class: "form-control" %></td>
-  <td class="bg-info"><%= f.number_field :amount, min: 0, value: params[:amount], class: "left-nested-amount-form form-control" %></td>
-  <td>
-    <div><%= f.select :right_account_title, @transfer_slip_account_titles, {include_blank: true}, class: "form-control js-searchable" %></div>
-    <div class="compound-journal-form"><%= f.select :right_sub_account_title, @sub_account_titles, {include_blank: true}, class: "form-control js-searchable" %></div>
-  </td>
-  <td><%= f.select :right_tax_rate, @tax_rate_arys, {}, class: "form-control" %></td>
-  <td class="bg-info"><%= f.number_field :right_amount, min: 0, value: params[:right_amount], class: "right-nested-amount-form form-control" %></td>
-  <td><%= f.text_field :description, class: "form-control" %></td>
-  <td><%= link_to_remove_association '削除', f, class: 'btn btn-danger nestedRemoveClass' %></td>
-</tr>
+
+<div class="compound_journal-fields margin-x">
+  <div class="nested-fields">
+  <div class="border-separator"></div>
+    <%= f.hidden_field :id %>
+    <div class="compound_journal-form">
+      <div>
+        <div class="text-center font-bold">借方</div>
+        <div class="bg-info padding-5-10-10">
+          <div class="required"><%= f.label :account_title, class: "label-#{yield(:class_text)}" %></div>
+          <div><%= f.select :account_title, @transfer_slip_account_titles, {include_blank: true}, required: true, class: "form-control js-searchable" %></div>
+          <div class="margin-top-10"><%= f.label :sub_account_title, class: "label-#{yield(:class_text)}" %></div>
+          <div><%= f.select :sub_account_title, @sub_account_titles, {include_blank: true}, class: "form-control js-searchable" %></div>
+          <div class="margin-top-10"><%= f.label :tax_rate, class: "label-#{yield(:class_text)}" %></div>
+          <div><%= f.select :tax_rate, @tax_rate_arys, {}, class: "short-form" %></div>
+          <div class="margin-top-10 required"><%= f.label :amount, class: "label-#{yield(:class_text)}" %></div>
+          <div><%= f.number_field :amount, min: 0, required: true, class: "left-nested-amount-form short-form" %></div>
+        </div>
+      </div>
+      <div>
+        <div class="text-center font-bold">貸方</div>
+        <div class="bg-info padding-5-10-10">
+          <div class="required"><%= f.label :account_title, class: "label-#{yield(:class_text)}" %></div>
+          <div><%= f.select :right_account_title, @transfer_slip_account_titles, {include_blank: true}, required: true, class: "form-control js-searchable" %></div>
+          <div class="margin-top-10"><%= f.label :sub_account_title, class: "label-#{yield(:class_text)}" %></div>
+          <div><%= f.select :right_sub_account_title, @sub_account_titles, {include_blank: true}, class: "form-control js-searchable" %></div>
+          <div class="margin-top-10"><%= f.label :tax_rate, class: "label-#{yield(:class_text)}" %></div>
+          <div><%= f.select :right_tax_rate, @tax_rate_arys, {}, class: "short-form" %></div>
+          <div class="margin-top-10 required"><%= f.label :amount, class: "label-#{yield(:class_text)}" %></div>
+          <div><%= f.number_field :right_amount, min: 0, required: true, class: "right-nested-amount-form short-form" %></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="border-separator"></div>
+
+    <div><%= f.text_field :description, placeholder: "摘要", class: "form-control" %></div>
+
+    <div class="min-separator"></div>
+
+    <div><%= link_to_remove_association '削除', f, class: 'btn btn-danger nestedRemoveClass' %></div>
+
+    <div class="min-separator"></div>
+    <div class="min-separator"></div>
+
+
+  </div>
+</div>

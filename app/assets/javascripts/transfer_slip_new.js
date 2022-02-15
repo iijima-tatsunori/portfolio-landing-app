@@ -90,10 +90,11 @@ $(document).on('turbolinks:load', function() {
       
       // 左右金額差が0の時に表示を隠し、送信ボタンを有効にする。
       if (totalBalance == 0) {
-        $(".caution-balance").hide();
-        $(".submit-btn").prop("disabled", false);
+        if (!rightBalance == 0 || !leftBalance == 0 ) {
+          $(".caution-balance").text("");
+          $(".submit-btn").prop("disabled", false);
+        }
       } else {
-        $(".caution-balance").show();
         $(".submit-btn").prop("disabled", true);
       }
     }
@@ -152,4 +153,14 @@ $(document).on('turbolinks:load', function() {
           amountBalance();
   	    },100);
       });
+    
+    $(".clear-btn").on('click', function() {
+      $("input[type='number']:even").val(0);
+      $("input[type='number']:odd").val(0);
+      leftSum();
+      rightSum();
+      amountBalance();
+    });
+  $(".caution-balance").text("借貸の金額を入力してください。");
+  $(".submit-btn").prop("disabled", true);
 });

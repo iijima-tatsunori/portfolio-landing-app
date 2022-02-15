@@ -71,16 +71,14 @@ class ApplicationController < ActionController::Base
     @this_month = @first_day.all_month
     @today = Date.current
     @this_year = @first_day.all_year
+    @prev_year = @today.prev_year.all_year
   end
   
   # before_action
   
     # 税率用()--view()
     def tax_rate_arys
-      @tax_rate_arys = %w[対象外
-                           8%
-                           10%
-                          ]
+      @tax_rate_arys = [["対象外", 0],["8%", 1],["10%", 2]]
     end
     # -----------------------------------------
     
@@ -563,9 +561,7 @@ class ApplicationController < ActionController::Base
       end
       # 利益剰余金
       def retained_earnings
-        @retained_earnings = %w[利益準備金
-                                繰越利益剰余金
-                                ]
+        @retained_earnings = %w[利益準備金]
       end
     # -----------------------------------------
    
