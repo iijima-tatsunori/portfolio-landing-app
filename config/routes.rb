@@ -44,6 +44,10 @@ Rails.application.routes.draw do
       # 帳簿（振替伝票）
       get 'transfer_slip_new'
       post 'transfer_slip_create'
+
+      # レシートOCR
+      get 'ocr_new'
+      post 'ocr_create'
       
       # 仕訳帳
       get 'journal_books'

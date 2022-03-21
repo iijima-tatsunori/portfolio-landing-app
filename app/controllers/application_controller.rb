@@ -75,6 +75,21 @@ class ApplicationController < ActionController::Base
   end
   
   # before_action
+
+    def ocr_right_account_titles
+      @ocr_right_account_titles = [
+                                    ["会社のお金で現金で支払った：現金","現金"],
+                                    ["個人のお金で現金で支払った：事業主借","事業主借"]
+                                  ]
+    end
+
+    def ocr_account_titles
+      @ocr_account_titles = [
+                              ["カフェで一人会費をした：会議費","会議費"],
+                              ["お客さんと会食した：接待交際費","接待交際費"],
+                              ["仕事上で研究や視察を目的とした飲食代：研究費","研究費"]
+                            ]
+    end
   
     # 税率用()--view()
     def tax_rate_arys

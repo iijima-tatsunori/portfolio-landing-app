@@ -40,7 +40,9 @@ ja:
           
         compound_journal:
           account_title: 勘定科目
+          right_account_title: 貸方勘定科目
           sub_account_title: 補助勘定科目
           tax_rate: 税率
           description: 摘要
           amount: 金額
+          right_amount: 貸方金額

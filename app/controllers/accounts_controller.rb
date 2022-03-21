@@ -6,19 +6,24 @@ class AccountsController < ApplicationController
   
   before_action :logged_in_user, only: [:all_general_ledger, :master_general_ledger, :sub_master_general_ledger,
                                         :journal_books, :balance_sheet, :profit_and_loss_statement,
+                                        :ocr_new, :ocr_create,
                                         :transfer_slip_new, :transfer_slip_create, :transfer_slip_edit, :transfer_slip_update, :transfer_slip_destroy]
 
   before_action :admin_and_accounting_user, only: [:all_general_ledger, :master_general_ledger, :sub_master_general_ledger,
-                                                   :journal_books, :balance_sheet, :profit_and_loss_statement,
-                                                   :transfer_slip_new, :transfer_slip_create, :transfer_slip_edit, :transfer_slip_update, :transfer_slip_destroy]
+                                                  :journal_books, :balance_sheet, :profit_and_loss_statement,
+                                                  :ocr_new, :ocr_create,
+                                                  :transfer_slip_new, :transfer_slip_create, :transfer_slip_edit, :transfer_slip_update, :transfer_slip_destroy]
 
   before_action :set_one_month, only: [:all_general_ledger, :master_general_ledger, :sub_master_general_ledger,
-                                       :journal_books, :balance_sheet, :profit_and_loss_statement,
-                                       :transfer_slip_new, :transfer_slip_create, :transfer_slip_edit, :transfer_slip_update, :transfer_slip_destroy]
+                                      :journal_books, :balance_sheet, :profit_and_loss_statement,
+                                      :ocr_new, :ocr_create,
+                                      :transfer_slip_new, :transfer_slip_create, :transfer_slip_edit, :transfer_slip_update, :transfer_slip_destroy]
 
-  before_action :transfer_slip_account_titles, only: [:transfer_slip_new, :transfer_slip_create, :transfer_slip_edit]
-  before_action :tax_rate_arys, only: [:transfer_slip_new, :transfer_slip_create, :transfer_slip_edit, :transfer_slip_update, :transfer_slip_destroy]
-  before_action :sub_account_titles, only: [:transfer_slip_new, :transfer_slip_create, :transfer_slip_edit, :transfer_slip_update, :transfer_slip_destroy]
+  before_action :ocr_right_account_titles, only: [:ocr_new, :ocr_create]
+  before_action :ocr_account_titles, only: [:ocr_new, :ocr_create]
+  before_action :transfer_slip_account_titles, only: [:ocr_new, :ocr_create, :transfer_slip_new, :transfer_slip_create, :transfer_slip_edit]
+  before_action :tax_rate_arys, only: [:ocr_new, :ocr_create, :transfer_slip_new, :transfer_slip_create, :transfer_slip_edit, :transfer_slip_update, :transfer_slip_destroy]
+  before_action :sub_account_titles, only: [:ocr_new, :ocr_create, :transfer_slip_new, :transfer_slip_create, :transfer_slip_edit, :transfer_slip_update, :transfer_slip_destroy]
   
   before_action :left_account_titles, only: :all_general_ledger
   before_action :right_account_titles, only: :all_general_ledger
@@ -31,8 +36,6 @@ class AccountsController < ApplicationController
   before_action :extraordinary_gains, only: [:profit_and_loss_statement, :balance_sheet]
   before_action :extraordinary_loss, only: [:profit_and_loss_statement, :balance_sheet]
   before_action :corporate_inhabitant_and_enterprise_taxes, only: [:profit_and_loss_statement, :balance_sheet]
-  
-  
   
   before_action :cash_deposits, only: :balance_sheet
   before_action :trade_receivables, only: :balance_sheet
@@ -48,6 +51,22 @@ class AccountsController < ApplicationController
   before_action :retained_earnings, only: :balance_sheet
   
   def csv
+  end
+
+  def ocr_new
+    @account = Account.new
+    @compound_journals = @account.compound_journals.build
+  end
+
+  def ocr_create
+    @account = Account.new(transfer_slip_account_params)
+    if @account.save
+      flash[:success] = "#{l(@account.accounting_date, format: :long)}の帳簿を新規作成しました。"
+      redirect_to ocr_new_accounts_url
+    else
+      flash[:danger] = "入力エラー。"
+      redirect_to ocr_new_accounts_url
+    end
   end
   
   # --------------------------振替伝票作成-------------------------
@@ -68,8 +87,6 @@ class AccountsController < ApplicationController
   end
   
   def transfer_slip_edit
-    @compounds = @account.compound_journals.where(account_id: @account.id)
-    
   end
 
   def transfer_slip_update
@@ -138,6 +155,7 @@ class AccountsController < ApplicationController
     # ------------------------strong_parameter-----------------------
     def transfer_slip_account_params
       params.require(:account).permit(:accounting_date,
+                                      :image,
                                       compound_journals_attributes: [
                                       :id,
                                       :account_title,

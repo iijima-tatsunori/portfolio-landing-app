@@ -24,7 +24,6 @@ production:
   <<: *default
   adapter: postgresql
   encoding: unicode
-  database: portfolio-landing-app
-  pool: 5
-  username: portfolio-landing-app
-  password: password
+  database: account-database-instance
+  username: account_app
+  password: Scms15silvia
